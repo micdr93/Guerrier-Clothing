@@ -119,12 +119,12 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-# Default primary key field type
+
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# Security settings to fix CSRF issues
 CSRF_TRUSTED_ORIGINS = [
-    'https://8000-micdr93-guerrierclothin-032ayo5hxew.ws-eu117.gitpod.io',  # Your Gitpod URL here
+    'https://8000-micdr93-guerrierclothin-032ayo5hxew.ws-eu117.gitpod.io',
 ]
 
