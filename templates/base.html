@@ -15,8 +15,7 @@
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     {% endblock %}
 
-    {% block extra_css %}
-    {% endblock %}
+    {% block extra_css %}{% endblock %}
 
     {% block corejs %}
     <script src="https://kit.fontawesome.com/d98ce85e12.js" crossorigin="anonymous"></script>
@@ -24,15 +23,17 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
     {% endblock %}
 
-    {% block extra_js %}
-    {% endblock %}
+    {% block extra_js %}{% endblock %}
 
     <title>Guerrier Clothing {% block extra_title %}{% endblock %}</title>
   </head>
   <body>
     <header class="container-fluid fixed-top">
+      <!-- Mobile Header -->
+      {% include 'includes/mobile-top-header.html' %}
+
+      <!-- Desktop Header -->
       <div id="topnav" class="row bg-white pt-lg-2 d-none d-lg-flex">
-        <!-- My Account and Sign In -->
         <div class="col-12 col-lg-4 text-center text-lg-left">
           <ul class="list-inline mb-0">
             <li class="list-inline-item dropdown">
@@ -72,14 +73,12 @@
           </ul>
         </div>
 
-        <!-- Logo -->
         <div class="col-12 col-lg-4 text-center">
           <a href="{% url 'home' %}" class="nav-link main-logo-link">
             <h2 class="logo-font text-black my-0"><strong>GUERRIER</strong></h2>
           </a>
         </div>
 
-        <!-- Search Bar -->
         <div class="col-12 col-lg-4 text-center text-lg-right">
           <form method="GET" action="">
             <div class="input-group w-100">
@@ -93,6 +92,9 @@
           </form>
         </div>
       </div>
+
+      <!-- Main Navigation -->
+      {% include 'includes/main-nav.html' %}
     </header>
 
     {% if messages %}
@@ -101,13 +103,10 @@
     </div>
     {% endif %}
 
-    {% block page_header %}
-    {% endblock %}
+    {% block page_header %}{% endblock %}
 
-    {% block content %}
-    {% endblock %}
+    {% block content %}{% endblock %}
 
-    {% block postloadjs %}
-    {% endblock %}
+    {% block postloadjs %}{% endblock %}
   </body>
 </html>
