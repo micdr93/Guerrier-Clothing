@@ -20,3 +20,39 @@ body {
     z-index: 1060;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
+
+.dropdown-menu .text-black {
+    color: #000 !important;
+}
+
+.dropdown-menu .border-black {
+    border: 1px solid black !important;
+}
+
+.dropdown-menu .bg-black {
+    background: #000 !important;
+}
+
+/* -------------------------------- Media Queries */
+
+/* Slightly larger container on xl screens */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 80%;
+    }
+}
+
+/* Fixed top navbar only on medium and up */
+@media (min-width: 992px) {
+    .fixed-top-desktop-only {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 1030;
+    }
+
+    .header-container {
+        padding-top: 164px;
+    }
+}
