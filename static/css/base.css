@@ -76,3 +76,24 @@ body {
         padding-top: 164px;
     }
 }
+
+/* Make sure the parent container uses flexbox */
+nav ul {
+    display: flex;  /* Ensures the items are on the same line */
+    justify-content: flex-start;  /* Ensures items align to the left */
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Optional: Ensure all dropdowns and links inside the navbar have uniform styles */
+nav ul li {
+    margin-right: 20px; /* Adds space between items */
+}
+
+/* Style for dropdown items to match your link style */
+.dropdown-item {
+    color: black;  /* Adjust the color if needed */
+    text-decoration: none;
+    padding: 10px 15px;
+}
