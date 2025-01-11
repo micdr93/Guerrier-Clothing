@@ -5,10 +5,11 @@ html, body {
 }
 
 body {
-    background: url() no-repeat center center fixed;
-    background-size: 900px;
-    color: #555;
-    font-family: 'Lato', sans-serif;
+    background-image: url("{% static 'images/backgroundimg.png' %}");
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat; 
+    height: 100vh;
 }
 
 .navbar {
