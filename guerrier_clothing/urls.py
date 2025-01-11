@@ -21,8 +21,10 @@ from django.conf.urls.static import static
 from .views import handler404
 from .views import handler500
 
-handler404 = 'performance_footwear.views.handler404'
-handler500 = 'performance_footwear.views.handler500'
+handler404 = handler404 = 'guerrier_clothing.views.handler404'
+
+handler500 = handler404 = 'guerrier_clothing.views.handler500'
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
