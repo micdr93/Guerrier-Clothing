@@ -5,11 +5,11 @@ html, body {
 }
 
 body {
-    background-image: url("{% static 'css/images/backgroundimg.png' %}");
+    background: url('/static/images/backgroundimg.png') no-repeat center center fixed;
     background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat; 
-    height: 100vh;
+    height: calc(100vh - 164px);
+    color: #555;
+    font-family: 'Lato';
 }
 
 .navbar {
