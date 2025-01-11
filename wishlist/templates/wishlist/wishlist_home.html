@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="overlay"></div>
+<!-- Main content section for the wishlist page -->
+<div class="m-5">
+    <div class="container mb-1">
+        <div class="row">
+            <div class="col">
+                <h2 class="title-font text-center">Your Wishlist</h2>
+            </div>
+        </div>
+    </div>
+    <!-- Container for the wishlist items -->
+    <div class="container mb-5">
+        {% if wishlist.products.exists %}
+        <!-- Clear wishlist link -->
+        <p class="text-center"><a href="{% url 'clear_wishlist' %}" class="text-uppercase">Clear
+                Wishlist</a></p>
+        <div class="row">
+            <div class="col-12">
+                <p class="text-center">Here are all the items you've added to your wishlist!</p>
+            </div>
+        </div>
+        <!-- Wishlist items for small screens -->
+        <div class="d-block d-md-none">
+            {% for product in wishlist.products.all %}
+            <div class="text-center">
+                <!-- Product image -->
+                <div data-label="Product:" class="mb-3">
+                    {% if product.image %}
+                    <img class="img-fluid rounded w-30" src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                    <img class="img-fluid rounded w-30" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                    {% endif %}
+                </div>
+                <!-- Product name -->
+                <div data-label="Name:" class="mb-3">
+                    <p class="h6">{{ product.name }}</p>
+                </div>
+                <!-- Product price -->
+                <div data-label="Price:" class="mb-3">
+                    {% if product.on_sale %}
+                        <!-- Sale price and original price for products on sale -->
+                        <div class="sale-footer bg-white d-flex flex-row">
+                            <p class="mb-0 pt-0 pb-1">
+                                <span
+                                    class="h6 pr-3  font-weight-bold price-font-original text-decoration-line-through">
+                                    £{{ product.price }}</span>
+                            </p>
+                            <br>
+                            <p class="mb-0 pt-0 pb-0">
+                                <span class="h5  font-weight-bold price-font text-danger">
+                                    £{{ product.sale_price|floatformat:2 }}</span>
+                            </p>
+                        </div>
+                        {% else %}
+                            <!-- Regular price for products not on sale -->
+                            <p class="mb-0 pt-0 pb-1"><span class="h5 text-left font-weight-bold price-font">
+                                £{{ product.price }}</span></p>
+                    {% endif %}
+                </div>
+                <!-- View Product link -->
+                <div class="wishlist mb-3" data-label="View Product:">
+                    View Product:
+                    <a href="{% url 'product_detail' product.id %}" aria-label="Link to View Product Detail Page">
+                        <i class="fa-solid fa-binoculars text-primary"></i>
+                    </a>
+                </div>
+                 <!-- Remove Product link -->
+                <div class="wishlist mb-3" data-label="Remove Product:">
+                    Remove Product:
+                    <a href="{% url 'remove_wishlist' product.id %}?next={% url 'wishlist' %}"
+                        aria-label="Link to Remove Product">
+                        <i class="fa-solid fa-trash-can text-danger"></i>
+                    </a>
+                </div>
+            </div>
+            <!-- Add horizontal line after every item for small screens -->
+            {% if forloop.counter|divisibleby:1 %}
+            <div class="col-12  mt-3 mb-3">
+                <hr class="product-hr">
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        <!-- Wishlist items for large screens -->
+        <div class="table-responsive rounded-0 d-none d-md-block">
+            <table class="table wishlist-table text-align-center">
+                <thead class="wishlist-head">
+                    <tr class="wishlist-row mx-1 my-1">
+                        <th class="wishlist-title">Product</th>
+                        <th class="wishlist-title">Name</th>
+                        <th class="wishlist-title">Description</th>
+                        <th class="wishlist-title">Price</th>
+                        <th class="wishlist-title">View</th>
+                        <th class="wishlist-title">Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Display wishlist items in a table for large screens -->
+                    {% for product in wishlist.products.all %}
+                    <tr class="wishlist-table">
+                        <!-- Product image -->
+                        <td class="wishlist-title" data-label="Product:">
+                            {% if product.image %}
+                            <img class="img-fluid rounded w-30" src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                            <img class="img-fluid rounded w-30" src="{{ MEDIA_URL }}noimage.png"
+                                alt="{{ product.name }}">
+                            {% endif %}
+                        </td>
+                        <!-- Product name -->
+                        <td class="wishlist-title" data-label="Name:">
+                            <p class="h6">{{ product.name }}</p>
+                        </td>
+                        <!-- Product description -->
+                        <td class="wishlist-title" data-label="Name:">
+                            <p class="h6">{{ product.description }}</p>
+                        </td>
+                        <!-- Product price -->
+                        <td class="wishlist-title" data-label="Price:">
+                            {% if product.on_sale %}
+                            <!-- Sale price and original price for products on sale -->
+                            <div class="sale-footer bg-white">
+                                <p class="mb-0 pt-0 pb-1">
+                                    <span
+                                        class="h6 pr-3 text-left font-weight-bold price-font-original text-decoration-line-through">
+                                        £{{ product.price }}</span>
+                                </p>
+                                <br>
+                                <p class="mb-0 pt-0 pb-0">
+                                    <span class="h5 text-left font-weight-bold price-font text-danger">
+                                        £{{ product.sale_price|floatformat:2 }}</span>
+                                </p>
+                            </div>
+                            {% else %}
+                            <!-- Regular price for products not on sale -->
+                        <p class="mb-0 pt-0 pb-1"><span class="h5 text-left font-weight-bold price-font">
+                                £{{ product.price }}</span></p>
+                         {% endif %}
+                        </td>
+                        <!-- View Product link -->
+                        <td class="wishlist" data-label="View Product:">
+                            <a href="{% url 'product_detail' product.id %}"
+                                aria-label="Link to View Product Detail Page">
+                                <i class="fa-solid fa-binoculars text-primary"></i>
+                            </a>
+                        </td>
+                        <!-- Remove Product link -->
+                        <td class="wishlist" data-label="Remove Product:">
+                            <a href="{% url 'remove_wishlist' product.id %}?next={% url 'wishlist' %}"
+                                aria-label="Link to Remove Product">
+                                <i class="fa-solid fa-trash-can text-danger"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <!-- Display a message if the wishlist is empty -->
+        <div class="row">
+            <div class="col-12">
+                <p class="text-center text-black mt-3 h5">Your Wishlist is currently empty - click the <span
+                        class="icon"><i class="fas fa-heart fa-fw"></i></span> icon to add something!</p>
+                <div class="text-center mt-4">
+                    <a href="{% url 'products' %}" class="btn btn-outline-black rounded-0  mt-1">
+                        <span class="icon">
+                            <i class="fas fa-chevron-left"></i>
+                        </span>
+                        <span class="text-uppercase">Go to Products</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+<!-- Back to top button -->
+<div class="btt-button shadow-sm rounded-0 border border-black bg-white">
+        <a class="btt-link d-flex h-100">
+            <i class="fas fa-arrow-up text-black mx-auto my-auto"></i>
+        </a>
+    </div>
+{% endblock %}
