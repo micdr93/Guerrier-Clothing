@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from . import views
-from bag import views
+
 
 
 urlpatterns = [
@@ -10,6 +10,6 @@ urlpatterns = [
     path("privacy_policy", views.privacy_policy, name="privacy_policy"),
     path("returns", views.returns, name="returns"),
     path("contact", views.contact, name="contact"),
+    path('', include('home.urls')),  
     path('bag/', include('bag.urls')),
-
 ]

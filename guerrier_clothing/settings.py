@@ -34,6 +34,8 @@ INSTALLED_APPS = [
     'products',
     'django_summernote',
     'bag',
+    'checkout',
+    'profiles',
     ]
 
 MIDDLEWARE = [
