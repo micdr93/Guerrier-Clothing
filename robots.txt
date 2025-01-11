@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /accounts/
+Disallow: /bag/
+Disallow: /profiles/
+Disallow: /checkout/
+Disallow: /admin/
