@@ -1,1 +1,34 @@
-[{"pk":1,"model":"products.category","fields":{"name":"shirts","friendly_name":"Shirts"}},{"pk":2,"model":"products.category","fields":{"name":"hats","friendly_name":"Hats"}},{"pk":3,"model":"products.category","fields":{"name":"mugs","friendly_name":"Mugs"}},{"pk":4,"model":"products.category","fields":{"name":"coasters","friendly_name":"Coasters"}}]
+[
+    {
+        "pk": 1,
+        "model": "products.category",
+        "fields": {
+            "name": "shirts",
+            "friendly_name": "Shirts"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "products.category",
+        "fields": {
+            "name": "hats",
+            "friendly_name": "Hats"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "products.category",
+        "fields": {
+            "name": "mugs",
+            "friendly_name": "Mugs"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "products.category",
+        "fields": {
+            "name": "coasters",
+            "friendly_name": "Coasters"
+        }
+    }
+]
