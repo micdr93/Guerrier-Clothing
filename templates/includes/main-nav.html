@@ -1,12 +1,17 @@
 <div class="collapse navbar-collapse" id="main-nav">
-    <ul class="navbar-nav w-auto mx-auto d-flex justify-content-start">  
-        
+    <ul class="navbar-nav w-auto mx-auto d-flex justify-content-start">
+
         <!-- Clothing Dropdown -->
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="clothing-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> 
+            <a class="nav-link dropdown-toggle text-black font-weight-bold"
+               href="#"
+               id="clothing-link"
+               data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">
                 Clothing
             </a>
-            <div class="dropdown-menu" aria-labelledby="clothing-link">
+            <div class="dropdown-menu border-0" aria-labelledby="clothing-link">
                 <a href="#" class="dropdown-item">Shirts</a>
                 <a href="#" class="dropdown-item">Hats</a>
             </div>
@@ -14,10 +19,15 @@
 
         <!-- Homeware Dropdown -->
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="homeware-link" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Homeware 
+            <a class="nav-link dropdown-toggle text-black font-weight-bold"
+               href="#"
+               id="homeware-link"
+               data-toggle="dropdown"
+               aria-haspopup="true"
+               aria-expanded="false">
+                Homeware
             </a>
-            <div class="dropdown-menu" aria-labelledby="homeware-link">
+            <div class="dropdown-menu border-0" aria-labelledby="homeware-link">
                 <a href="#" class="dropdown-item">Mugs</a>
                 <a href="#" class="dropdown-item">Coasters</a>
             </div>
@@ -25,8 +35,25 @@
 
         <!-- Contact Us Link -->
         <li class="nav-item">
-            <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>  
+            <a class="nav-link text-black font-weight-bold" href="{% url 'contact' %}">
+                Contact Us
+            </a>
         </li>
     </ul>
 </div>
 
+<script>
+    $(document).ready(function () {
+        $(".dropdown").hover(
+            function () {
+                $(this).find('.dropdown-menu').show();
+                $(this).find('.nav-link').css('text-decoration', 'underline');
+                $(this).find('.nav-link').css('text-decoration-color', 'black');
+            },
+            function () {
+                $(this).find('.dropdown-menu').hide();
+                $(this).find('.nav-link').css('text-decoration', 'none');
+            }
+        );
+    });
+</script>

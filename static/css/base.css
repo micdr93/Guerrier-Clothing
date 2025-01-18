@@ -1,28 +1,27 @@
 html, body {
     margin: 0;
     padding: 0;
-    /* Use min-height so body can grow if content is taller than viewport */
+
     min-height: 100%;
 }
 
 body {
-    /* Instead of one shorthand, break down properties for clarity */
+  
     background-image: url('/static/images/backgroundimg.png');
-    background-position: center;      /* Center the image */
-    background-repeat: no-repeat;     /* No repeated tiles */
-    background-size: cover;          /* Fill container, maintaining aspect ratio */
+    background-position: center;      
+    background-repeat: no-repeat;     
+    background-size: cover;          
     color: #555;
     font-family: 'Lato', sans-serif;
 }
 
-/* OPTIONAL: For desktop screens, if you still want the parallax/fixed effect, add a media query. */
+
 @media (min-width: 992px) {
     body {
-        background-attachment: fixed; /* Keep the image fixed on larger screens only */
+        background-attachment: fixed; 
     }
 }
 
-/* Keep your other CSS as is, just removing or adjusting the body height property. */
 
 .navbar {
     z-index: 1050;
@@ -65,7 +64,7 @@ body {
     z-index: -1;
 }
 
-/* -------------------------------- Media Queries */
+
 
 @media (min-width: 1200px) {
     .container {
