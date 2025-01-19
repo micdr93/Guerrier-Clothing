@@ -14,7 +14,9 @@ SECRET_KEY = 'django-insecure-8chd+08em%nm!8o@&!5@qjcbu)5-ih*vu4m+&et6rc^588ayye
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['8000-micdr93-guerrierclothin-dwr04glveer.ws-eu117.gitpod.io']
+ALLOWED_HOSTS = [
+    'guerrier-184e74af35e6.herokuapp.com',
+    '8000-micdr93-guerrierclothin-dwr04glveer.ws-eu117.gitpod.io']
 
 
 # Application definition
@@ -37,7 +39,7 @@ INSTALLED_APPS = [
     'checkout',
     'profiles',
     'wishlist',
-    ]
+        ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
