@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -90,12 +91,8 @@ LOGIN_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'guerrier_clothing.wsgi.application'
 
-# Database settings
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(default='postgresql://neondb_owner:ratLIbd3E4ch@ep-rough-shape-a275vn2j.eu-central-1.aws.neon.tech/motor_oasis_gong_951689')
 }
 
 # Password validation
