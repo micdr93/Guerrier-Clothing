@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% load static%}
+
+{% block page_header %}
+<div class="container header-container">
+    <div class="row">
+        <div class="col"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Main content container -->
+<div class="container h-100">
+    <div class="container mb-1 mt-5">
+        <div class="row">
+            <div class="col">
+                <h2 class="title-font text-center">Delete Review</h2>
+            </div>
+        </div>
+    </div>
+    <!-- Delete review form -->
+    <div class="col-sm col-md-8 offset-md-2 p-2 my-5 text-center border-black bg-white">
+        <form class="delete-form" method="POST">
+            {% csrf_token %}
+            <p class="h5 mb-3">You are about to delete your review titled: "<strong>{{ object.title }}</strong>"</p>
+            <p class="mb-3">With the message:</p>
+            <div><strong>{{ object.review }}</strong></div>
+            <br>
+            <p class="h5">This action cannot be undone!</p>
+            <div>
+                <a class="btn product-btn my-2 ml-2" href="{% url 'products' %}">Cancel</a> 
+                <button class="btn btn-danger my-2 ml-2" aria-label="delete post">Delete Review!</button>            
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
