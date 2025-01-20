@@ -1,7 +1,14 @@
 from django.shortcuts import render
 
+from products.models import Product 
 
-from django.shortcuts import render
+def index(request):
+    products = Product.objects.all()  
+    context = {
+        'products': products 
+    }
+    return render(request, 'index.html', context)
+
 
 def handler404(request, exception):
     return render(request, '404.html', status=404)
