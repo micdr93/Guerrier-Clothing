@@ -10,6 +10,12 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 <br>
 
 
+### Home Page Wireframes
+
+![screenshot](documentation/wireframes/Android.png)
+![screenshot](documentation/wireframes/iPad.png)
+![screenshot](documentation/wireframes/iPhone.png)
+
 # Technologies
 
 ## Languages Used
