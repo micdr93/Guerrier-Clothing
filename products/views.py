@@ -10,13 +10,10 @@ from django.db.models.functions import Lower
 from .forms import ProductForm, ReviewsForm
 from .widgets import CustomClearableFileInput
 
-
-from .models import Product, Category, Reviews  
-from .forms import ProductForm, ReviewsForm
+from .models import Product, Category, Review  # Adjusted to use Review instead of Reviews
 from profiles.models import UserProfile
 from wishlist.models import Wishlist
 import random
-
 
 # renders all products from database
 def all_products(request):
@@ -84,7 +81,7 @@ def all_products(request):
 # view for product detail page
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
-    reviews = Reviews.objects.filter(product=product).order_by("-created_on")
+    reviews = Review.objects.filter(product=product).order_by("-created_on")
 
     related_products = list(
         Product.objects.filter(category=product.category).exclude(pk=product_id)
@@ -191,13 +188,13 @@ def add_review(request, product_id):
 
         if review_form.is_valid():
             try:
-                Reviews.objects.create(
+                Review.objects.create(
                     product=product,
                     user=request.user,
                     title=request.POST["title"],
                     review=request.POST["review"],
                 )
-                reviews = Reviews.objects.filter(product=product)
+                reviews = Review.objects.filter(product=product)
                 messages.success(request, "Your review has been successfully added!")
                 return redirect(reverse("product_detail", args=[product.id]))
             except IntegrityError:
@@ -213,7 +210,7 @@ class UpdateReview(
     LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView
 ):
 
-    model = Reviews
+    model = Review
     form_class = ReviewsForm
     template_name = "products/edit_review.html"
     success_message = "Your review was updated!"
@@ -230,7 +227,7 @@ class UpdateReview(
 # view to delete a review
 class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
-    model = Reviews
+    model = Review
     template_name = "products/delete_review.html"
     success_message = "Review deleted successfully."
 
@@ -244,4 +241,4 @@ class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
-        return super(DeleteReview, self).delete(request, *args, **kwargs)
+        return super().delete(request, *args, **kwargs)

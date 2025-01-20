@@ -17,7 +17,6 @@ class Category(models.Model):
     def get_friendly_name(self):
         return self.friendly_name
 
-
 class Size(models.Model):
     """
     Model to represent available sizes for products.
@@ -35,13 +34,12 @@ class Size(models.Model):
     def __str__(self):
         return self.get_name_display()
 
-
 class Product(models.Model):
     """
     Model to represent products.
     """
-    category = models.ForeignKey('Category', null=True, blank=True, on_delete=models.SET_NULL)
-    sizes = models.ManyToManyField('Size', blank=True)
+    category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
+    sizes = models.ManyToManyField(Size, blank=True)
     sku = models.CharField(max_length=254, null=True, blank=True)
     name = models.CharField(max_length=254)
     description = models.CharField(max_length=255, default="Default description")
@@ -53,8 +51,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-
-class Reviews(models.Model):
+class Review(models.Model):
     """
     Model to represent product reviews.
     """
@@ -68,10 +65,10 @@ class Reviews(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=["user", "product"], name="reviews_per_user"
+                fields=["user", "product"], name="unique_review_per_user"
             )
         ]
         verbose_name_plural = "Reviews"
 
     def __str__(self):
-        return self.title
+        return self.title if self.title else f"Review for {self.product.name}"

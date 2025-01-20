@@ -7,26 +7,9 @@
             "sku": "gblurblue",
             "name": "G Blur Tee Blue",
             "description": "Blue Blur Logo Tee.",
-            "has_sizes": true,
-            "sizes": [
-                "S",
-                "M",
-                "L",
-                "XL",
-                "XXL"
-            ],
+            "sizes": [1, 2, 3, 4, 5],
             "price": "50.00",
-            "sale_price": null,
-            "rating": null,
-            "image_url": null,
-            "image": "images/gblurtblue.png",
-            "brand": 1,
-            "on_sale": false,
-            "created_on": "2025-01-08",
-            "average_rating": null,
-            "gender": null,
-            "materials": null,
-            "country_origin": null
+            "image": "images/gblurtblue.png"
         }
     },
     {
@@ -37,26 +20,9 @@
             "sku": "gblurwhite",
             "name": "G Blur Tee White",
             "description": "White Blur Logo Tee",
-            "has_sizes": true,
-            "sizes": [
-                "S",
-                "M",
-                "L",
-                "XL",
-                "XXL"
-            ],
+            "sizes": [1, 2, 3, 4, 5],
             "price": "50.00",
-            "sale_price": null,
-            "rating": null,
-            "image_url": null,
-            "image": "images/gblurtwhite.png",
-            "brand": 1,
-            "on_sale": false,
-            "created_on": "2025-01-08",
-            "average_rating": null,
-            "gender": null,
-            "materials": null,
-            "country_origin": null
+            "image": "images/gblurtwhite.png"
         }
     },
     {
@@ -67,26 +33,9 @@
             "sku": "paidinfull",
             "name": "Paid In Full",
             "description": "Masterplan",
-            "has_sizes": true,
-            "sizes": [
-                "S",
-                "M",
-                "L",
-                "XL",
-                "XXL"
-            ],
+            "sizes": [1, 2, 3, 4, 5],
             "price": "50.00",
-            "sale_price": null,
-            "rating": null,
-            "image_url": null,
-            "image": "images/paidinfullt.png",
-            "brand": 1,
-            "on_sale": false,
-            "created_on": "2025-01-08",
-            "average_rating": null,
-            "gender": null,
-            "materials": null,
-            "country_origin": null
+            "image": "images/paidinfullt.png"
         }
     },
     {
@@ -97,26 +46,9 @@
             "sku": "blacknblue",
             "name": "Black N' Blue",
             "description": "A bold black and blue shirt for everyday wear.",
-            "has_sizes": true,
-            "sizes": [
-                "S",
-                "M",
-                "L",
-                "XL",
-                "XXL"
-            ],
+            "sizes": [1, 2, 3, 4, 5],
             "price": "50.00",
-            "sale_price": null,
-            "rating": null,
-            "image_url": null,
-            "image": "images/blacknbluet.png",
-            "brand": 1,
-            "on_sale": false,
-            "created_on": "2025-01-08",
-            "average_rating": null,
-            "gender": null,
-            "materials": null,
-            "country_origin": null
+            "image": "images/blacknbluet.png"
         }
     },
     {
@@ -127,26 +59,9 @@
             "sku": "wiki",
             "name": "Wiki",
             "description": "It is what it is.",
-            "has_sizes": true,
-            "sizes": [
-                "S",
-                "M",
-                "L",
-                "XL",
-                "XXL"
-            ],
+            "sizes": [1, 2, 3, 4, 5],
             "price": "50.00",
-            "sale_price": null,
-            "rating": null,
-            "image_url": null,
-            "image": "images/wikitee.png",
-            "brand": 1,
-            "on_sale": false,
-            "created_on": "2025-01-08",
-            "average_rating": null,
-            "gender": null,
-            "materials": null,
-            "country_origin": null
+            "image": "images/wikitee.png"
         }
     },
     {
@@ -157,26 +72,9 @@
             "sku": "makethemcount",
             "name": "Make Them Count",
             "description": "The G.O.A.T",
-            "has_sizes": true,
-            "sizes": [
-                "S",
-                "M",
-                "L",
-                "XL",
-                "XXL"
-            ],
+            "sizes": [1, 2, 3, 4, 5],
             "price": "50.00",
-            "sale_price": null,
-            "rating": null,
-            "image_url": null,
-            "image": "images/makethemcount.png",
-            "brand": 1,
-            "on_sale": false,
-            "created_on": "2025-01-08",
-            "average_rating": null,
-            "gender": null,
-            "materials": null,
-            "country_origin": null
+            "image": "images/makethemcount.png"
         }
     },
     {
@@ -187,26 +85,9 @@
             "sku": "philotee",
             "name": "Philo Tee",
             "description": "A True Dublin Icon",
-            "has_sizes": true,
-            "sizes": [
-                "S",
-                "M",
-                "L",
-                "XL",
-                "XXL"
-            ],
+            "sizes": [1, 2, 3, 4, 5],
             "price": "50.00",
-            "sale_price": null,
-            "rating": null,
-            "image_url": null,
-            "image": "images/philotee.png",
-            "brand": 1,
-            "on_sale": false,
-            "created_on": "2025-01-08",
-            "average_rating": null,
-            "gender": null,
-            "materials": null,
-            "country_origin": null
+            "image": "images/philotee.png"
         }
     }
 ]

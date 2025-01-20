@@ -4,6 +4,7 @@ from django.urls import path, include
 from home import views  
 from django.conf import settings
 from django.conf.urls.static import static
+from home import views as home_views
 
 handler404 = 'guerrier_clothing.views.handler404'
 handler500 = 'guerrier_clothing.views.handler500'

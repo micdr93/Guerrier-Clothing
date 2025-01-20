@@ -17,6 +17,15 @@ def privacy_policy(request):
     return render(request, "home/privacy_policy.html")
 
 
+def shirts_view(request):
+   
+    return render(request, 'home/shirts.html', context={})
+
+
+def hats_view(request):
+ 
+    return render(request, 'home/hats.html', context={})
+
 # View for rendering the returns page
 def returns(request):
 
