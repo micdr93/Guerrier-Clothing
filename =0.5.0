@@ -1,0 +1,9 @@
+Collecting dj-database-url
+  Downloading dj_database_url-2.3.0-py3-none-any.whl.metadata (12 kB)
+Requirement already satisfied: Django>=4.2 in /workspace/.pip-modules/lib/python3.12/site-packages (from dj-database-url) (4.2.18)
+Requirement already satisfied: typing-extensions>=3.10.0.0 in /home/gitpod/.pyenv/versions/3.12.2/lib/python3.12/site-packages (from dj-database-url) (4.12.2)
+Requirement already satisfied: asgiref<4,>=3.6.0 in /workspace/.pip-modules/lib/python3.12/site-packages (from Django>=4.2->dj-database-url) (3.8.1)
+Requirement already satisfied: sqlparse>=0.3.1 in /workspace/.pip-modules/lib/python3.12/site-packages (from Django>=4.2->dj-database-url) (0.5.3)
+Downloading dj_database_url-2.3.0-py3-none-any.whl (7.8 kB)
+Installing collected packages: dj-database-url
+Successfully installed dj-database-url-2.3.0
