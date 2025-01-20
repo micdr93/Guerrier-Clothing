@@ -1,4 +1,4 @@
-<div class="collapse navbar-collapse" id="main-nav">
+<div class="collapse navbar-collapse" id="nav">
     <ul class="navbar-nav w-auto mx-auto d-flex justify-content-start">
 
         <!-- Clothing Dropdown -->
@@ -12,8 +12,8 @@
                 Clothing
             </a>
             <div class="dropdown-menu border-0" aria-labelledby="clothing-link">
-                <a href="#" class="dropdown-item">Shirts</a>
-                <a href="#" class="dropdown-item">Hats</a>
+                <a href="{% url 'shirts' %}" class="dropdown-item">Shirts</a>
+                <a href="{% url 'hats' %}" class="dropdown-item">Hats</a>
             </div>
         </li>
 
@@ -41,19 +41,3 @@
         </li>
     </ul>
 </div>
-
-<script>
-    $(document).ready(function () {
-        $(".dropdown").hover(
-            function () {
-                $(this).find('.dropdown-menu').show();
-                $(this).find('.nav-link').css('text-decoration', 'underline');
-                $(this).find('.nav-link').css('text-decoration-color', 'black');
-            },
-            function () {
-                $(this).find('.dropdown-menu').hide();
-                $(this).find('.nav-link').css('text-decoration', 'none');
-            }
-        );
-    });
-</script>
