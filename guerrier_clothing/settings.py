@@ -16,7 +16,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'guerrier-184e74af35e6.herokuapp.com',
-    '8000-micdr93-guerrierclothin-dwr04glveer.ws-eu117.gitpod.io',
+    '127.0.0.1',
 ]
 
 # Application definition

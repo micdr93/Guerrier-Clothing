@@ -4,9 +4,8 @@ Django==4.2.18
 django-allauth==65.3.1
 django-countries==7.6.1
 django-summernote==0.8.20.0
+psycopg2-binary==2.9.10
 gunicorn==23.0.0
 pillow==11.1.0
-psycopg==3.2.4
-psycopg-c==3.2.4
 sqlparse==0.5.3
 stripe==11.4.1
