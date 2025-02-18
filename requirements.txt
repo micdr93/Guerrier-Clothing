@@ -3,6 +3,8 @@ dj-database-url==2.3.0
 Django==4.2.18
 django-allauth==65.3.1
 django-countries==7.6.1
+django-crispy-forms==2.0
+crispy-bootstrap4==2022.1
 django-summernote==0.8.20.0
 psycopg2-binary==2.9.10
 gunicorn==23.0.0
