@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import dj_database_url
+import django_on_heroku
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,10 +10,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8chd+08em%nm!8o@&!5@qjcbu)5-ih*vu4m+&et6rc^588ayye'
+SECRET_KEY = 'iba58YoiZCm0mzeAObgPAxWpV2kZQxA-lZBMVMYZZiGlyEoXEL-dubPS8O1yONobvo0'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'guerrier-184e74af35e6.herokuapp.com',
@@ -109,6 +110,14 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# Stripe settings
+STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
+STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
+STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
+
+# Heroku settings
+django_on_heroku.settings(locals())
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'  # Corrected typo here
