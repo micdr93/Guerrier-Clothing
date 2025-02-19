@@ -7,6 +7,43 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 * [Link to App](https://guerrier-184e74af35e6.herokuapp.com/) 
   
 
+![Home Screen](path/to/your/image.png)
+
+---
+
+## Table of Contents
+
+1. [UX](#ux)
+2. [Strategy](#strategy)
+   * [Target Users](#target-users)
+   * [Site Goals](#site-goals)
+   * [Project Goals](#project-goals)
+3. [Agile Planning](#agile-planning)
+   * [User Stories](#user-stories)
+4. [Structure](#structure)
+   * [Wireframes](#wireframes)
+   * [Database Schema](#database-schema)
+5. [Main Plan](#main-plan)
+6. [Features](#features)
+   * [Existing Features](#existing-features)
+   * [Future Features](#future-features)
+7. [Design](#design)
+   * [Colour Scheme](#colour-scheme)
+   * [Typography](#typography)
+   * [Site Images](#site-images)
+8. [Business Model](#business-model)
+   * [Marketing Strategy](#marketing-strategy)
+   * [SEO](#seo)
+9. [Technologies](#technologies)
+   * [Languages Used](#languages-used)
+   * [Frameworks and Libraries](#frameworks-and-libraries)
+   * [Tools and Resources](#tools-and-resources)
+10. [Testing](#testing)
+11. [Bugs](#bugs)
+12. [Credits](#credits)
+13. [Deployment](#deployment)
+14. [Acknowledgements](#acknowledgements)
+
 <br>
 
 
