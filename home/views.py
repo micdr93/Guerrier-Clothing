@@ -1,12 +1,13 @@
 from django.shortcuts import render, redirect
-from products.models import Product
+from products.models import Product, Category
 from .forms import ContactForm
 from django.contrib import messages
 
 
-# View for rendering the home page
 def index(request):
-    return render(request, 'home/index.html')
+
+    return render(request, 'home/index.html',)
+
 
 
 # View for rendering the privacy policy page
@@ -59,3 +60,4 @@ def contact(request):
     }
 
     return render(request, "home/contact.html", context)
+
