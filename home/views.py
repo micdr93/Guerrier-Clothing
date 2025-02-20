@@ -9,6 +9,18 @@ def index(request):
     return render(request, 'home/index.html',)
 
 
+def shirts_view(request):
+    """A view to show all shirts"""
+    # Filter products that are shirts
+    products = Product.objects.filter(category__name='shirts')
+    
+    context = {
+        'products': products,
+        'current_category': 'shirts',
+    }
+    
+    return render(request, 'home/shirts.html', context)
+
 
 # View for rendering the privacy policy page
 def privacy_policy(request):
@@ -60,4 +72,5 @@ def contact(request):
     }
 
     return render(request, "home/contact.html", context)
+
 

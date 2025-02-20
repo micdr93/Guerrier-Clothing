@@ -22,6 +22,27 @@
                   <li class="nav-item">
                       <a class="nav-link" href="{% url 'contact' %}">Contact Us</a>
                   </li>
+
+                  {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'profile_home' %}">My Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'wishlist_home' %}">Wishlist</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'account_signup' %}">Register</a>
+            </li>
+        {% endif %}
+    </ul>
+</div>
               </ul>
           </div>
       </div>

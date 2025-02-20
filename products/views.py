@@ -77,6 +77,17 @@ def all_products(request):
 
     return render(request, 'products/products.html', context)
 
+def all_products(request):
+    products = Product.objects.all()
+    wishlist = None
+    if request.user.is_authenticated:
+        wishlist = Wishlist.objects.filter(user=request.user).first()
+    
+    context = {
+        'products': products,
+        'wishlist': wishlist,
+    }
+    return render(request, 'products/products.html', context)
 
 # view for product detail page
 def product_detail(request, product_id):
@@ -242,3 +253,4 @@ class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
+    
