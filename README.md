@@ -47,13 +47,33 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 <br>
 
 
-### Home Page Wireframes
+### Wireframes
 
-![screenshot](documentation/wireframes/Android.png)
+I created detailed wireframes for both desktop and mobile versions of all main pages to guide the development process.
 
-![screenshot](documentation/wireframes/iPad.png)
+#### Desktop Wireframes
 
-![screenshot](documentation/wireframes/iPhone.png)
+- [Home Page](documentation/wireframes/wireframe-home-page-desktop.png)
+- [All Products Page](documentation/wireframes/wireframe-all-products-page-desktop.png)
+- [Product Detail Page](documentation/wireframes/wireframe-product-detail-desktop.png)
+- [Basket Page](documentation/wireframes/wireframe-basket-page-desktop.png)
+- [Checkout Page](documentation/wireframes/wireframe-checkout-page-desktop.png)
+- [Wishlist Page](documentation/wireframes/wireframe-wishlist-desktop.png)
+- [Reviews Page](documentation/wireframes/wireframe-reviews-desktop.png)
+- [Contact Us Page](documentation/wireframes/wireframe-contact-us-desktop.png)
+
+#### Mobile Wireframes
+
+- [Home Page](documentation/wireframes/wireframe-home-page-mobile.png)
+- [All Products Page](documentation/wireframes/wireframe-all-products-page-mobile.png)
+- [Product Detail Page](documentation/wireframes/wireframe-product-detail-mobile.png)
+- [Basket Page](documentation/wireframes/wireframe-basket-page-mobile.png)
+- [Checkout Page](documentation/wireframes/wireframe-checkout-page-mobile.png)
+- [Wishlist Page](documentation/wireframes/wireframe-wishlist-mobile.png)
+- [Reviews Page](documentation/wireframes/wireframe-reviews-mobile.png)
+- [Contact Us Page](documentation/wireframes/wireframe-contact-us-mobile.png)
+
+All wireframes were created using Balsamiq to establish a consistent user interface across the site while ensuring responsive design for different devices.
 
 # Technologies
 
