@@ -109,35 +109,3 @@ class Product(models.Model):
         """
         return cls.objects.filter(is_active=True)
 
-class Review(models.Model):
-    """
-    Model to represent product reviews with enhanced features.
-    """
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='product_reviews')
-    
-    title = models.CharField(max_length=100)
-    review = models.TextField(max_length=1500)
-    
-    rating = models.IntegerField(
-        validators=[
-            MinValueValidator(1, "Rating must be at least 1"),
-            MaxValueValidator(5, "Rating cannot exceed 5")
-        ]
-    )
-    
-    created_on = models.DateTimeField(auto_now_add=True)
-    updated_on = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=["user", "product"], 
-                name="unique_review_per_user"
-            )
-        ]
-        ordering = ['-created_on']
-        verbose_name_plural = "Reviews"
-
-    def __str__(self):
-        return f"{self.title} - {self.product.name}"

@@ -1,7 +1,8 @@
 from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .widgets import CustomClearableFileInput
-from .models import Product, Category, Review
+from .models import Product, Category
+from reviews.models import Review 
 
 class ProductForm(forms.ModelForm):
     class Meta:

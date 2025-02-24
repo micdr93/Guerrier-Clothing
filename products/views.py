@@ -9,8 +9,8 @@ from django.db.models import Q
 from django.db.models.functions import Lower
 from .forms import ProductForm, ReviewsForm
 from .widgets import CustomClearableFileInput
-
-from .models import Product, Category, Review  # Adjusted to use Review instead of Reviews
+from .models import Product, Category
+from reviews.models import Review
 from profiles.models import UserProfile
 from wishlist.models import Wishlist
 import random
