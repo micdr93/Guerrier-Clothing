@@ -7,7 +7,7 @@ html, body {
 
 body {
   
-    background-image: url('/static/images/backgroundimg.png');
+   
     background-position: center;      
     background-repeat: no-repeat;     
     background-size: cover;          
@@ -137,4 +137,20 @@ nav ul li {
 .alert {
     border-radius: 4px;
     margin-bottom: 1rem;
+}
+
+.footer {
+    background-color: #f8f9fa;
+    padding: 2rem 0;
+    margin-top: auto;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
