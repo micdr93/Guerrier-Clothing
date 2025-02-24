@@ -39,6 +39,11 @@ INSTALLED_APPS = [
     'checkout',
     'profiles',
     'wishlist',
+    'recommendations',
+    'reviews',
+    'crispy_forms',
+    'storages',
+    'django_countries',
 ]
 
 MIDDLEWARE = [

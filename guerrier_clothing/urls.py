@@ -20,6 +20,8 @@ urlpatterns = [
     path('profiles/', include('profiles.urls')),
     path('clothing/', include('products.urls')),
     path('wishlist/', include('wishlist.urls')),
+    path('reviews/', include('reviews.urls')),
+    path('recommendations/', include('recommendations.urls')),
     path("contact/", views.contact, name="contact"),
     path('shirts/', views.shirts_view, name='shirts'),
     path('hats/', views.hats_view, name='hats'),
