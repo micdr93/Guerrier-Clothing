@@ -4,7 +4,8 @@
         "model": "products.category",
         "fields": {
             "name": "shirts",
-            "friendly_name": "Shirts"
+            "friendly_name": "Shirts",
+            "description": null
         }
     },
     {
@@ -12,7 +13,8 @@
         "model": "products.category",
         "fields": {
             "name": "hats",
-            "friendly_name": "Hats"
+            "friendly_name": "Hats",
+            "description": null
         }
     },
     {
@@ -20,7 +22,8 @@
         "model": "products.category",
         "fields": {
             "name": "mugs",
-            "friendly_name": "Mugs"
+            "friendly_name": "Mugs",
+            "description": null
         }
     },
     {
@@ -28,7 +31,8 @@
         "model": "products.category",
         "fields": {
             "name": "coasters",
-            "friendly_name": "Coasters"
+            "friendly_name": "Coasters",
+            "description": null
         }
     }
 ]

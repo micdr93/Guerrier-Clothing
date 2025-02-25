@@ -2,11 +2,20 @@ from django.shortcuts import render, redirect
 from products.models import Product, Category
 from .forms import ContactForm
 from django.contrib import messages
-
+from django.contrib.auth import logout
 
 def index(request):
 
     return render(request, 'home/index.html',)
+
+
+
+
+def instant_logout(request):
+    """Log out the user immediately without confirmation screen"""
+    logout(request)
+    messages.success(request, "You have been successfully logged out.")
+    return redirect('home')
 
 
 def shirts_view(request):
@@ -22,17 +31,22 @@ def shirts_view(request):
     return render(request, 'home/shirts.html', context)
 
 
+def products_view(request):
+    """A view to show all products"""
+    products = Product.objects.filter(is_active=True)
+    
+    context = {
+        'products': products,
+    }
+    
+    return render(request, 'home/products.html', context)
+
 # View for rendering the privacy policy page
 def privacy_policy(request):
     """
     FAQs Page
     """
     return render(request, "home/privacy_policy.html")
-
-
-def shirts_view(request):
-   
-    return render(request, 'home/shirts.html', context={})
 
 
 def hats_view(request):

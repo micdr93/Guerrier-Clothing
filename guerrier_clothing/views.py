@@ -16,3 +16,13 @@ def handler404(request, exception):
 def handler500(request):
     return render(request, '500.html', status=500)
 
+
+def products_view(request):
+    """A view to show all products"""
+    products = Product.objects.filter(is_active=True)
+    
+    context = {
+        'products': products,
+    }
+    
+    return render(request, 'home/products.html', context)

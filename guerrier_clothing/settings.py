@@ -95,6 +95,7 @@ ACCOUNT_USERNAME_REQUIRED = False
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
+ACCOUNT_ADAPTER = 'home.adapters.CustomAccountAdapter'
 
 WSGI_APPLICATION = 'guerrier_clothing.wsgi.application'
 

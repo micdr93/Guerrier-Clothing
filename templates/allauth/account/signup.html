@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load i18n %}
-
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
@@ -8,44 +7,38 @@
             <div class="card mt-5">
                 <div class="card-body">
                     <h1 class="card-title text-center mb-4">{% trans "Sign Up" %}</h1>
-
                     <form class="signup" id="signup_form" method="POST" action="{% url 'account_signup' %}">
                         {% csrf_token %}
-
-                        <!-- Username field -->
-                        <div class="form-group mb-3">
-                            <label for="id_username">{% trans "Username" %}</label>
-                            <input type="text" name="username" class="form-control" placeholder="Username" id="id_username" required>
+                        
+                        {% if form.errors %}
+                        <div class="alert alert-danger">
+                            {{ form.errors }}
                         </div>
-
+                        {% endif %}
+                        
                         <!-- Email field -->
                         <div class="form-group mb-3">
                             <label for="id_email">{% trans "Email" %}</label>
                             <input type="email" name="email" class="form-control" placeholder="Email address" id="id_email" required>
                         </div>
-
                         <!-- Password field -->
                         <div class="form-group mb-3">
                             <label for="id_password1">{% trans "Password" %}</label>
                             <input type="password" name="password1" class="form-control" placeholder="Password" id="id_password1" required>
                         </div>
-
                         <!-- Password confirmation field -->
                         <div class="form-group mb-3">
                             <label for="id_password2">{% trans "Password (again)" %}</label>
                             <input type="password" name="password2" class="form-control" placeholder="Password confirmation" id="id_password2" required>
                         </div>
-
                         {% if redirect_field_value %}
                             <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
                         {% endif %}
-
                         <!-- Submit button -->
                         <div class="d-grid gap-2">
                             <button class="btn btn-primary" type="submit">{% trans "Sign Up" %}</button>
                         </div>
                     </form>
-
                     <div class="mt-3 text-center">
                         <p>
                             {% trans "Already have an account?" %}
