@@ -3,17 +3,15 @@ from pathlib import Path
 import dj_database_url
 import django_on_heroku
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'iba58YoiZCm0mzeAObgPAxWpV2kZQxA-lZBMVMYZZiGlyEoXEL-dubPS8O1yONobvo0'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'default-key-for-development-only')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'DEVELOPMENT' in os.environ
 
 ALLOWED_HOSTS = [
     'guerrier-184e74af35e6.herokuapp.com',
@@ -87,19 +85,30 @@ SITE_ID = 1
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+# Authentication settings
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
-ACCOUNT_USERNAME_MIN_LENGTH = 4
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_USERNAME_REQUIRED = False
+
+
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
+
 WSGI_APPLICATION = 'guerrier_clothing.wsgi.application'
 
-DATABASES = {
-    'default': dj_database_url.config(default='postgresql://neondb_owner:ratLIbd3E4ch@ep-rough-shape-a275vn2j.eu-central-1.aws.neon.tech/motor_oasis_gong_951689')
-}
+if 'DATABASE_URL' in os.environ:
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -139,6 +148,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
-    'https://8000-micdr93-guerrierclothin-dwr04glveer.ws-eu117.gitpod.io',
+    
     'https://guerrier-184e74af35e6.herokuapp.com',
 ]
