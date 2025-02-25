@@ -110,7 +110,7 @@ def product_detail(request, product_id):
         return render(request, template, context)
     else:
         user = request.user
-        wishlist = Wishlist.objects.filter(user=user, products=product_id).exists()
+        wishlist = Wishlist.objects.filter(user=user, items__product__id=product_id).exists()
 
         template = "products/product_detail.html"
         context = {

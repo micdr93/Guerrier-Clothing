@@ -125,7 +125,7 @@ STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
 django_on_heroku.settings(locals())
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'  # Corrected typo here
+STATIC_URL = '/static/' 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
