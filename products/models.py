@@ -67,9 +67,12 @@ class Product(models.Model):
             MaxValueValidator(5, "Rating cannot exceed 5")
         ]
     )
-    
-    image_url = models.URLField(max_length=1024, null=True, blank=True)
-    image = models.ImageField(null=True, blank=True, upload_to='product_images/')
+    image = models.ImageField(
+        null=True, 
+        blank=True, 
+        # Updated to match the actual folder structure
+        upload_to='images/product_images/'
+    )
     
     # Soft delete fields
     is_active = models.BooleanField(default=True)

@@ -29,5 +29,3 @@ urlpatterns = [
     path('shirts/', views.shirts_view, name='shirts'),
     path('hats/', views.hats_view, name='hats'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
