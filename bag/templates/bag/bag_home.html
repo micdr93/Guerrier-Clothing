@@ -21,15 +21,19 @@
                 <td>{{ item.product.price }}</td>
                 <td>{{ item.total_price }}</td>
                 <td>
-                    <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger">Remove</a>
+                    <!-- Adjust your remove link to use product.id or whatever you need -->
+                    <a href="{% url 'remove_from_cart' item.product.id %}" class="btn btn-danger">
+                        Remove
+                    </a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
-    <div class="total">
+
+    <div class="total mt-3">
         <h3>Total: {{ cart_total }}</h3>
         <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
     </div>
 </div>
-{% endblock %} 
+{% endblock %}
