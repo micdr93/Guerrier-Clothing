@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'recommendations',
     'reviews',
     'crispy_forms',
+    'crispy_bootstrap5',
     'storages',
     'django_countries',
 ]
@@ -125,6 +126,15 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# Delivery
+
+FREE_DELIVERY_THRESHOLD = 50
+
+STANDARD_DELIVERY_PERCENTAGE = 10
+
+# Crispy forms settings
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 # Stripe settings
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
