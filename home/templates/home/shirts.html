@@ -23,63 +23,77 @@
         <div class="product-container col-10 offset-1">
             <div class="row mt-1 mb-2">
                 <div class="col-12 col-md-6 order-md-first">
-                    <p class="text-muted mt-3 text-center text-md-left">
-                        <a href="{% url 'products' %}" class="text-black">Products</a> | Shirts
-                    </p>
+
                 </div>
             </div>
 
+            <!-- Here's the key: each product goes in its own .col-*, inside .row -->
             <div class="row">
                 {% for product in products %}
-                <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                    <div class="card h-100 border-0">
-                        {% if wishlist and product in wishlist.products.all %}
-                            <a href="{% url 'remove_wishlist' product.id %}" aria-label="Remove product from Wishlist">
-                                <div class="wishlist-badge"><i class="fa-regular fa-heart"></i></div>
-                            </a>
-                        {% else %}
-                            <a href="{% url 'add_wishlist' product.id %}" aria-label="Add product to Wishlist">
-                                <div class="wishlist-badge"><i class="fa-regular fa-heart"></i></div>
-                            </a>
-                        {% endif %}
+                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+                        <div class="card h-100 border-0">
+                            {% if product.id in wishlist_item_ids %}
+                                <!-- Already in wishlist; show remove link -->
+                                <a href="{% url 'remove_from_wishlist' product.id %}" aria-label="Remove product from Wishlist">
+                                    <div class="wishlist-badge">
+                                        <i class="fa-regular fa-heart"></i>
+                                    </div>
+                                </a>
+                            {% else %}
+                                <!-- Not in wishlist; show add link -->
+                                <a href="{% url 'add_to_wishlist' product.id %}" aria-label="Add product to Wishlist">
+                                    <div class="wishlist-badge">
+                                        <i class="fa-regular fa-heart"></i>
+                                    </div>
+                                </a>
+                            {% endif %}
 
-                        {% if product.image %}
-                            <a href="{% url 'product_detail' product.id %}">
-                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                            </a>
-                        {% else %}
-                            <a href="{% url 'product_detail' product.id %}">
-                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-                            </a>
-                        {% endif %}
+                            {% if product.image %}
+                                <a href="{% url 'product_detail' product.id %}">
+                                    <img class="card-img-top img-fluid"
+                                         src="{{ product.image.url }}"
+                                         alt="{{ product.name }}">
+                                </a>
+                            {% else %}
+                                <a href="{% url 'product_detail' product.id %}">
+                                    <img class="card-img-top img-fluid"
+                                         src="{{ MEDIA_URL }}noimage.png"
+                                         alt="{{ product.name }}">
+                                </a>
+                            {% endif %}
 
-                        <div class="card-body pb-0">
-                            <p class="mb-0">{{ product.name }}</p>
-                        </div>
-                        <div class="card-footer bg-white pt-0 border-0 text-left">
-                            <div class="row">
-                                <div class="col">
-                                    <p class="mb-0 text-left font-weight-bold">€{{ product.price }}</p>
-                                    {% if product.brand %}
-                                        <p class="small mt-1 mb-0">
-                                            <a class="text-muted" href="{% url 'products' %}?brand={{ product.brand.name }}">
-                                                <i class="fas fa-tag mr-1"></i>{{ product.brand.friendly_name }}
-                                            </a>
+                            <div class="card-body pb-0">
+                                <p class="mb-0">{{ product.name }}</p>
+                            </div>
+                            <div class="card-footer bg-white pt-0 border-0 text-left">
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="mb-0 text-left font-weight-bold">
+                                            €{{ product.price }}
                                         </p>
-                                    {% endif %}
-                                    {% if product.rating %}
-                                        <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
-                                    {% else %}
-                                        <small class="text-muted">No Rating</small>
-                                    {% endif %}
+                                        {% if product.brand %}
+                                            <p class="small mt-1 mb-0">
+                                                <a class="text-muted" href="{% url 'products' %}?brand={{ product.brand.name }}">
+                                                    <i class="fas fa-tag mr-1"></i>
+                                                    {{ product.brand.friendly_name }}
+                                                </a>
+                                            </p>
+                                        {% endif %}
+                                        {% if product.rating %}
+                                            <small class="text-muted">
+                                                <i class="fas fa-star mr-1"></i>{{ product.rating }} / 5
+                                            </small>
+                                        {% else %}
+                                            <small class="text-muted">No Rating</small>
+                                        {% endif %}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
+                        </div>  <!-- .card -->
+                    </div>  <!-- .col -->
                 {% endfor %}
-            </div>
-        </div>
-    </div>
-</div>
+            </div>  <!-- .row -->
+        </div>  <!-- .product-container -->
+    </div>  <!-- .row -->
+</div>  <!-- .container-fluid -->
 {% endblock %}

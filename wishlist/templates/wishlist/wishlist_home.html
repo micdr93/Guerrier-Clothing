@@ -4,33 +4,40 @@
 {% block content %}
 <div class="container">
     <h1 class="mb-4">My Wishlist</h1>
-    {% if wishlist and wishlist.products.all %}
+
+    {% if wishlist and wishlist.items.exists %}
         <div class="row">
-            {% for product in wishlist.products.all %}
+            {% for item in wishlist.items.all %}
                 <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                     <div class="card h-100 border-0">
-                        <a href="{% url 'remove_wishlist' product.id %}" aria-label="Remove from wishlist">
+
+                        <a href="{% url 'remove_from_wishlist' item.product.id %}" aria-label="Remove from wishlist">
                             <div class="wishlist-badge"><i class="fas fa-heart"></i></div>
                         </a>
-                        
-                        {% if product.image %}
-                            <a href="{% url 'product_detail' product.id %}">
-                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+
+                        {% if item.product.image %}
+                            <a href="{% url 'product_detail' item.product.id %}">
+                                <img class="card-img-top img-fluid"
+                                     src="{{ item.product.image.url }}"
+                                     alt="{{ item.product.name }}">
                             </a>
                         {% else %}
-                            <a href="{% url 'product_detail' product.id %}">
-                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                            <a href="{% url 'product_detail' item.product.id %}">
+                                <img class="card-img-top img-fluid"
+                                     src="{{ MEDIA_URL }}noimage.png"
+                                     alt="{{ item.product.name }}">
                             </a>
                         {% endif %}
 
                         <div class="card-body">
-                            <h5 class="card-title">{{ product.name }}</h5>
-                            <p class="card-text">€{{ product.price }}</p>
+                            <h5 class="card-title">{{ item.product.name }}</h5>
+                            <p class="card-text">€{{ item.product.price }}</p>
                         </div>
                     </div>
                 </div>
             {% endfor %}
         </div>
+
     {% else %}
         <p>Your wishlist is empty</p>
         <a href="{% url 'products' %}" class="btn btn-primary">Continue Shopping</a>
