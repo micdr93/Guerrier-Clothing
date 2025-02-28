@@ -21,11 +21,15 @@
         <div class="col-12 col-lg-6">
             <div class="order-summary">
                 <p class="mb-2"><strong>Order Total:</strong> ${{ grand_total|floatformat:2 }}</p>
-                <!-- Additional summary info if needed -->
             </div>
         </div>
         <div class="col-12 col-lg-6">
             <p class="text-muted">Please fill out the form below to complete your order</p>
+
+            <!-- Hidden Stripe keys -->
+            <p id="id_stripe_public_key" hidden>{{ stripe_public_key|safe }}</p>
+            <p id="id_client_secret" hidden>{{ client_secret|safe }}</p>
+
             <form action="{% url 'checkout' %}" method="POST" id="payment-form">
                 {% csrf_token %}
                 <fieldset class="rounded px-3 mb-3">
@@ -44,82 +48,77 @@
                 </fieldset>
                 <fieldset class="rounded px-3 mb-3">
                     <legend class="small text-black">Payment Details</legend>
-                    <!-- Stripe Card Element placeholder -->
-                    <div id="card-element">
-                        <!-- A Stripe Element will be inserted here. -->
-                    </div>
-                    <!-- Element to display form errors -->
+                    <div id="card-element"><!-- Stripe injects card field here --></div>
                     <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                 </fieldset>
-                <button type="submit" class="btn btn-primary w-100">Complete Order</button>
+                <button type="submit" class="btn btn-primary w-100" id="submit-button">Complete Order</button>
             </form>
         </div>
     </div>
 </div>
+{% endblock %}
 
-<!-- Load Stripe.js -->
-<script src="https://js.stripe.com/v3/"></script>
+{% block postloadjs %}
 <script>
-    // Initialize Stripe with your public key from the template context.
-    var stripe = Stripe("{{ STRIPE_PUBLIC_KEY }}");
-    var elements = stripe.elements();
+    document.addEventListener("DOMContentLoaded", function () {
+        var stripePublicKey = document.getElementById("id_stripe_public_key").textContent.trim();
+        var clientSecret = document.getElementById("id_client_secret").textContent.trim();
+        var stripe = Stripe(stripePublicKey);
+        var elements = stripe.elements();
 
-    // Custom styling for the Stripe Element.
-    var style = {
-        base: {
-            color: "#32325d",
-            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-            fontSmoothing: "antialiased",
-            fontSize: "16px",
-            "::placeholder": {
-                color: "#aab7c4"
-            }
-        },
-        invalid: {
-            color: "#fa755a",
-            iconColor: "#fa755a"
-        }
-    };
+        var style = {
+            base: {
+                color: "#32325d",
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSmoothing: "antialiased",
+                fontSize: "16px",
+                "::placeholder": { color: "#aab7c4" }
+            },
+            invalid: { color: "#fa755a", iconColor: "#fa755a" }
+        };
 
-    // Create an instance of the card Element.
-    var card = elements.create("card", { style: style });
-    // Mount the card Element into the card-element div.
-    card.mount("#card-element");
+        var card = elements.create("card", { style: style });
+        card.mount("#card-element");
 
-    // Listen for real-time validation errors from the card Element.
-    card.on("change", function(event) {
-        var displayError = document.getElementById("card-errors");
-        if (event.error) {
-            displayError.textContent = event.error.message;
-        } else {
-            displayError.textContent = "";
-        }
-    });
+        // Handle form validation errors
+        card.addEventListener("change", function (event) {
+            var displayError = document.getElementById("card-errors");
+            displayError.textContent = event.error ? event.error.message : "";
+        });
 
-    // Handle form submission.
-    var form = document.getElementById("payment-form");
-    form.addEventListener("submit", function(event) {
-        event.preventDefault();
-        stripe.createToken(card).then(function(result) {
-            if (result.error) {
-                // Display error in #card-errors.
-                var errorElement = document.getElementById("card-errors");
-                errorElement.textContent = result.error.message;
-            } else {
-                // Token was created – pass it to your server.
-                stripeTokenHandler(result.token);
-            }
+        var form = document.getElementById("payment-form");
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            document.getElementById("submit-button").disabled = true;
+
+            stripe.confirmCardPayment(clientSecret, {
+                payment_method: {
+                    card: card,
+                    billing_details: {
+                        name: form.full_name.value,
+                        email: form.email.value,
+                        phone: form.phone_number.value,
+                        address: {
+                            line1: form.street_address1.value,
+                            line2: form.street_address2.value,
+                            city: form.town_or_city.value,
+                            postal_code: form.postcode.value,
+                            state: form.county.value,
+                            country: form.country.value
+                        }
+                    }
+                }
+            }).then(function (result) {
+                if (result.error) {
+                    document.getElementById("card-errors").textContent = result.error.message;
+                    document.getElementById("submit-button").disabled = false;
+                } else {
+                    if (result.paymentIntent.status === "succeeded") {
+                        form.submit();
+                    }
+                }
+            });
         });
     });
-
-    // Insert the token ID into the form and submit it.
-    function stripeTokenHandler(token) {
-        var hiddenInput = document.createElement("input");
-        hiddenInput.setAttribute("type", "hidden");
-        hiddenInput.setAttribute("name", "stripeToken");
-        hiddenInput.setAttribute("value", token.id);
-        form.appendChild(hiddenInput);
-        form.submit();
-    }
 </script>
 {% endblock %}

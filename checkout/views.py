@@ -14,6 +14,7 @@ import json
 
 @require_POST
 def cache_checkout_data(request):
+    """ Store bag contents in Stripe metadata before payment """
     try:
         pid = request.POST.get('client_secret').split('_secret')[0]
         stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -24,18 +25,27 @@ def cache_checkout_data(request):
         })
         return HttpResponse(status=200)
     except Exception as e:
-        messages.error(request, 'Sorry, your payment cannot be \
-            processed right now. Please try again later.')
+        messages.error(request, 'Sorry, your payment cannot be processed right now. Please try again later.')
         return HttpResponse(content=e, status=400)
 
 def checkout(request):
+    """ Handle the checkout process """
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
-    
+
+    if not stripe_public_key:
+        messages.warning(request, "Stripe public key is missing. Payment processing might not work.")
+
     if request.method == 'POST':
         bag = request.session.get('bag', {})
-        # ... rest of your checkout logic
-    else:
+        if not bag:
+            messages.error(request, "There's nothing in your bag.")
+            return redirect(reverse('products'))
+
+        # Handle form submission (e.g., create an order)
+        # Add your order processing logic here...
+
+    else:  # GET request (initial page load)
         bag = request.session.get('bag', {})
         if not bag:
             messages.error(request, "There's nothing in your bag at the moment")
@@ -43,27 +53,32 @@ def checkout(request):
 
         current_bag = bag_contents(request)
         total = current_bag['grand_total']
-        
-    context = {
-        'order_form': OrderForm(),
-    }
 
-    return render(request, 'checkout/checkout.html', context)
+        # ✅ **Create a Stripe PaymentIntent**
+        stripe.api_key = stripe_secret_key
+        intent = stripe.PaymentIntent.create(
+            amount=int(total * 100),  # Stripe expects amount in cents
+            currency="eur"
+        )
+
+        context = {
+            'order_form': OrderForm(),
+            'stripe_public_key': stripe_public_key,  # ✅ Pass to template
+            'client_secret': intent.client_secret,  # ✅ Pass to template
+        }
+
+        return render(request, 'checkout/checkout.html', context)
 
 def checkout_success(request, order_number):
-    """
-    Handle successful checkouts
-    """
+    """ Handle successful checkouts """
     save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
 
     if request.user.is_authenticated:
         profile = UserProfile.objects.get(user=request.user)
-        # Attach the user's profile to the order
         order.user_profile = profile
         order.save()
 
-        # Save the user's info
         if save_info:
             profile_data = {
                 'default_phone_number': order.phone_number,
@@ -78,16 +93,9 @@ def checkout_success(request, order_number):
             if user_profile_form.is_valid():
                 user_profile_form.save()
 
-    messages.success(request, f'Order successfully processed! \
-        Your order number is {order_number}. A confirmation \
-        email will be sent to {order.email}.')
+    messages.success(request, f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.')
 
     if 'bag' in request.session:
         del request.session['bag']
 
-    template = 'checkout/checkout_success.html'
-    context = {
-        'order': order,
-    }
-
-    return render(request, template, context)
+    return render(request, 'checkout/checkout_success.html', {'order': order})
