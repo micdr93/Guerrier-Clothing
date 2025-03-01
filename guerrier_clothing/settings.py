@@ -2,7 +2,13 @@ import os
 from pathlib import Path
 import dj_database_url
 import django_on_heroku
+from dotenv import load_dotenv
+load_dotenv() 
 
+import os
+if os.path.exists("env.py"):
+    import env
+    print("Environment variables loaded from env.py")
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY', 'default-key-for-development-only')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'DEVELOPMENT' in os.environ
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'guerrier-184e74af35e6.herokuapp.com',
@@ -41,7 +47,6 @@ INSTALLED_APPS = [
     'reviews',
     'crispy_forms',
     'crispy_bootstrap5',
-    'storages',
     'django_countries',
 ]
 
@@ -63,6 +68,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'templates', 'errors'),
             os.path.join(BASE_DIR, 'templates', 'allauth'),
         ],
         'APP_DIRS': True,
@@ -72,6 +78,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',  # required by allauth
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'bag.contexts.bag_contents',  # Add bag context processor
             ],
         },
     },
@@ -91,7 +98,6 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_USERNAME_REQUIRED = False
-
 
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
@@ -128,18 +134,17 @@ USE_L10N = True
 USE_TZ = True
 
 # Delivery
-
 FREE_DELIVERY_THRESHOLD = 50
-
 STANDARD_DELIVERY_PERCENTAGE = 10
 
 # Crispy forms settings
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
-# Stripe settings
+# Stripe settings - Using hardcoded values for testing
+
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
-STRIPE_WEBHOOK_SECRET = os.environ.get('STRIPE_WEBHOOK_SECRET', '')
 
 # Heroku settings
 django_on_heroku.settings(locals())
@@ -159,6 +164,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CSRF trusted origins
 CSRF_TRUSTED_ORIGINS = [
-    
     'https://guerrier-184e74af35e6.herokuapp.com',
 ]

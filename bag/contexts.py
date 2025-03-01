@@ -12,6 +12,8 @@ def bag_contents(request):
     product_count = 0
     bag = request.session.get('bag', {})
 
+    print(f"Session Bag: {bag}")  # ✅ Debugging
+
     for item_id, quantity in bag.items():
         try:
             product = get_object_or_404(Product, pk=item_id)
@@ -25,23 +27,13 @@ def bag_contents(request):
         except Product.DoesNotExist:
             continue
 
-    if total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
-        free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
-    else:
-        delivery = 0
-        free_delivery_delta = 0
+    print(f"Total Price in Bag Context: {total}")  # ✅ Debugging
 
-    grand_total = delivery + total
+    grand_total = total  # If using delivery costs, add them here.
 
-    context = {
+    return {
         'bag_items': bag_items,
         'total': total,
         'product_count': product_count,
-        'delivery': delivery,
-        'free_delivery_delta': free_delivery_delta,
-        'free_delivery_threshold': settings.FREE_DELIVERY_THRESHOLD,
         'grand_total': grand_total,
     }
-
-    return context

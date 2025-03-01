@@ -88,28 +88,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Form to choose size + Add to Bag -->
-                                <div class="row mt-2">
-                                    <div class="col">
-                                        <form action="{% url 'add_to_bag' product.id %}" method="POST" class="d-flex align-items-center">
-                                            {% csrf_token %}
-                                            <label for="size-{{ product.id }}" class="visually-hidden">
-                                                Select a size
-                                            </label>
-                                            <select name="size" id="size-{{ product.id }}" class="form-select form-select-sm me-2" required>
-                                                <option value="">Size</option>
-                                                <option value="S">S</option>
-                                                <option value="M">M</option>
-                                                <option value="L">L</option>
-                                                <!-- Add or remove sizes as needed -->
-                                            </select>
-                                            <button type="submit" class="btn btn-sm btn-primary">
-                                                Add to Bag
-                                            </button>
-                                        </form>
-                                    </div>
-                                </div>
-                                <!-- /Form section ends -->
+                             
 
                             </div>
                         </div>  <!-- .card -->

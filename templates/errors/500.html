@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col"></div>
+        </div>
+    </div>
+    <div class="container h-100">
+        <div class="row h-100">
+            <div class="col-7 col-md-6 my-auto">
+                <!-- Display the error message for the 500 page -->
+                <h3 class="display-4 logo-font text-black">
+                    500! Something went wrong on our end.
+                </h3>
+                <p class="lead">
+                    We’re working to fix it. Please try again later.
+                </p>
+                <div class="my-5">
+                    <!-- Provide a link to return to the main shop page -->
+                    <h4>
+                        <a href="{% url 'products' %}" 
+                            class="shop-now-button btn btn-lg rounded-0 text-uppercase py-3">
+                                Continue Shopping
+                        </a>
+                    </h4>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
