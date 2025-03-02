@@ -39,40 +39,23 @@
             <!-- Order History -->
             <div class="card mt-4">
                 <div class="card-header bg-secondary text-white">
-                    <h5>Order History</h5>
-                </div>
-                <div class="card-body">
-                    {% if orders %}
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Order ID</th>
-                                    <th>Date</th>
-                                    <th>Total</th>
-                                    <th>Status</th>
-                                    <th>Details</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for order in orders %}
-                                    <tr>
-                                        <td>{{ order.id }}</td>
-                                        <td>{{ order.date_ordered|date:"F d, Y" }}</td>
-                                        <td>€{{ order.total_price }}</td>
-                                        <td>{{ order.status }}</td>
-                                        <td>
-                                            <a href="{% url 'orders:detail' order.id %}" class="btn btn-sm btn-info">View</a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    {% else %}
-                        <p>No orders found.</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
+                    <hr>
+                   <h3>Order History</h3>
+  {% if orders %}
+    <ul class="list-group">
+      {% for order in orders %}
+        <li class="list-group-item mb-3">
+          <strong>Order Number:</strong> {{ order.order_number }}<br>
+          <strong>Date:</strong> {{ order.date|date:"M d, Y H:i" }}<br>
+          <strong>Grand Total:</strong> ${{ order.grand_total }}<br>
+          <a href="{% url 'checkout:order_detail' order.order_number %}" class="btn btn-sm btn-primary mt-2">
+            View Details
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>You haven't placed any orders yet.</p>
+  {% endif %}
 </div>
 {% endblock %}

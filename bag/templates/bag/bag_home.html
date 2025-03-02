@@ -33,7 +33,8 @@
 
     <div class="total mt-3">
         <h3>Total: {{ cart_total }}</h3>
-        <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+        <a href="{% url 'checkout:checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+
     </div>
 </div>
 {% endblock %}

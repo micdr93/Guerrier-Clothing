@@ -8,6 +8,7 @@ from .models import Order, OrderLineItem
 from products.models import Product
 from bag.contexts import bag_contents
 from profiles.models import UserProfile
+from django.contrib.auth.decorators import login_required
 from profiles.forms import UserProfileForm
 import stripe
 import json
@@ -182,3 +183,18 @@ def checkout_success(request, order_number):
         del request.session['bag']
     
     return render(request, 'checkout/checkout_success.html', {'order': order})
+
+@login_required
+def order_detail(request, order_number):
+    """
+    Display the details of a single order.
+    Ensures that the order belongs to the current user.
+    """
+    order = get_object_or_404(Order, order_number=order_number)
+    # Optional: check that the order's user_profile belongs to the current user
+    if order.user_profile and order.user_profile.user != request.user:
+        # You can handle this case differently, e.g., show a 403 Forbidden response.
+        return render(request, '403.html', status=403)
+    
+    return render(request, 'checkout/order_detail.html', {'order': order})
+
