@@ -17,7 +17,6 @@ import os
 
 @require_POST
 def cache_checkout_data(request):
-    """Store bag contents in Stripe metadata before payment."""
     try:
         pid = request.POST.get('client_secret').split('_secret')[0]
         stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -32,24 +31,22 @@ def cache_checkout_data(request):
         return HttpResponse(content=str(e), status=400)
 
 def checkout(request):
-    """Handle the checkout process."""
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
     stripe.api_key = stripe_secret_key
-    
+
     if stripe_secret_key:
         key_preview = stripe_secret_key[:6] + "..." if len(stripe_secret_key) > 6 else "NOT SET"
         print(f"🔑 Using Stripe Secret Key: {key_preview}")
 
     if not stripe_public_key or not stripe_secret_key:
         messages.error(request, "Stripe API keys are missing. Please check your environment variables.")
-        
+
     if request.method == 'POST':
         bag = request.session.get('bag', {})
-        
         if not bag:
             messages.error(request, "There's nothing in your bag.")
-            return redirect(reverse('products'))  # adjust if your products URL is namespaced
+            return redirect(reverse('products'))
 
         form_data = {
             'full_name': request.POST.get('full_name'),
@@ -61,16 +58,15 @@ def checkout(request):
             'street_address1': request.POST.get('street_address1'),
             'street_address2': request.POST.get('street_address2'),
         }
-        
+
         order_form = OrderForm(form_data)
-        
+
         if order_form.is_valid():
             try:
                 order = order_form.save(commit=False)
                 pid = request.POST.get('client_secret', '')
                 if pid:
                     order.stripe_pid = pid.split('_secret')[0]
-                
                 if request.user.is_authenticated:
                     try:
                         profile = UserProfile.objects.get(user=request.user)
@@ -78,13 +74,13 @@ def checkout(request):
                         print(f"✅ Order associated with user profile: {profile}")
                     except UserProfile.DoesNotExist:
                         print(f"❌ No user profile found for user: {request.user.username}")
-                
+
                 current_bag = bag_contents(request)
                 order.delivery_cost = current_bag.get('delivery', 0)
                 order.order_total = current_bag.get('total', 0)
                 order.grand_total = current_bag.get('grand_total', 0)
                 order.save()
-                
+
                 for item_id, quantity in bag.items():
                     try:
                         product = Product.objects.get(id=item_id)
@@ -99,13 +95,15 @@ def checkout(request):
                         messages.error(request, f"Product {item_id} not found")
                         order.delete()
                         return redirect(reverse('bag:view_bag'))
-                
+
                 request.session['bag'] = {}
+                # Use the proper namespace for checkout_success
                 return redirect(reverse('checkout:checkout_success', args=[order.order_number]))
-                
+
             except Exception as e:
                 print(f"ERROR: {type(e).__name__}: {str(e)}")
                 messages.error(request, f"There was an error processing your order: {str(e)}")
+                # Use the proper namespace for the bag view
                 return redirect(reverse('bag:view_bag'))
         else:
             messages.error(request, "There was an error with your form. Please check your information.")
@@ -123,7 +121,7 @@ def checkout(request):
             return redirect(reverse('bag:view_bag'))
 
         try:
-            intent = stripe.PaymentIntent.create()
+            intent = stripe.PaymentIntent.create(
                 amount=int(total * 100),
                 currency="eur"
             )
@@ -144,18 +142,13 @@ def checkout(request):
     return render(request, 'checkout/checkout.html', context)
 
 def checkout_success(request, order_number):
-    """Handle successful checkouts."""
     order = get_object_or_404(Order, order_number=order_number)
-    
     print(f"🛒 Order Number: {order.order_number}")
     print(f"👤 User Profile: {order.user_profile}")
     if request.user.is_authenticated:
         print(f"🔐 Logged in User: {request.user.username}")
     
-    messages.success(
-        request,
-        f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.'
-    )
+    messages.success(request, f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.')
     
     if 'bag' in request.session:
         del request.session['bag']
@@ -164,9 +157,12 @@ def checkout_success(request, order_number):
 
 @login_required
 def order_detail(request, order_number):
-    """Display the details of a single order."""
+    """
+    Display the details of a single order.
+    Ensure the order belongs to the current user.
+    """
     order = get_object_or_404(Order, order_number=order_number)
     if order.user_profile and order.user_profile.user != request.user:
+
         return render(request, '403.html', status=403)
-    
     return render(request, 'checkout/order_detail.html', {'order': order})
