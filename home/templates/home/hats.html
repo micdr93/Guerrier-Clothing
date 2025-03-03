@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load review_extras %}
 
 {% block page_header %}
 <div class="container header-container">
@@ -38,7 +39,7 @@
 
                             {% if product.id in wishlist_item_ids %}
                                 <!-- Already in wishlist; show remove link -->
-                                <a href="{% url 'bag:remove_from_cart' item.product.id %}" aria-label="Remove product from Wishlist">
+                                <a href="{% url 'bag:remove_from_cart' product.id %}" aria-label="Remove product from Wishlist">
                                     <div class="wishlist-badge"><i class="fa-regular fa-heart"></i></div>
                                 </a>
                             {% else %}
@@ -76,13 +77,14 @@
                                                 </a>
                                             </p>
                                         {% endif %}
-                                        {% if product.rating %}
-                                            <small class="text-muted">
-                                                <i class="fas fa-star mr-1"></i>{{ product.rating }} / 5
-                                            </small>
-                                        {% else %}
-                                            <small class="text-muted">No Rating</small>
-                                        {% endif %}
+                                        {% average_rating product as avg_rating %}
+                                            {% if avg_rating %}
+                                                <small class="text-muted">
+                                               <i class="fas fa-star mr-1"></i>{{ avg_rating }} / 5
+                                                          </small>
+                                            {% else %}
+                                          <small class="text-muted">No Rating</small>
+                                            {% endif %}
                                     </div>
                                 </div>
                             </div>
