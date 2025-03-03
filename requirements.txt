@@ -2,7 +2,7 @@ asgiref==3.8.1
 bleach==6.2.0
 certifi==2025.1.31
 charset-normalizer==3.4.1
-crispy-bootstrap5==2023.2
+crispy-bootstrap5==2024.10
 dj-database-url==2.3.0
 Django==4.2.18
 django-allauth==65.3.1
