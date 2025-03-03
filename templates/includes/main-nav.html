@@ -60,7 +60,7 @@
 
             <!-- Wishlist icon -->
             <li class="nav-item me-3">
-                <a class="nav-link" href="{% url 'wishlist_home' %}" aria-label="Wishlist">
+                <a class="nav-link" href="{% url 'wishlist:wishlist_home' %}" aria-label="Wishlist">
                     <i class="fa-regular fa-heart"></i>
                 </a>
             </li>
@@ -85,7 +85,7 @@
                     </a>
                     <div class="dropdown-menu border-0" aria-labelledby="account-link">
                         <a href="{% url 'profiles:home' %}" class="dropdown-item">My Profile</a>
-                        <a href="{% url 'wishlist_home' %}" class="dropdown-item">Wishlist</a>
+                        <a href="{% url 'wishlist:wishlist_home' %}" class="dropdown-item">Wishlist</a>
                         <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
                     </div>
                 {% else %}

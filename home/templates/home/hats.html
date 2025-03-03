@@ -43,19 +43,19 @@
                                 </a>
                             {% else %}
                                 <!-- Not in wishlist; show add link -->
-                                <a href="{% url 'add_to_wishlist' product.id %}" aria-label="Add product to Wishlist">
+                                <a href="{% url 'wishlist:add_to_wishlist' product.id %}" aria-label="Add product to Wishlist">
                                     <div class="wishlist-badge"><i class="fa-regular fa-heart"></i></div>
                                 </a>
                             {% endif %}
 
                             {% if product.image %}
-                                <a href="{% url 'product_detail' product.id %}">
+                                <a href="{% url 'products:product_detail' product.id %}">
                                     <img class="card-img-top img-fluid"
                                          src="{{ product.image.url }}"
                                          alt="{{ product.name }}">
                                 </a> 
                             {% else %}
-                                <a href="{% url 'product_detail' product.id %}">
+                                <a href="{% url 'products:product_detail' product.id %}">
                                     <img class="card-img-top img-fluid"
                                          src="{{ MEDIA_URL }}noimage.png"
                                          alt="{{ product.name }}">

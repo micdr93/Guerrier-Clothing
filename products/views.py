@@ -15,68 +15,7 @@ from profiles.models import UserProfile
 from wishlist.models import Wishlist
 import random
 
-# renders all products from database
-def all_products(request):
-    products = Product.objects.all()
-    user = request.user
-    query = None
-    categories = None
-    sort = None
-    direction = None
-
-    if user.is_authenticated:
-        wishlist, created = Wishlist.objects.get_or_create(user=user)
-    else:
-        wishlist = None
-
-    if request.GET:
-        if 'sort' in request.GET:
-            sortkey = request.GET['sort']
-            sort = sortkey
-            if sortkey == 'name':
-                sortkey = 'lower_name'
-                products = products.annotate(lower_name=Lower('name'))
-            elif sortkey == 'category':
-                sortkey = 'category__name'
-            if 'direction' in request.GET:
-                direction = request.GET['direction']
-                if direction == 'desc':
-                    sortkey = f'-{sortkey}'
-            products = products.order_by(sortkey)
-
-        if 'gender' in request.GET:
-            gender = request.GET['gender']
-            if gender:
-                products = products.filter(gender=gender)
-        
-        if 'category' in request.GET:
-            categories = request.GET['category']
-            if categories:
-                categories = categories.split(',')
-                products = products.filter(category__name__in=categories)
-                categories = Category.objects.filter(name__in=categories)
-
-        if 'q' in request.GET:
-            query = request.GET['q']
-            if not query:
-                messages.error(request, "You didn't enter any search criteria!")
-                return redirect(reverse('products'))
-
-            queries = Q(name__icontains=query) | Q(description__icontains=query)
-            products = products.filter(queries)
-
-    current_sorting = f'{sort}_{direction}'
-
-    context = {
-        'products': products,
-        'search_term': query,
-        'current_categories': categories,
-        'current_sorting': current_sorting,
-        "wishlist": wishlist,
-    }
-
-    return render(request, 'products/products.html', context)
-
+# Renders all products from the database
 def all_products(request):
     products = Product.objects.all()
     wishlist = None
@@ -89,7 +28,7 @@ def all_products(request):
     }
     return render(request, 'products/products.html', context)
 
-# view for product detail page
+# View for product detail page
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     reviews = Review.objects.filter(product=product).order_by("-created_on")
@@ -100,29 +39,21 @@ def product_detail(request, product_id):
     if len(related_products) >= 4:
         related_products = random.sample(related_products, 4)
 
-    if not request.user.is_authenticated:
-        template = "products/product_detail.html"
-        context = {
-            "product": product,
-            "reviews": reviews,
-            "related_products": related_products,
-        }
-        return render(request, template, context)
-    else:
+    context = {
+        "product": product,
+        "reviews": reviews,
+        "related_products": related_products,
+    }
+    
+    # If the user is authenticated, add wishlist information
+    if request.user.is_authenticated:
         user = request.user
-        wishlist = Wishlist.objects.filter(user=user, items__product__id=product_id).exists()
+        # Here, wishlist is a boolean that indicates whether this product is in the user's wishlist.
+        context["wishlist"] = Wishlist.objects.filter(user=user, items__product__id=product_id).exists()
 
-        template = "products/product_detail.html"
-        context = {
-            "product": product,
-            "reviews": reviews,
-            "related_products": related_products,
-            "wishlist": wishlist,
-        }
-        return render(request, template, context)
+    return render(request, "products/product_detail.html", context)
 
-
-# view fom admin adding a product
+# View for admin adding a product
 @login_required
 def add_product(request):
     if not request.user.is_superuser:
@@ -134,7 +65,7 @@ def add_product(request):
         if form.is_valid():
             product = form.save()
             messages.success(request, 'Successfully added product!')
-            return redirect(reverse('product_detail', args=[product.id]))
+            return redirect(reverse('products:product_detail', args=[product.id]))
         else:
             messages.error(request, 'Failed to add product. Please ensure the form is valid.')
     else:
@@ -144,11 +75,9 @@ def add_product(request):
     context = {
         'form': form,
     }
-
     return render(request, template, context)
 
-
-# view to edit a product
+# View to edit a product
 @login_required
 def edit_product(request, product_id):
     if not request.user.is_superuser:
@@ -161,7 +90,7 @@ def edit_product(request, product_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Successfully updated product!')
-            return redirect(reverse('product_detail', args=[product.id]))
+            return redirect(reverse('products:product_detail', args=[product.id]))
         else:
             messages.error(request, 'Failed to update product. Please ensure the form is valid.')
     else:
@@ -173,11 +102,9 @@ def edit_product(request, product_id):
         'form': form,
         'product': product,
     }
-
     return render(request, template, context)
 
-
-# view to delete a product
+# View to delete a product
 @login_required
 def delete_product(request, product_id):
     if not request.user.is_superuser:
@@ -187,16 +114,15 @@ def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     product.delete()
     messages.success(request, 'Product deleted!')
-    return redirect(reverse('products'))
+    # Assuming you have a URL pattern named 'product_list' in your products app
+    return redirect(reverse('products:product_list'))
 
-
-# view to add a review
+# View to add a review
 @login_required
 def add_review(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     if request.method == "POST":
         review_form = ReviewsForm(request.POST)
-
         if review_form.is_valid():
             try:
                 Review.objects.create(
@@ -205,22 +131,19 @@ def add_review(request, product_id):
                     title=request.POST["title"],
                     review=request.POST["review"],
                 )
-                reviews = Review.objects.filter(product=product)
                 messages.success(request, "Your review has been successfully added!")
-                return redirect(reverse("product_detail", args=[product.id]))
+                return redirect(reverse("products:product_detail", args=[product.id]))
             except IntegrityError:
                 messages.error(request, "You have already reviewed this product.")
-                return redirect(reverse("product_detail", args=[product.id]))
+                return redirect(reverse("products:product_detail", args=[product.id]))
         else:
             messages.error(request, "Your review has not been submitted.")
-    return redirect(reverse("product_detail", args=[product.id]))
+    return redirect(reverse("products:product_detail", args=[product.id]))
 
-
-# view to update a review
+# View to update a review
 class UpdateReview(
     LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView
 ):
-
     model = Review
     form_class = ReviewsForm
     template_name = "products/edit_review.html"
@@ -232,12 +155,10 @@ class UpdateReview(
         return user == review.user or user.is_superuser
 
     def get_success_url(self):
-        return reverse("product_detail", kwargs={"product_id": self.object.product_id})
+        return reverse("products:product_detail", kwargs={"product_id": self.object.product_id})
 
-
-# view to delete a review
+# View to delete a review
 class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-
     model = Review
     template_name = "products/delete_review.html"
     success_message = "Review deleted successfully."
@@ -248,9 +169,9 @@ class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return user == review.user or user.is_superuser
 
     def get_success_url(self):
-        return reverse("product_detail", kwargs={"product_id": self.object.product_id})
+        return reverse("products:product_detail", kwargs={"product_id": self.object.product_id})
 
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
-    
+product_list = all_products

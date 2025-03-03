@@ -103,7 +103,6 @@ def checkout(request):
             except Exception as e:
                 print(f"ERROR: {type(e).__name__}: {str(e)}")
                 messages.error(request, f"There was an error processing your order: {str(e)}")
-                # Use the proper namespace for the bag view
                 return redirect(reverse('bag:view_bag'))
         else:
             messages.error(request, "There was an error with your form. Please check your information.")
@@ -148,11 +147,16 @@ def checkout_success(request, order_number):
     if request.user.is_authenticated:
         print(f"🔐 Logged in User: {request.user.username}")
     
-    messages.success(request, f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.')
+    messages.success(
+        request,
+        f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.'
+    )
     
+    # Clear the bag once the order is successful
     if 'bag' in request.session:
         del request.session['bag']
     
+    # Render the checkout success template instead of redirecting to avoid redirect loops.
     return render(request, 'checkout/checkout_success.html', {'order': order})
 
 @login_required
@@ -163,6 +167,5 @@ def order_detail(request, order_number):
     """
     order = get_object_or_404(Order, order_number=order_number)
     if order.user_profile and order.user_profile.user != request.user:
-
         return render(request, '403.html', status=403)
     return render(request, 'checkout/order_detail.html', {'order': order})
