@@ -28,4 +28,5 @@ urlpatterns = [
     path("contact/", views.contact, name="contact"),
     path('shirts/', views.shirts_view, name='shirts'),
     path('hats/', views.hats_view, name='hats'),
+    path('webhooks/', include('checkout.urls', namespace='checkout')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
