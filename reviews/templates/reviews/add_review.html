@@ -2,12 +2,21 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <h2>Leave a Review for {{ product.name }}</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
-  </form>
-  <br>
-  <a href="{% url 'products:product_detail' product.id %}">Back to product details</a>
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="col-md-6">
+                <br>
+                <h2 class="text-center">Leave a Review for {{ product.name }}</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                    <button type="submit" class="btn btn-primary mt-3">Submit Review</button>
+                </form>
+                <br>
+                <div class="text-center">
+                    <a href="{% url 'products:product_detail' product.id %}">Back to product details</a>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

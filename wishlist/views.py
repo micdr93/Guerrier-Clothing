@@ -3,20 +3,34 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from products.models import Product
 from .models import Wishlist, WishlistItem
+from recommendations.utils import get_recommended_items
 
 @login_required
 def wishlist_home(request):
-    """Display the user's wishlist"""
+    """
+    Display the user's wishlist along with recommended items.
+    """
+    # Retrieve the user's wishlist (using the Wishlist model)
     wishlist = Wishlist.objects.filter(user=request.user).first()
+    
+    # If the wishlist exists, compute recommendations based on its items
+    if wishlist:
+        user_products = [item.product for item in wishlist.items.all()]
+        recommended_items = get_recommended_items(user_products)
+    else:
+        recommended_items = []
+
     context = {
-        'wishlist': wishlist
+        'wishlist': wishlist,
+        'recommended_items': recommended_items,
     }
     return render(request, 'wishlist/wishlist_home.html', context)
 
-
 @login_required
 def add_to_wishlist(request, product_id):
-    """Add a product to the wishlist"""
+    """
+    Add a product to the user's wishlist.
+    """
     product = get_object_or_404(Product, pk=product_id)
     wishlist, _ = Wishlist.objects.get_or_create(user=request.user)
     
@@ -33,15 +47,15 @@ def add_to_wishlist(request, product_id):
     
     return redirect(request.META.get('HTTP_REFERER', 'products'))
 
-
 @login_required
 def remove_from_wishlist(request, product_id):
-    """Remove a product from the wishlist"""
+    """
+    Remove a product from the user's wishlist.
+    """
     product = get_object_or_404(Product, pk=product_id)
     wishlist = Wishlist.objects.filter(user=request.user).first()
     
     if wishlist:
-        # Delete the WishlistItem for this product if it exists
         wishlist_item = WishlistItem.objects.filter(wishlist=wishlist, product=product).first()
         if wishlist_item:
             wishlist_item.delete()

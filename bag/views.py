@@ -2,6 +2,21 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.shortcuts import redirect
 from products.models import Product
+from recommendations.utils import get_recommended_items
+
+
+def bag_home(request):
+
+    bag = request.session.get('bag', {})
+    bag_product_ids = bag.keys() 
+    user_products = Product.objects.filter(id__in=bag_product_ids)
+    recommended_items = get_recommended_items(user_products)
+
+    context = {
+        'bag': bag,
+        'recommended_items': recommended_items,
+    }
+    return render(request, 'bag/bag_home.html', context)
 
 def view_bag(request):
     bag = request.session.get('bag', {})  

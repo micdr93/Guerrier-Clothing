@@ -122,6 +122,7 @@ nav ul li {
 .btn-primary {
     padding: 0.75rem 1.5rem;
     font-weight: 500;
+    background-color: ;
 }
 
 /* Error messages styling */
@@ -153,4 +154,39 @@ body {
 
 main {
     flex: 1;
+}
+
+/* Global button styles */
+button,
+.btn,
+.btn-primary,
+input[type="submit"],
+input[type="button"] {
+    background: #000 !important;
+    color: #fff !important;
+    text-transform: uppercase;
+    border: none;
+    cursor: pointer;
+}
+
+/* Optionally adjust padding and font properties */
+button,
+.btn {
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Hover state */
+button:hover,
+.btn:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+    background: #333 !important; /* Slightly lighter black for hover */
+    color: #fff !important;
+}
+
+.wishlist-badge i.fa-heart {
+    color: #000;
+    font-size: 1.5rem;
 }

@@ -10,9 +10,11 @@
             {% for item in wishlist.items.all %}
                 <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                     <div class="card h-100 border-0">
-
+                       
                         <a href="{% url 'bag:remove_from_cart' item.product.id %}" aria-label="Remove from wishlist">
-                            <div class="wishlist-badge"><i class="fas fa-heart"></i></div>
+                            <div class="wishlist-badge">
+                                <i class="fas fa-heart" style="color: #000;"></i>
+                            </div>
                         </a>
 
                         {% if item.product.image %}
@@ -38,6 +40,27 @@
             {% endfor %}
         </div>
 
+        <div class="container mt-4">
+            <h3>Recommended For You</h3>
+            <div class="row">
+                {% for product in recommended_items %}
+                    <div class="col-sm-6 col-md-4 col-lg-3">
+                        <div class="card h-100">
+                            <a href="{% url 'products:product_detail' product.id %}">
+                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                            </a>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">${{ product.price }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>No recommendations available at the moment.</p>
+                {% endfor %}
+            </div>
+        </div>
+        
     {% else %}
         <p>Your wishlist is empty</p>
         <a href="{% url 'products' %}" class="btn btn-primary">Continue Shopping</a>
