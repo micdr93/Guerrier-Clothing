@@ -123,7 +123,7 @@ def checkout(request):
             return redirect(reverse('bag:view_bag'))
 
         try:
-            intent = stripe.PaymentIntent.create(
+            intent = stripe.PaymentIntent.create()
                 amount=int(total * 100),
                 currency="eur"
             )
