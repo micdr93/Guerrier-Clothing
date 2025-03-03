@@ -30,7 +30,8 @@
             <div id="id_stripe_public_key" hidden>{{ stripe_public_key }}</div>
             <div id="id_client_secret" hidden>{{ client_secret }}</div>
 
-            <form action="{% url 'checkout' %}" method="POST" id="payment-form">
+            <form action="{% url 'checkout:checkout' %}" method="POST" id="payment-form">
+
                 {% csrf_token %}
                 <fieldset class="rounded px-3 mb-3">
                     <legend class="small text-black">Personal Details</legend>

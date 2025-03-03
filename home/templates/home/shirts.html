@@ -33,7 +33,7 @@
                         <div class="card h-100 border-0">
                             {% if product.id in wishlist_item_ids %}
                                 <!-- Already in wishlist; show remove link -->
-                                <a href="{% url 'remove_from_wishlist' product.id %}" aria-label="Remove product from Wishlist">
+                                <a href= "{% url 'bag:remove_from_cart' item.product.id %}" aria-label="Remove product from Wishlist">
                                     <div class="wishlist-badge">
                                         <i class="fa-regular fa-heart"></i>
                                     </div>

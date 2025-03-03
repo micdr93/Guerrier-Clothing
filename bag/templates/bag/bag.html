@@ -55,7 +55,7 @@
                                 </td>
                                 <td class="text-end">
                                     <!-- Remove button -->
-                                    <form action="{% url 'remove_from_bag' item.product.id %}" method="POST">
+                                    <form action="{% url 'bag:remove_from_cart' item.product.id %}" method="POST">
                                         {% csrf_token %}
                                         <button type="submit"
                                                 class="btn btn-sm btn-outline-danger"

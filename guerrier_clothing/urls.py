@@ -16,7 +16,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('', include('home.urls')), 
     path('products/', include('products.urls')),
-    path('bag/', include('bag.urls')),
+    path('bag/', include(('bag.urls', 'bag'), namespace='bag')),
     path('checkout/', include('checkout.urls')),
     path('profiles/', include('profiles.urls')),
     path('accounts/', include('allauth.urls')),

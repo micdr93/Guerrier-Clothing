@@ -66,11 +66,7 @@ ROOT_URLCONF = 'guerrier_clothing.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'templates', 'errors'),
-            os.path.join(BASE_DIR, 'templates', 'allauth'),
-        ],
+        'DIRS':  [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

@@ -65,7 +65,8 @@
                 <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                     <div class="card h-100 border-0">
                         {% if wishlist and product in wishlist.products.all %}
-                            <a href="{% url 'remove_wishlist' product.id %}" aria-label="Remove product from Wishlist">
+                            <a href="{% url 'bag:remove_from_cart' item.product.id %}"
+                            aria-label="Remove product from Wishlist">
                                 <div class="wishlist-badge"><i class="fa-regular fa-heart"></i></div>
                             </a>
                         {% else %}

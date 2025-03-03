@@ -36,12 +36,11 @@ def add_to_bag(request, product_id):
         bag[product_key] = 1
     request.session['bag'] = bag
     messages.success(request, f'Added {product.name} to your bag.')
-    return redirect('view_bag')
+    return redirect('bag:view_bag')
 
 def remove_from_bag(request, product_id):
     bag = request.session.get('bag', {})
     product_key = str(product_id)
     if product_key in bag:
         del bag[product_key]
-    request.session['bag'] = bag
-    return redirect('view_bag')
+    return redirect('bag:view_bag')
