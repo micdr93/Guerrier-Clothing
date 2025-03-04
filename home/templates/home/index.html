@@ -2,19 +2,19 @@
 {% load static %}
 
 {% block page_header %}
-<div class="container header-container">
-    <div class="row">
-        <div class="col">
-            <!-- Large clickable hero image linking to all products -->
-            <a href="{% url 'all_products' %}">
-                <img src="{% static 'images/hero.png' %}" class="img-fluid w-100" alt="Shop All Products">
+<div class="container-fluid px-0">
+    <div class="row no-gutters">
+        <div class="col-12">
+            <a href="{% url 'all_products' %}" class="hero-banner d-block">
+                <img src="{{ banner_image }}" alt="Shop All Guerrier Products">
+                <div class="banner-overlay">
+                    <h2 class="banner-text">Shop The Collection</h2>
+                </div>
             </a>
         </div>
     </div>
 </div>
 {% endblock %}
-<br>
-<br>
 
 {% block content %}
 <div class="container mt-4">
@@ -27,7 +27,7 @@
                     A bold streetwear brand inspired by the spirit of warriors. Based in the vibrant streets of Dublin, Guerrier draws its name from the French word for warrior, representing strength, courage, and resilience.
                 </p>
                 <p>
-                    Our mission is simple: to create clothing that empowers you to take on life’s challenges with confidence. Designed with a blend of cutting-edge streetwear aesthetics and premium-quality craftsmanship, Guerrier is your go-to armor for standing out and standing strong.
+                    Our mission is simple: to create clothing that empowers you to take on life's challenges with confidence. Designed with a blend of cutting-edge streetwear aesthetics and premium-quality craftsmanship, Guerrier is your go-to armor for standing out and standing strong.
                 </p>
             </div>
         </div>

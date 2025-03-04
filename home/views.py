@@ -8,6 +8,7 @@ from wishlist.models import Wishlist
 def index(request):
     return render(request, 'home/index.html')
 
+
 def instant_logout(request):
     logout(request)
     messages.success(request, "You have been successfully logged out.")

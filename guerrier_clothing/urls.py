@@ -46,5 +46,8 @@ urlpatterns = [
     
     # Logout (using your custom view)
     path('logout/', instant_logout, name='logout'),
-    
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
+
+# Add this as a separate statement
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
