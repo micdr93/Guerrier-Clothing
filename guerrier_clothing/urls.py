@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from home import views as home_views
-from home.views import instant_logout
+from home.views import instant_logout, all_products
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -15,6 +15,7 @@ urlpatterns = [
     # Home
     path('', home_views.index, name='index'),
     path('', include('home.urls')),  # if you have additional home app URLs
+    path('products/', all_products, name='all_products'),
     
     # Products (and "clothing" if needed)
     path('products/', include(('products.urls', 'products'), namespace='products')),

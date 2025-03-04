@@ -72,3 +72,7 @@ def contact(request):
         "form": form,
     }
     return render(request, "home/contact.html", context)
+
+def all_products(request):
+   
+    return render(request, 'products.html', {})
