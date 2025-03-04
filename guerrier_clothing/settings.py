@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'products',
     'django_summernote',
     'bag',
-    'checkout',
+    'checkout.apps.CheckoutConfig',
     'profiles',
     'wishlist',
     'recommendations',
