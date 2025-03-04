@@ -76,3 +76,15 @@ def contact(request):
 def all_products(request):
    
     return render(request, 'products.html', {})
+
+def mugs_view(request):
+    products = Product.objects.filter(category__name__iexact='mugs')
+    return render(request, 'home/mugs.html', {'products': products})
+
+def coasters_view(request):
+    products = Product.objects.filter(category__name__iexact='coasters')
+    return render(request, 'home/coasters.html', {'products': products})
+
+def skateboard_decks_view(request):
+    products = Product.objects.filter(category__name__iexact='skateboard decks')
+    return render(request, 'home/skateboard_decks.html', {'products': products})
