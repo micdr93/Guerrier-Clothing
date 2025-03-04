@@ -4,10 +4,27 @@ from django.contrib.auth import logout
 from .forms import ContactForm
 from products.models import Product
 from wishlist.models import Wishlist
+from .forms import NewsletterForm
+from .models import NewsletterSubscription
 
 def index(request):
-    return render(request, 'home/index.html')
 
+    if request.method == 'POST':
+        newsletter_form = NewsletterForm(request.POST)
+        if newsletter_form.is_valid():
+            try:
+                newsletter_form.save()
+                messages.success(request, "Thank you for subscribing to our newsletter!")
+            except:
+                messages.error(request, "You're already subscribed to our newsletter.")
+    else:
+        newsletter_form = NewsletterForm()
+        
+    context = {
+        'banner_image': '/media/banners/banner.png',
+        'newsletter_form': newsletter_form
+    }
+    return render(request, 'home/index.html', context)
 
 def instant_logout(request):
     logout(request)

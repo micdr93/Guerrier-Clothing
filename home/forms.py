@@ -1,7 +1,8 @@
 from django import forms
 from .models import Contact
 from .models import Product
-from .models import Category
+from .models import Category 
+from .models import NewsletterSubscription
 
 
 class ContactForm(forms.ModelForm):
@@ -18,3 +19,12 @@ class CategoryForm(forms.ModelForm):
      class Meta:
         model = Category
         fields = ['name', 'description']
+
+
+class NewsletterForm(forms.ModelForm):
+    class Meta:
+        model = NewsletterSubscription
+        fields = ['email']
+        widgets = {
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'Enter your email address'})
+        }

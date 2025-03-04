@@ -47,5 +47,31 @@
         </div>
         {% endfor %}
     </div>
+    
+    <!-- Newsletter Section - INSIDE the content block -->
+    <div class="container-fluid bg-light py-5 mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h2 class="mb-4">Join Our Newsletter</h2>
+                <p class="mb-4">Sign up to receive updates on new products, exclusive offers, and streetwear trends.</p>
+                
+                <form method="POST" class="d-flex justify-content-center">
+                    {% csrf_token %}
+                    <div class="input-group mb-3 w-75">
+                        {{ newsletter_form.email }}
+                        <button class="btn btn-dark" type="submit">Subscribe</button>
+                    </div>
+                </form>
+                
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} mt-3">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
