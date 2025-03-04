@@ -7,20 +7,34 @@
               <span class="navbar-toggler-icon"></span>
           </button>
 
-          <!-- Mobile Navigation Content -->
-          <div class="collapse navbar-collapse" id="mobile-nav">
-              <ul class="navbar-nav">
-                  <li class="nav-item dropdown">
-                      <a class="nav-link" href="{% url 'products' %}">All Clothing</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{% url 'shirts_view' %}">Shirts</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="{% url 'hats_view' %}">Hats</a>
-                  </li>
-
-
+          
+<!-- Mobile Navigation Content -->
+<div class="collapse navbar-collapse" id="mobile-nav">
+    <ul class="navbar-nav">
+        <!-- Clothing Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="clothing-mobile" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                All Clothing
+            </a>
+            <div class="dropdown-menu" aria-labelledby="clothing-mobile">
+                <a class="dropdown-item" href="{% url 'products' %}">All Clothing</a>
+                <a class="dropdown-item" href="{% url 'shirts_view' %}">Shirts</a>
+                <a class="dropdown-item" href="{% url 'hats_view' %}">Hats</a>
+            </div>
+        </li>
+        <!-- Homeware Dropdown -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="homeware-mobile" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Homeware
+            </a>
+            <div class="dropdown-menu" aria-labelledby="homeware-mobile">
+                <a class="dropdown-item" href="#">Mugs</a>
+                <a class="dropdown-item" href="#">Coasters</a>
+                <a class="dropdown-item" href="#">Skateboard Decks</a>
+            </div>
+        </li>
+    </ul>
+</div>
                   {% if user.is_authenticated %}
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'profiles:home' %}">My Profile</a>
