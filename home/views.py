@@ -14,7 +14,7 @@ def instant_logout(request):
     return redirect('home')
 
 def shirts_view(request):
-    products = Product.objects.filter(category__name='shirts')
+    products = Product.objects.filter(category__name__iexact='shirts')
     context = {
         'products': products,
         'current_category': 'shirts',
@@ -22,7 +22,7 @@ def shirts_view(request):
     return render(request, 'home/shirts.html', context)
 
 def hats_view(request):
-    products = Product.objects.filter(category_id=2)
+    products = Product.objects.filter(category__id=2)
     wishlist_item_ids = set()
     wishlist = None
     if request.user.is_authenticated:
@@ -74,17 +74,20 @@ def contact(request):
     return render(request, "home/contact.html", context)
 
 def all_products(request):
-   
     return render(request, 'products.html', {})
 
+# Homeware views using long-term fix with proper category assignments
 def mugs_view(request):
-    products = Product.objects.filter(category__name__iexact='mugs')
+    
+    products = Product.objects.filter(category__id=3)
     return render(request, 'home/mugs.html', {'products': products})
 
 def coasters_view(request):
-    products = Product.objects.filter(category__name__iexact='coasters')
+    
+    products = Product.objects.filter(category__id=4)
     return render(request, 'home/coasters.html', {'products': products})
 
 def skateboard_decks_view(request):
-    products = Product.objects.filter(category__name__iexact='skateboard decks')
+
+    products = Product.objects.filter(category__id=5)
     return render(request, 'home/skateboard_decks.html', {'products': products})

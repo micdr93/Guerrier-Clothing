@@ -34,5 +34,14 @@
             "friendly_name": "Coasters",
             "description": null
         }
+    },
+    {
+        "pk": 5,
+        "model": "products.category",
+        "fields": {
+            "name": "skateboard_decks",
+            "friendly_name": "Skateboard Decks",
+            "description": null
+        }
     }
 ]
