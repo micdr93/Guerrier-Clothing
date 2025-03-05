@@ -19,6 +19,7 @@ from decimal import Decimal
 def all_products(request):
     products = Product.objects.filter(is_active=True)
     
+    # Search query
     query = request.GET.get('q')
     if query:
         products = products.filter(
@@ -27,11 +28,13 @@ def all_products(request):
             Q(category__name__icontains=query)
         )
     
+    # Category filtering
     category = request.GET.get('category')
     if category:
-        products = products.filter(category__name=category)
+        products = products.filter(category__name__iexact=category)
     
-    sort = request.GET.get('sort', 'default')
+    # Sorting logic
+    sort = request.GET.get('sort')
     direction = request.GET.get('direction', 'asc')
     
     if sort == 'price':
@@ -43,23 +46,21 @@ def all_products(request):
     elif sort == 'rating':
         products = products.order_by('rating' if direction == 'asc' else '-rating')
     
+    # Wishlist context
     wishlist = None
     if request.user.is_authenticated:
         wishlist = Wishlist.objects.filter(user=request.user).first()
     
-    categories = Category.objects.all()
-    
+    # Prepare context
     context = {
         'products': products,
         'search_term': query,
         'current_categories': category,
-        'categories': categories,
+        'categories': Category.objects.all(),
         'wishlist': wishlist,
-        'current_sorting': f'{sort}_{direction}',
+        'current_sorting': f'{sort}_{direction}' if sort and direction else 'None_None',
     }
     
-    return render(request, 'products/products.html', context)
-
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     reviews = Review.objects.filter(product=product).order_by("-created_on")
