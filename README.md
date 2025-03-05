@@ -154,8 +154,10 @@ The project uses a relational database model with the following main models:
 - Heart icon for the user's wishlist
 - Person icon for user profil, login or sign up
 
-![Navigation Bar](documentation/features/navbar.png)
+![Navigation Bar](documentation/readme_images/navbar.png)
 
+### Home Page
+- Newsletter signup form
 
 # Technologies
 
