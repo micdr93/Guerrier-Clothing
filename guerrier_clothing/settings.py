@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.sitemaps',
     'django.contrib.sites',
+    'django_extensions',
     'allauth',
     'allauth.account',
     'home',

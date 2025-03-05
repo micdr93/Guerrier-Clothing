@@ -140,6 +140,8 @@ The project uses a relational database model with the following main models:
 - **Wishlist**: User-saved favorite products
 - **Review**: User feedback on products
 
+[Database Schema](documentation/db-schema.png)
+
 
 # Technologies
 
