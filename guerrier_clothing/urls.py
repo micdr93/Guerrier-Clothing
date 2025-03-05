@@ -1,14 +1,14 @@
 from django.contrib import admin
 from django.urls import path, include
-from home import views as home_views
-from home.views import instant_logout
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 
+from home import views as home_views
+from allauth.account.views import LogoutView
+
 handler404 = 'guerrier_clothing.views.handler404'
 handler500 = 'guerrier_clothing.views.handler500'
-
 
 from products.sitemaps import (
     StaticViewSitemap,
@@ -26,11 +26,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     
-    
     # Home
     path('', home_views.index, name='index'),
     path('', include('home.urls')),  # additional home app URLs
-    
     
     # Products (and "clothing" if needed)
     path('products/', include(('products.urls', 'products'), namespace='products')),
@@ -59,8 +57,8 @@ urlpatterns = [
     path('shirts/', home_views.shirts_view, name='shirts'),
     path('hats/', home_views.hats_view, name='hats'),
     
-    # Logout (using your custom view)
-    path('logout/', instant_logout, name='logout'),
+    # Use AllAuth's logout view
+    path('logout/', LogoutView.as_view(), name='logout'),
 
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap')
 ]
