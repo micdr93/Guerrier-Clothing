@@ -14,21 +14,52 @@ from reviews.models import Review
 from profiles.models import UserProfile
 from wishlist.models import Wishlist
 import random
+from decimal import Decimal
 
-# Renders all products from the database
 def all_products(request):
-    products = Product.objects.all()
+    products = Product.objects.filter(is_active=True)
+    
+    query = request.GET.get('q')
+    if query:
+        products = products.filter(
+            Q(name__icontains=query) | 
+            Q(description__icontains=query) |
+            Q(category__name__icontains=query)
+        )
+    
+    category = request.GET.get('category')
+    if category:
+        products = products.filter(category__name=category)
+    
+    sort = request.GET.get('sort', 'default')
+    direction = request.GET.get('direction', 'asc')
+    
+    if sort == 'price':
+        products = products.order_by('price' if direction == 'asc' else '-price')
+    elif sort == 'name':
+        products = products.order_by('name' if direction == 'asc' else '-name')
+    elif sort == 'category':
+        products = products.order_by('category__name' if direction == 'asc' else '-category__name')
+    elif sort == 'rating':
+        products = products.order_by('rating' if direction == 'asc' else '-rating')
+    
     wishlist = None
     if request.user.is_authenticated:
         wishlist = Wishlist.objects.filter(user=request.user).first()
     
+    categories = Category.objects.all()
+    
     context = {
         'products': products,
+        'search_term': query,
+        'current_categories': category,
+        'categories': categories,
         'wishlist': wishlist,
+        'current_sorting': f'{sort}_{direction}',
     }
+    
     return render(request, 'products/products.html', context)
 
-# View for product detail page
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     reviews = Review.objects.filter(product=product).order_by("-created_on")
@@ -45,15 +76,12 @@ def product_detail(request, product_id):
         "related_products": related_products,
     }
     
-    # If the user is authenticated, add wishlist information
     if request.user.is_authenticated:
         user = request.user
-        # Here, wishlist is a boolean that indicates whether this product is in the user's wishlist.
         context["wishlist"] = Wishlist.objects.filter(user=user, items__product__id=product_id).exists()
 
     return render(request, "products/product_detail.html", context)
 
-# View for admin adding a product
 @login_required
 def add_product(request):
     if not request.user.is_superuser:
@@ -77,7 +105,6 @@ def add_product(request):
     }
     return render(request, template, context)
 
-# View to edit a product
 @login_required
 def edit_product(request, product_id):
     if not request.user.is_superuser:
@@ -104,7 +131,6 @@ def edit_product(request, product_id):
     }
     return render(request, template, context)
 
-# View to delete a product
 @login_required
 def delete_product(request, product_id):
     if not request.user.is_superuser:
@@ -114,10 +140,8 @@ def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     product.delete()
     messages.success(request, 'Product deleted!')
-    # Assuming you have a URL pattern named 'product_list' in your products app
     return redirect(reverse('products:product_list'))
 
-# View to add a review
 @login_required
 def add_review(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -140,7 +164,6 @@ def add_review(request, product_id):
             messages.error(request, "Your review has not been submitted.")
     return redirect(reverse("products:product_detail", args=[product.id]))
 
-# View to update a review
 class UpdateReview(
     LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView
 ):
@@ -157,7 +180,6 @@ class UpdateReview(
     def get_success_url(self):
         return reverse("products:product_detail", kwargs={"product_id": self.object.product_id})
 
-# View to delete a review
 class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Review
     template_name = "products/delete_review.html"
@@ -174,4 +196,51 @@ class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
+def all_products(request):
+    products = Product.objects.filter(is_active=True)
+    
+    query = request.GET.get('q')
+    if query:
+        products = products.filter(
+            Q(name__icontains=query) | 
+            Q(description__icontains=query) |
+            Q(category__name__icontains=query)
+        )
+    
+    category = request.GET.get('category')
+    if category:
+        products = products.filter(category__name__iexact=category)
+    
+    sort = request.GET.get('sort')
+    direction = request.GET.get('direction', 'asc')
+    
+    # Debug print
+    print(f"Sort: {sort}, Direction: {direction}")
+    
+    if sort == 'price':
+        products = products.order_by('price' if direction == 'asc' else '-price')
+    elif sort == 'name':
+        products = products.order_by('name' if direction == 'asc' else '-name')
+    elif sort == 'category':
+        products = products.order_by('category__name' if direction == 'asc' else '-category__name')
+    elif sort == 'rating':
+        products = products.order_by('rating' if direction == 'asc' else '-rating')
+    
+    wishlist = None
+    if request.user.is_authenticated:
+        wishlist = Wishlist.objects.filter(user=request.user).first()
+    
+    categories = Category.objects.all()
+    
+    context = {
+        'products': products,
+        'search_term': query,
+        'current_categories': category,
+        'categories': categories,
+        'wishlist': wishlist,
+        'current_sorting': f'{sort}_{direction}' if sort and direction else 'None_None',
+    }
+    
+    return render(request, 'products/products.html', context)
+
 product_list = all_products

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
+from decimal import Decimal
 
 class Category(models.Model):
     """
@@ -49,11 +50,11 @@ class Product(models.Model):
     description = models.TextField(max_length=1000, default="Default description")
     
     price = models.DecimalField(
-        max_digits=6, 
+        max_digits=10,  # Increased to handle larger prices 
         decimal_places=2, 
         validators=[
-            MinValueValidator(0.01, "Price must be greater than zero"),
-            MaxValueValidator(10000, "Price is too high")
+            MinValueValidator(Decimal('0.01'), "Price must be greater than zero"),
+            MaxValueValidator(Decimal('99999.99'), "Price is too high")
         ]
     )
     
@@ -70,7 +71,6 @@ class Product(models.Model):
     image = models.ImageField(
         null=True, 
         blank=True, 
-        # Updated to match the actual folder structure
         upload_to='images/product_images/'
     )
     
@@ -112,3 +112,8 @@ class Product(models.Model):
         """
         return cls.objects.filter(is_active=True)
 
+    def format_price(self):
+        """
+        Format price with EURO symbol
+        """
+        return f"€{self.price:.2f}"

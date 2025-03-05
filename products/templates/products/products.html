@@ -53,156 +53,134 @@
                           
                         {% endif %}
                         {{ products|length }} Products 
-                        {% if search_term %}
-                            found for <strong>"{{ search_term }}"</strong>
-                        {% endif %}
-                    </p>
+                        <!-- Search Form -->
+        <form method="GET" action="{% url 'products:product_list' %}" class="form-inline justify-content-center mb-3">
+            <div class="input-group">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search products" 
+                       aria-label="Search" name="q" value="{{ request.GET.q }}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
                 </div>
             </div>
+        </form>
 
-            <div class="row">
-                {% for product in products %}
-                <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                    <div class="card h-100 border-0">
-                        {% if wishlist and product in wishlist.products.all %}
-                            <a href="{% url 'bag:remove_from_cart' item.product.id %}"
-                            aria-label="Remove product from Wishlist">
-                                <div class="wishlist-badge"><i class="fa-regular fa-heart"></i></div>
-                            </a>
-                        {% else %}
-                            <a href="{% url 'add_wishlist' product.id %}" aria-label="Add product to Wishlist">
-                                <div class="wishlist-badge"><i class="fa-regular fa-heart"></i></div>
-                            </a>
-                        {% endif %}
+        {% if search_term %}
+            <p class="text-muted">Search results for "{{ search_term }}"</p>
+        {% endif %}
+        {% if current_categories %}
+            <p class="text-muted">Category: {{ current_categories }}</p>
+        {% endif %}
+        <hr class="w-50 mb-1">
+    </div>
+</div>
 
-                        {% if product.image %}
-                            <a href="{% url 'products:product_detail' product.id %}">
-                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                            </a>
-                        {% else %}
-                            <a href="{% url 'products:product_detail' product.id %}">
-                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-                            </a>
-                        {% endif %}
-
-                        <div class="card-body pb-0">
-                            <p class="mb-0">{{ product.name }}</p>
-                        </div>
-                        <div class="card-footer bg-white pt-0 border-0 text-left">
-                            <div class="row">
-                                <div class="col">
-                                    {% if product.on_sale %}
-                                    <div class="sale-footer bg-white d-flex flex-row">
-                                        <p class="mb-0 pt-2 pb-2">
-                                            <span class="h6 pr-3 text-left font-weight-bold price-font-original text-decoration-line-through">
-                                                €{{ product.price }}
-                                            </span>
-                                        </p>
-                                        <p class="mb-0 pt-2 pb-2">
-                                            <span class="h5 text-left font-weight-bold price-font text-danger">
-                                                €{{ product.sale_price|floatformat:2 }}
-                                            </span>
-                                        </p>
-                                    </div>
-                                    {% else %}
-                                    <p class="mb-0 pt-2 pb-2">
-                                        <span class="h5 text-left font-weight-bold price-font">
-                                            €{{ product.price }}
-                                        </span>
-                                    </p>
-                                    {% endif %}
-
-                                    {% if product.brand %}
-                                        <a class="text-muted" href="{% url 'products' %}?brand={{ product.brand.name }}">
-                                            <i class="fa-regular fa-copyright"></i>
-                                            {{ product.brand.friendly_name }}
-                                        </a>
-                                    {% endif %}
-
-                                    {% if product.rating %}
-                                        <small class="text-muted">
-                                            <i class="fas fa-star mr-1"></i>{{ product.rating }} / 5
-                                        </small>
-                                    {% else %}
-                                        <small class="text-muted">No Rating</small>
-                                    {% endif %}
-
-                                    {% if request.user.is_superuser %}
-                                        <small class="ml-3">
-                                            <a href="{% url 'products:edit_product' product.id %}">
-                                                <i class="fa-solid fa-rotate"></i>
-                                            </a> |
-                                            <a class="text-danger" href="{% url 'products:delete_product' product.id %}">
-                                                <i class="fa-solid fa-trash-can"></i>
-                                            </a>
-                                        </small>
-                                    {% endif %}
-                                </div>
+<div class="row">
+    <div class="product-container col-10 offset-1">
+        <div class="row mt-1 mb-2">
+            <!-- Sorting Dropdown -->
+            <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
+                <div class="sort-select-wrapper w-50">
+                    <select id="sort-selector" class="custom-select custom-select-sm rounded-0 border border-{% if current_sorting != 'None_None' %}info{% else %}black{% endif %}">
+                        <option value="reset" {% if current_sorting == 'None_None' %}selected{% endif %}>Sort by...</option>
+                        <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (low to high)</option>
+                        <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (high to low)</option>
+                        <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+                        <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+                        <option value="rating_asc" {% if current_sorting == 'rating_asc' %}selected{% endif %}>Rating (low to high)</option>
+                        <option value="rating_desc" {% if current_sorting == 'rating_desc' %}selected{% endif %}>Rating (high to low)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Product Count and Category Filter -->
+            <div class="col-12 col-md-6 order-md-first">
+                <div class="row">
+                    <!-- Category Dropdown -->
+                    <div class="col-12 mb-2">
+                        <form method="GET" action="{% url 'products:product_list' %}" id="category-form">
+                            <select name="category" class="form-control" onchange="this.form.submit()">
+                                <option value="">All Categories</option>
+                                {% for category in categories %}
+                                    <option value="{{ category.name }}" 
+                                            {% if current_categories == category.name %}selected{% endif %}>
+                                        {{ category.friendly_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                    
+                    <!-- Product Count -->
+                    <div class="col-12">
+                        <p class="text-muted mt-3">
+                            {{ products|length }} Products 
+                            {% if current_categories %}in {{ current_categories }} Category{% endif %}
+                            {% if search_term %}matching "{{ search_term }}"{% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="row">
+            {% for product in products %}
+            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4">
+                <div class="card h-100 border-0">
+                    <!-- Product Image -->
+                    {% if product.image %}
+                        <a href="{% url 'products:product_detail' product.id %}">
+                            <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                        </a>
+                    {% else %}
+                        <a href="{% url 'products:product_detail' product.id %}">
+                            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                        </a>
+                    {% endif %}
+                    
+                    <!-- Product Details -->
+                    <div class="card-body pb-0">
+                        <p class="mb-0">{{ product.name }}</p>
+                    </div>
+                    <div class="card-footer bg-white pt-0 border-0 text-left">
+                        <div class="row">
+                            <div class="col">
+                                <!-- Use format_price method -->
+                                <p class="lead mb-0 text-left font-weight-bold">{{ product.format_price }}</p>
+                                
+                                <!-- Category Link -->
+                                {% if product.category %}
+                                <p class="small mt-1 mb-0">
+                                    <a class="text-muted" href="{% url 'products:product_list' %}?category={{ product.category.name }}">
+                                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                    </a>
+                                </p>
+                                {% endif %}
+                                
+                                <!-- Rating -->
+                                {% if product.rating %}
+                                    <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
+                                {% else %}
+                                    <small class="text-muted">No Rating</small>
+                                {% endif %}
+                                
+                                <!-- Admin Actions -->
+                                {% if request.user.is_superuser %}
+                                    <small class="ml-3">
+                                        <a href="{% url 'products:edit_product' product.id %}">Edit</a> | 
+                                        <a class="text-danger" href="{% url 'products:delete_product' product.id %}">Delete</a>
+                                    </small>
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </div>
-
-                {% if forloop.counter|divisibleby:1 %}
-                    <div class="col-12 d-sm-none mb-5">
-                        <hr>
-                    </div>
-                {% endif %}                        
-                {% if forloop.counter|divisibleby:2 %}
-                    <div class="col-12 d-none d-sm-block d-md-block d-lg-none mb-5">
-                        <hr>
-                    </div>
-                {% endif %}
-                {% if forloop.counter|divisibleby:3 %}
-                    <div class="col-12 d-none d-lg-block d-xl-none mb-5">
-                        <hr>
-                    </div>
-                {% endif %}
-                {% if forloop.counter|divisibleby:4 %}
-                    <div class="col-12 d-none d-xl-block mb-5">
-                        <hr>
-                    </div>
-                {% endif %}
-                {% endfor %}
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-center">No products found.</p>
+            </div>
+            {% endfor %}
         </div>
     </div>
 </div>
-
-<div class="btt-button shadow-sm rounded-0 border border-black bg-white">
-    <a class="btt-link d-flex h-100">
-        <i class="fas fa-arrow-up text-black mx-auto my-auto"></i>
-    </a> 
-</div>
-{% endblock %}
-
-{% block postloadjs %}
-{{ block.super }}
-<script>
-    $('.btt-link').click(function(e) {
-        window.scrollTo(0,0)
-    })
-</script>
-<script>
-    $('#sort-selector').change(function() {
-        var selector = $(this);
-        var currentUrl = new URL(window.location);
-
-        var selectedVal = selector.val();
-        if(selectedVal != "reset"){
-            var sort = selectedVal.split("_")[0];
-            var direction = selectedVal.split("_")[1];
-
-            currentUrl.searchParams.set("sort", sort);
-            currentUrl.searchParams.set("direction", direction);
-
-            window.location.replace(currentUrl);
-        } else {
-            currentUrl.searchParams.delete("sort");
-            currentUrl.searchParams.delete("direction");
-
-            window.location.replace(currentUrl);
-        }
-    });
-</script>
-{% endblock %}

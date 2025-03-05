@@ -15,7 +15,7 @@ urlpatterns = [
     # Home
     path('', home_views.index, name='index'),
     path('', include('home.urls')),  # additional home app URLs
-    path('products/', home_views.all_products, name='all_products'),
+    
     
     # Products (and "clothing" if needed)
     path('products/', include(('products.urls', 'products'), namespace='products')),
