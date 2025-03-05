@@ -7,7 +7,7 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 * [Link to App](https://guerrier-184e74af35e6.herokuapp.com/) 
   
 
-![Home Screen](path/to/your/image.png)
+![Home Screen](documentation/readme_images/shirtspagedesktop.png)
 
 ---
 
