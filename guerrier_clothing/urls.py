@@ -13,13 +13,13 @@ handler500 = 'guerrier_clothing.views.handler500'
 from products.sitemaps import (
     StaticViewSitemap,
     ProductSitemap,
-    FilterSitemap,
+    CategorySitemap,
 )
 
 sitemaps = {
     'static': StaticViewSitemap,
     'products': ProductSitemap,
-    'filters': FilterSitemap,
+    'categories': CategorySitemap,
 }
 
 urlpatterns = [
