@@ -77,7 +77,7 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 
 ## Agile Planning
 
-This project was developed using agile methodologies, breaking down the project into smaller tasks through user stories and tracking progress on GitHub Projects. The development process was organized into sprints, focusing on delivering functional features incrementally.
+This project was developed using agile methodologies, breaking down the project into smaller tasks through user stories and tracking progress on GitHub Projects. 
 
 ### User Stories
 
