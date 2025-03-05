@@ -17,9 +17,10 @@ import random
 from decimal import Decimal
 
 def all_products(request):
+    """A view to show all products, including filtering and sorting"""
     products = Product.objects.filter(is_active=True)
     
-    # Search query
+    # Search query handling
     query = request.GET.get('q')
     if query:
         products = products.filter(
@@ -28,10 +29,18 @@ def all_products(request):
             Q(category__name__icontains=query)
         )
     
-    # Category filtering
-    category = request.GET.get('category')
-    if category:
-        products = products.filter(category__name__iexact=category)
+    # Handle special homeware filter parameter
+    if request.GET.get('homeware_filter') == 'true':
+        # Define homeware category names
+        homeware_categories = ['mugs', 'coasters', 'skateboard_decks']
+        products = products.filter(category__name__in=homeware_categories)
+        # For display purposes
+        category = 'homeware'
+    else:
+        # Regular category filtering
+        category = request.GET.get('category')
+        if category:
+            products = products.filter(category__name__iexact=category)
     
     # Sorting logic
     sort = request.GET.get('sort')
@@ -51,17 +60,21 @@ def all_products(request):
     if request.user.is_authenticated:
         wishlist = Wishlist.objects.filter(user=request.user).first()
     
-    # Prepare context
+    categories = Category.objects.all()
+    
     context = {
         'products': products,
         'search_term': query,
         'current_categories': category,
-        'categories': Category.objects.all(),
+        'categories': categories,
         'wishlist': wishlist,
         'current_sorting': f'{sort}_{direction}' if sort and direction else 'None_None',
     }
     
+    return render(request, 'products/products.html', context)
+
 def product_detail(request, product_id):
+    """A view to show individual product details"""
     product = get_object_or_404(Product, pk=product_id)
     reviews = Review.objects.filter(product=product).order_by("-created_on")
 
@@ -85,6 +98,7 @@ def product_detail(request, product_id):
 
 @login_required
 def add_product(request):
+    """Add a product to the store"""
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
@@ -108,6 +122,7 @@ def add_product(request):
 
 @login_required
 def edit_product(request, product_id):
+    """Edit a product in the store"""
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
@@ -134,6 +149,7 @@ def edit_product(request, product_id):
 
 @login_required
 def delete_product(request, product_id):
+    """Delete a product from the store"""
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
@@ -141,10 +157,11 @@ def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     product.delete()
     messages.success(request, 'Product deleted!')
-    return redirect(reverse('products:product_list'))
+    return redirect(reverse('products:products'))
 
 @login_required
 def add_review(request, product_id):
+    """Add a review to a product"""
     product = get_object_or_404(Product, pk=product_id)
     if request.method == "POST":
         review_form = ReviewsForm(request.POST)
@@ -197,51 +214,5 @@ class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
-def all_products(request):
-    products = Product.objects.filter(is_active=True)
     
-    query = request.GET.get('q')
-    if query:
-        products = products.filter(
-            Q(name__icontains=query) | 
-            Q(description__icontains=query) |
-            Q(category__name__icontains=query)
-        )
-    
-    category = request.GET.get('category')
-    if category:
-        products = products.filter(category__name__iexact=category)
-    
-    sort = request.GET.get('sort')
-    direction = request.GET.get('direction', 'asc')
-    
-    # Debug print
-    print(f"Sort: {sort}, Direction: {direction}")
-    
-    if sort == 'price':
-        products = products.order_by('price' if direction == 'asc' else '-price')
-    elif sort == 'name':
-        products = products.order_by('name' if direction == 'asc' else '-name')
-    elif sort == 'category':
-        products = products.order_by('category__name' if direction == 'asc' else '-category__name')
-    elif sort == 'rating':
-        products = products.order_by('rating' if direction == 'asc' else '-rating')
-    
-    wishlist = None
-    if request.user.is_authenticated:
-        wishlist = Wishlist.objects.filter(user=request.user).first()
-    
-    categories = Category.objects.all()
-    
-    context = {
-        'products': products,
-        'search_term': query,
-        'current_categories': category,
-        'categories': categories,
-        'wishlist': wishlist,
-        'current_sorting': f'{sort}_{direction}' if sort and direction else 'None_None',
-    }
-    
-    return render(request, 'products/products.html', context)
-
-product_list = all_products
+product_list = all_products  

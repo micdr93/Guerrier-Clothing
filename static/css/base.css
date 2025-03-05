@@ -169,10 +169,10 @@ main {
     flex: 1;
 }
 
-/* Global button styles */
-button,
-.btn,
-.btn-primary,
+/* Global button styles - excluding navbar-toggler */
+button:not(.navbar-toggler),
+.btn:not(.navbar-toggler),
+.btn-primary:not(.navbar-toggler),
 input[type="submit"],
 input[type="button"] {
     background: #000 !important;
@@ -333,4 +333,75 @@ input[type="button"]:hover {
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
     border-bottom: 2px solid #000;
+}
+
+/* Navbar Toggler Fix - Add this at the end to override other styles */
+button.navbar-toggler,
+button.navbar-toggler:hover,
+button.navbar-toggler:focus,
+button.navbar-toggler:active {
+    background: transparent !important;
+    border: 1px solid rgba(0,0,0,.1) !important;
+    padding: 0.25rem 0.75rem !important;
+    text-transform: none !important;
+    color: #000 !important;
+    box-shadow: none !important;
+}
+
+button.navbar-toggler span.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(0, 0, 0, 0.5)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    display: inline-block !important;
+    width: 1.5em !important;
+    height: 1.5em !important;
+    vertical-align: middle !important;
+    content: "" !important;
+    background-size: 100% 100% !important;
+    background-color: transparent !important;
+}
+
+button.navbar-toggler:hover {
+    background-color: rgba(0,0,0,.05) !important;
+}
+/* Direct fix for the navbar toggler button */
+button.navbar-toggler {
+    background-color: transparent !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+}
+
+button.navbar-toggler .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+    background-color: transparent !important;
+}
+
+/* Target Bootstrap's selector specifically */
+.navbar-toggler {
+    background-color: transparent !important;
+}
+
+/* Remove this rule if it exists */
+[aria-label="Toggle navigation"] {
+    background-color: transparent !important;
+}
+
+/* Override any other potential selectors */
+button[data-bs-toggle="collapse"] {
+    background-color: transparent !important;
+
+    /* Additional styling for All Homeware link */
+.dropdown-menu .all-category-link {
+    font-weight: 500;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+}
+
+/* Ensure consistent styling between Clothing and Homeware dropdowns */
+.dropdown-menu .dropdown-item {
+    padding: 0.5rem 1rem;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-menu .dropdown-item:hover {
+    background-color: rgba(0,0,0,0.05);
+}
 }
