@@ -18,7 +18,7 @@
             {% if search_term %}
                 <p class="text-muted">Search results for "{{ search_term }}"</p>
             {% endif %}
-            <hr class="w-50 mb-1">
+            <
         </div>
     </div>
     <div class="row">
@@ -164,4 +164,25 @@
             }
         })
     </script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+          $('#sort-selector').on('change', function() {
+            console.log("Sort selector changed:", $(this).val());  // Debug log
+            var selectedVal = $(this).val();
+            var currentUrl = new URL(window.location.href);
+            if (selectedVal !== "reset") {
+              var parts = selectedVal.split("_");
+              var sort = parts[0];
+              var direction = parts[1];
+              currentUrl.searchParams.set("sort", sort);
+              currentUrl.searchParams.set("direction", direction);
+            } else {
+              currentUrl.searchParams.delete("sort");
+              currentUrl.searchParams.delete("direction");
+            }
+            window.location.href = currentUrl.toString();
+          });
+        });
+      </script>
 {% endblock %}

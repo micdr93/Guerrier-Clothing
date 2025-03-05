@@ -64,6 +64,7 @@ def all_products(request, category=None):
         'current_sorting': f'{sort}_{direction}' if sort and direction else 'None_None',
     }
     return render(request, 'products/products.html', context)
+    print("DEBUG: Final SQL Query:", products.query)
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
@@ -193,4 +194,3 @@ def search_results(request):
     context = {'products': products, 'search_term': query}
     return render(request, 'products/search_results.html', context)
 
-product_list = all_products

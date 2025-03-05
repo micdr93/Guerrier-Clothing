@@ -17,7 +17,7 @@
         <div class="col text-center mt-3">
             <h2 class="logo-font">Guerrier Streetwear</h2>
             {% for c in current_categories %}
-                <a class="category-badge text-decoration-none" href="{% url 'products' %}?category={{ c.name }}">
+                <a class="category-badge text-decoration-none" href="{% url 'products:products' %}?category={{ c.name }}">
                     <span class="p-2 mt-2 badge badge-white text-black rounded-0 border border-dark">
                         {{ c.friendly_name }}
                     </span>
@@ -30,16 +30,17 @@
     <div class="row">
         <div class="product-container col-10 offset-1">
             <div class="row mt-1 mb-2">
+                <!-- Sorting Dropdown -->
                 <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
                     <div class="sort-select-wrapper w-50">
                         <select id="sort-selector" class="custom-select custom-select-sm rounded-0 border border-{% if current_sorting != 'None_None' %}info{% else %}black{% endif %}">
                             <option value="reset" {% if current_sorting == 'None_None' %}selected{% endif %}>Sort by...</option>
                             <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (low to high)</option>
                             <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (high to low)</option>
-                            <option value="rating_asc" {% if current_sorting == 'rating_asc' %}selected{% endif %}>Rating (low to high)</option>
-                            <option value="rating_desc" {% if current_sorting == 'rating_desc' %}selected{% endif %}>Rating (high to low)</option>
                             <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
                             <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+                            <option value="rating_asc" {% if current_sorting == 'rating_asc' %}selected{% endif %}>Rating (low to high)</option>
+                            <option value="rating_desc" {% if current_sorting == 'rating_desc' %}selected{% endif %}>Rating (high to low)</option>
                             <option value="category_asc" {% if current_sorting == 'category_asc' %}selected{% endif %}>Category (A-Z)</option>
                             <option value="category_desc" {% if current_sorting == 'category_desc' %}selected{% endif %}>Category (Z-A)</option>
                             <option value="brand_asc" {% if current_sorting == 'brand_asc' %}selected{% endif %}>Brand (A-Z)</option>
@@ -47,140 +48,107 @@
                         </select>
                     </div>
                 </div>
+                <!-- Product Count and Search Form -->
                 <div class="col-12 col-md-6 order-md-first">
                     <p class="text-muted mt-3 text-center text-md-left">
-                        {% if search_term or current_categories or current_sorting != 'None_None' %}
-                          
-                        {% endif %}
-                        {{ products|length }} Products 
-                        <!-- Search Form -->
-        <form method="GET" action="{% url 'products:product_list' %}" class="form-inline justify-content-center mb-3">
-            <div class="input-group">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search products" 
-                       aria-label="Search" name="q" value="{{ request.GET.q }}">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit">Search</button>
-                </div>
-            </div>
-        </form>
-
-        {% if search_term %}
-            <p class="text-muted">Search results for "{{ search_term }}"</p>
-        {% endif %}
-        {% if current_categories %}
-            <p class="text-muted">Category: {{ current_categories }}</p>
-        {% endif %}
-        <hr class="w-50 mb-1">
-    </div>
-</div>
-
-<div class="row">
-    <div class="product-container col-10 offset-1">
-        <div class="row mt-1 mb-2">
-            <!-- Sorting Dropdown -->
-            <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
-                <div class="sort-select-wrapper w-50">
-                    <select id="sort-selector" class="custom-select custom-select-sm rounded-0 border border-{% if current_sorting != 'None_None' %}info{% else %}black{% endif %}">
-                        <option value="reset" {% if current_sorting == 'None_None' %}selected{% endif %}>Sort by...</option>
-                        <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (low to high)</option>
-                        <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (high to low)</option>
-                        <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
-                        <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
-                        <option value="rating_asc" {% if current_sorting == 'rating_asc' %}selected{% endif %}>Rating (low to high)</option>
-                        <option value="rating_desc" {% if current_sorting == 'rating_desc' %}selected{% endif %}>Rating (high to low)</option>
-                    </select>
+                        {{ products|length }} Products
+                    </p>
+                    <!-- Search Form -->
+                    <form method="GET" action="{% url 'products:products' %}" class="form-inline justify-content-center mb-3">
+                        <div class="input-group">
+                            <input class="form-control mr-sm-2" type="search" placeholder="Search products" 
+                                   aria-label="Search" name="q" value="{{ request.GET.q }}">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="submit">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                    {% if search_term %}
+                        <p class="text-muted">Search results for "{{ search_term }}"</p>
+                    {% endif %}
+                    {% if current_categories %}
+                        <p class="text-muted">Category: {{ current_categories }}</p>
+                    {% endif %}
+                    
                 </div>
             </div>
             
-            <!-- Product Count and Category Filter -->
-            <div class="col-12 col-md-6 order-md-first">
-                <div class="row">
-                    <!-- Category Dropdown -->
-                    <div class="col-12 mb-2">
-                        <form method="GET" action="{% url 'products:product_list' %}" id="category-form">
-                            <select name="category" class="form-control" onchange="this.form.submit()">
-                                <option value="">All Categories</option>
-                                {% for category in categories %}
-                                    <option value="{{ category.name }}" 
-                                            {% if current_categories == category.name %}selected{% endif %}>
-                                        {{ category.friendly_name }}
-                                    </option>
-                                {% endfor %}
-                            </select>
-                        </form>
-                    </div>
-                    
-                    <!-- Product Count -->
-                    <div class="col-12">
-                        <p class="text-muted mt-3">
-                            {{ products|length }} Products 
-                            {% if current_categories %}in {{ current_categories }} Category{% endif %}
-                            {% if search_term %}matching "{{ search_term }}"{% endif %}
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Products Grid -->
-        <div class="row">
-            {% for product in products %}
-            <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4">
-                <div class="card h-100 border-0">
-                    <!-- Product Image -->
-                    {% if product.image %}
-                        <a href="{% url 'products:product_detail' product.id %}">
-                            <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                        </a>
-                    {% else %}
-                        <a href="{% url 'products:product_detail' product.id %}">
-                            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-                        </a>
-                    {% endif %}
-                    
-                    <!-- Product Details -->
-                    <div class="card-body pb-0">
-                        <p class="mb-0">{{ product.name }}</p>
-                    </div>
-                    <div class="card-footer bg-white pt-0 border-0 text-left">
-                        <div class="row">
-                            <div class="col">
-                                <!-- Use format_price method -->
-                                <p class="lead mb-0 text-left font-weight-bold">{{ product.format_price }}</p>
-                                
-                                <!-- Category Link -->
-                                {% if product.category %}
-                                <p class="small mt-1 mb-0">
-                                    <a class="text-muted" href="{% url 'products:product_list' %}?category={{ product.category.name }}">
-                                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
-                                    </a>
-                                </p>
-                                {% endif %}
-                                
-                                <!-- Rating -->
-                                {% if product.rating %}
-                                    <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
-                                {% else %}
-                                    <small class="text-muted">No Rating</small>
-                                {% endif %}
-                                
-                                <!-- Admin Actions -->
-                                {% if request.user.is_superuser %}
-                                    <small class="ml-3">
-                                        <a href="{% url 'products:edit_product' product.id %}">Edit</a> | 
-                                        <a class="text-danger" href="{% url 'products:delete_product' product.id %}">Delete</a>
-                                    </small>
-                                {% endif %}
+            <!-- Products Grid -->
+            <div class="row">
+                {% for product in products %}
+                <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 mb-4">
+                    <div class="card h-100 border-0">
+                        <!-- Product Image -->
+                        {% if product.image %}
+                            <a href="{% url 'products:product_detail' product.id %}">
+                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                            </a>
+                        {% else %}
+                            <a href="{% url 'products:product_detail' product.id %}">
+                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                            </a>
+                        {% endif %}
+                        
+                        <!-- Product Details -->
+                        <div class="card-body pb-0">
+                            <p class="mb-0">{{ product.name }}</p>
+                        </div>
+                        <div class="card-footer bg-white pt-0 border-0 text-left">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="lead mb-0 text-left font-weight-bold">{{ product.format_price }}</p>
+                                    {% if product.category %}
+                                    <p class="small mt-1 mb-0">
+                                        <a class="text-muted" href="{% url 'products:products' %}?category={{ product.category.name }}">
+                                            <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                        </a>
+                                    </p>
+                                    {% endif %}
+                                    {% if product.rating %}
+                                        <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
+                                    {% else %}
+                                        <small class="text-muted">No Rating</small>
+                                    {% endif %}
+                                    {% if request.user.is_superuser %}
+                                        <small class="ml-3">
+                                            <a href="{% url 'products:edit_product' product.id %}">Edit</a> | 
+                                            <a class="text-danger" href="{% url 'products:delete_product' product.id %}">Delete</a>
+                                        </small>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                {% empty %}
+                <div class="col-12">
+                    <p class="text-center">No products found.</p>
+                </div>
+                {% endfor %}
             </div>
-            {% empty %}
-            <div class="col-12">
-                <p class="text-center">No products found.</p>
-            </div>
-            {% endfor %}
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+      $('#sort-selector').on('change', function() {
+          console.log("Sort selector changed:", $(this).val());
+          var selectedVal = $(this).val();
+          var currentUrl = new URL(window.location.href);
+          if (selectedVal !== "reset") {
+              var parts = selectedVal.split("_");
+              var sort = parts[0];
+              var direction = parts[1];
+              currentUrl.searchParams.set("sort", sort);
+              currentUrl.searchParams.set("direction", direction);
+          } else {
+              currentUrl.searchParams.delete("sort");
+              currentUrl.searchParams.delete("direction");
+          }
+          console.log("New URL:", currentUrl.toString());
+          window.location.href = currentUrl.toString();
+      });
+  });
+</script>
+{% endblock %}
