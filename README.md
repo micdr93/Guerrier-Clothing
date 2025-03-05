@@ -75,6 +75,26 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 - Integrate Stripe for secure payment processing
 - Implement SEO best practices for improved visibility
 
+## Agile Planning
+
+This project was developed using agile methodologies, breaking down the project into smaller tasks through user stories and tracking progress on GitHub Projects. The development process was organized into sprints, focusing on delivering functional features incrementally.
+
+### User Stories
+
+#### First-Time Visitor Goals
+- As a first-time visitor, I want to easily understand the brand's purpose and values
+- As a first-time visitor, I want to browse products intuitively by category
+- As a first-time visitor, I want to view product details and images clearly
+
+#### Returning Visitor Goals
+- As a returning visitor, I want to create an account to save my information
+- As a returning visitor, I want to add items to my wishlist for future purchase
+- As a returning visitor, I want to see my order history
+
+#### Site Owner Goals
+- As a site owner, I want to manage products through an admin interface
+- As a site owner, I want to receive order notifications
+- As a site owner, I want to promote special offers and new products
 
 ### Wireframes
 
