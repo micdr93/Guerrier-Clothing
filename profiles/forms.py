@@ -11,17 +11,16 @@ class ReviewsForm(forms.Form):
     content = forms.CharField(widget=forms.Textarea)
 
 class UserProfileForm(forms.ModelForm):
+    full_name = forms.CharField(max_length=100, required=False)
+
     class Meta:
         model = UserProfile
         exclude = ('user',)
         
     def __init__(self, *args, **kwargs):
-        """
-        Add placeholders and classes, remove auto-generated
-        labels and set autofocus on first field
-        """
         super().__init__(*args, **kwargs)
         placeholders = {
+            'full_name': 'Full Name',
             'default_phone_number': 'Phone Number',
             'default_postcode': 'Postal Code',
             'default_town_or_city': 'Town or City',
