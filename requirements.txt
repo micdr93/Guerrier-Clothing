@@ -16,7 +16,6 @@ packaging==24.2
 pillow==11.1.0
 psycopg==3.2.4
 psycopg-c==3.2.4
-psycopg2-binary==2.9.10
 requests==2.32.3
 sqlparse==0.5.3
 stripe==6.2.0
