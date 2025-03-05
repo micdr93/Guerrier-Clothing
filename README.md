@@ -57,6 +57,14 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 - Customers who value quality and brand story
 - People who identify with the warrior mentality and resilience theme
 
+#### Site Goals
+
+- Create an intuitive shopping experience that showcases the Guerrier brand identity
+- Allow users to easily browse, select, and purchase products
+- Build brand loyalty through user accounts, wishlists, and reviews
+- Provide secure checkout and payment processing
+- Enable customers to contact the business with questions or feedback
+
 
 ### Wireframes
 
