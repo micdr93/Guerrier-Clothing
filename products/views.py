@@ -36,6 +36,13 @@ def all_products(request):
         products = products.filter(category__name__in=homeware_categories)
         # For display purposes
         category = 'homeware'
+    # Add this block to handle clothing filter
+    elif request.GET.get('clothing_filter') == 'true':
+        # Define clothing category names
+        clothing_categories = ['shirts', 'hats']
+        products = products.filter(category__name__in=clothing_categories)
+        # For display purposes
+        category = 'clothing'
     else:
         # Regular category filtering
         category = request.GET.get('category')

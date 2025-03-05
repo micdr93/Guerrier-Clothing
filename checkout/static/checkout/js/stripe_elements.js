@@ -1,3 +1,4 @@
+document.addEventListener('DOMContentLoaded', function() {
 // Get Stripe public key and client secret
 var stripePublicKey = document.getElementById('id_stripe_public_key').textContent.trim();
 var clientSecret = document.getElementById('id_client_secret').textContent.trim();
@@ -32,6 +33,7 @@ var card = elements.create('card', {style: style});
 // Add an instance of the card Element into the `card-element` div
 card.mount('#card-element');
 console.log("💳 Card element mounted");
+});
 
 // Handle real-time validation errors from the card Element
 card.addEventListener('change', function(event) {
@@ -48,8 +50,10 @@ var form = document.getElementById('payment-form');
 form.addEventListener('submit', function(event) {
     event.preventDefault();
     
-    // Disable the submit button to prevent repeated clicks
-    document.getElementById('submit-button').disabled = true;
+    // Disable the submit button and show loading indicator
+    var submitButton = document.getElementById('submit-button');
+    submitButton.disabled = true;
+    submitButton.innerHTML = '<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span> Processing...';
     
     // Cache checkout data before confirming payment
     var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -102,5 +106,6 @@ form.addEventListener('submit', function(event) {
     }).catch(function(error) {
         console.error("Error in payment process:", error);
         document.getElementById('submit-button').disabled = false;
+        document.getElementById('submit-button').innerHTML = 'Complete Order';
     });
 });

@@ -50,8 +50,8 @@
             <p class="text-muted">Please fill out the form below to complete your order</p>
 
             <!-- Hidden Stripe keys -->
-            <div id="id_stripe_public_key" hidden>{{ stripe_public_key }}</div>
-            <div id="id_client_secret" hidden>{{ client_secret }}</div>
+            <input type="hidden" id="id_stripe_public_key" value="{{ stripe_public_key }}">
+            <input type="hidden" id="id_client_secret" value="{{ client_secret }}"> 
 
             <form action="{% url 'checkout:checkout' %}" method="POST" id="payment-form">
                 {% csrf_token %}
@@ -69,10 +69,12 @@
                     {{ order_form.street_address1|as_crispy_field }}
                     {{ order_form.street_address2|as_crispy_field }}
                 </fieldset>
+
                 <fieldset class="rounded px-3 mb-3">
                     <legend class="small text-black">Payment Details</legend>
                     <!-- This div will be populated by Stripe JS -->
                     <div id="card-element" class="mb-3 p-2 border rounded"></div>
+                    
                     <!-- Used to display form errors -->
                     <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                 </fieldset>
