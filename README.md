@@ -98,6 +98,8 @@ This project was developed using agile methodologies, breaking down the project 
 
 [Link to GitHub Projects Board](https://github.com/users/micdr93/projects/5)
 
+# Structure
+
 ### Wireframes
 
 I created detailed wireframes for both desktop and mobile versions of all main pages to guide the development process.
@@ -125,6 +127,19 @@ I created detailed wireframes for both desktop and mobile versions of all main p
 - [Contact Us Page](documentation/wireframes/wireframe-contact-us-mobile.png)
 
 All wireframes were created using Balsamiq to establish a consistent user interface across the site while ensuring responsive design for different devices.
+
+### Database Schema
+
+The project uses a relational database model with the following main models:
+
+- **User**: Extended Django User model with additional profile information
+- **Product**: Contains all product information including category, price, and images
+- **Category**: Classification system for products
+- **Order**: Contains customer and shipping information
+- **OrderLineItem**: Individual items within orders
+- **Wishlist**: User-saved favorite products
+- **Review**: User feedback on products
+
 
 # Technologies
 
