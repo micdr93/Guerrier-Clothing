@@ -142,6 +142,18 @@ The project uses a relational database model with the following main models:
 
 [Database Schema](documentation/db-schema.png)
 
+## Features
+
+### Existing Features
+
+#### Navigation
+- Responsive navigation bar that adapts to different screen sizes
+- Dropdown menu for product categories
+- Search functionality for finding specific products
+- Cart icon for the user's shopping cart
+- Heart icon for the user's wishlist
+- 
+
 
 # Technologies
 
