@@ -46,6 +46,17 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 
 <br>
 
+## UX
+
+### Strategy
+
+#### Target Users
+
+- Fashion-conscious individuals aged 18-35
+- Streetwear enthusiasts looking for unique designs
+- Customers who value quality and brand story
+- People who identify with the warrior mentality and resilience theme
+
 
 ### Wireframes
 

@@ -6,52 +6,43 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.db import IntegrityError
 from django.db.models import Q
-from django.db.models.functions import Lower
 from .forms import ProductForm, ReviewsForm
-from .widgets import CustomClearableFileInput
 from .models import Product, Category
 from reviews.models import Review
-from profiles.models import UserProfile
 from wishlist.models import Wishlist
 import random
-from decimal import Decimal
 
-def all_products(request):
+def all_products(request, category=None):
     products = Product.active_products()
-    
-    # Search query handling
-    query = request.GET.get('q')
+    query_category = request.GET.get('category', category)
+    query = request.GET.get('q', '').strip()
     if query:
-        products = products.filter(
-            Q(name__icontains=query) | 
+        filtered = products.filter(
+            Q(name__icontains=query) |
             Q(description__icontains=query) |
             Q(category__name__icontains=query)
-        )
-    
-    # Handle special homeware filter parameter
-    if request.GET.get('homeware_filter') == 'true':
-        # Define homeware category names exactly as they appear in your database
-        homeware_categories = ['Mugs', 'Coasters', 'Skateboard Decks']
-        products = products.filter(category__name__in=homeware_categories)
-        category = 'Homeware'
-    
-    # Handle clothing filter parameter
-    elif request.GET.get('clothing_filter') == 'true':
-        # Define clothing category names exactly as they appear in your database
-        clothing_categories = ['Shirts', 'Hats']
-        products = products.filter(category__name__in=clothing_categories)
-        category = 'Clothing'
-    
+        ).distinct()
+        # Debug output: check counts and SQL query
+        print("DEBUG: Query:", query, "Initial count:", products.count(), "Filtered count:", filtered.count())
+        print("DEBUG SQL:", filtered.query)
+        products = filtered
+        active_category = None
     else:
-        # Regular category filtering
-        category = request.GET.get('category')
-        if category:
-            products = products.filter(category__name__iexact=category)
-    
-    
+        if request.GET.get('homeware_filter') == 'true':
+            homeware_categories = ['mugs', 'coasters', 'skateboard_decks']
+            products = products.filter(category__name__in=homeware_categories)
+            active_category = 'Homeware'
+        elif request.GET.get('clothing_filter') == 'true':
+            clothing_categories = ['shirts', 'Hats']
+            products = products.filter(category__name__in=clothing_categories)
+            active_category = 'Clothing'
+        elif query_category:
+            products = products.filter(category__name__iexact=query_category)
+            active_category = query_category
+        else:
+            active_category = None
     sort = request.GET.get('sort')
     direction = request.GET.get('direction', 'asc')
-    
     if sort == 'price':
         products = products.order_by('price' if direction == 'asc' else '-price')
     elif sort == 'name':
@@ -60,17 +51,14 @@ def all_products(request):
         products = products.order_by('category__name' if direction == 'asc' else '-category__name')
     elif sort == 'rating':
         products = products.order_by('rating' if direction == 'asc' else '-rating')
-    
     wishlist = None
     if request.user.is_authenticated:
         wishlist = Wishlist.objects.filter(user=request.user).first()
-    
     categories = Category.objects.all()
-    
     context = {
         'products': products,
         'search_term': query,
-        'current_categories': category,
+        'current_categories': active_category,
         'categories': categories,
         'wishlist': wishlist,
         'current_sorting': f'{sort}_{direction}' if sort and direction else 'None_None',
@@ -78,35 +66,25 @@ def all_products(request):
     return render(request, 'products/products.html', context)
 
 def product_detail(request, product_id):
-    """A view to show individual product details"""
     product = get_object_or_404(Product, pk=product_id)
     reviews = Review.objects.filter(product=product).order_by("-created_on")
-
-    related_products = list(
-        Product.objects.filter(category=product.category).exclude(pk=product_id)
-    )
+    related_products = list(Product.objects.filter(category=product.category).exclude(pk=product_id))
     if len(related_products) >= 4:
         related_products = random.sample(related_products, 4)
-
     context = {
         "product": product,
         "reviews": reviews,
         "related_products": related_products,
     }
-    
     if request.user.is_authenticated:
-        user = request.user
-        context["wishlist"] = Wishlist.objects.filter(user=user, items__product__id=product_id).exists()
-
+        context["wishlist"] = Wishlist.objects.filter(user=request.user, items__product__id=product_id).exists()
     return render(request, "products/product_detail.html", context)
 
 @login_required
 def add_product(request):
-    """Add a product to the store"""
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
-
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES)
         if form.is_valid():
@@ -117,20 +95,15 @@ def add_product(request):
             messages.error(request, 'Failed to add product. Please ensure the form is valid.')
     else:
         form = ProductForm()
-
     template = 'products/add_product.html'
-    context = {
-        'form': form,
-    }
+    context = {'form': form}
     return render(request, template, context)
 
 @login_required
 def edit_product(request, product_id):
-    """Edit a product in the store"""
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
-
     product = get_object_or_404(Product, pk=product_id)
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
@@ -143,21 +116,15 @@ def edit_product(request, product_id):
     else:
         form = ProductForm(instance=product)
         messages.info(request, f'You are editing {product.name}')
-
     template = 'products/edit_product.html'
-    context = {
-        'form': form,
-        'product': product,
-    }
+    context = {'form': form, 'product': product}
     return render(request, template, context)
 
 @login_required
 def delete_product(request, product_id):
-    """Delete a product from the store"""
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
-
     product = get_object_or_404(Product, pk=product_id)
     product.delete()
     messages.success(request, 'Product deleted!')
@@ -165,7 +132,6 @@ def delete_product(request, product_id):
 
 @login_required
 def add_review(request, product_id):
-    """Add a review to a product"""
     product = get_object_or_404(Product, pk=product_id)
     if request.method == "POST":
         review_form = ReviewsForm(request.POST)
@@ -186,9 +152,7 @@ def add_review(request, product_id):
             messages.error(request, "Your review has not been submitted.")
     return redirect(reverse("products:product_detail", args=[product.id]))
 
-class UpdateReview(
-    LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView
-):
+class UpdateReview(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = Review
     form_class = ReviewsForm
     template_name = "products/edit_review.html"
@@ -220,20 +184,13 @@ class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return super().delete(request, *args, **kwargs)
 
 def search_results(request):
-    query = request.GET.get('q', '')
-    
-    # Search across product name, description, and category
+    query = request.GET.get('q', '').strip()
     products = Product.objects.filter(
-        Q(name__icontains=query) | 
-        Q(description__icontains=query) | 
+        Q(name__icontains=query) |
+        Q(description__icontains=query) |
         Q(category__name__icontains=query)
-    )
-    
-    context = {
-        'products': products,
-        'search_term': query,
-    }
-    
+    ).distinct()
+    context = {'products': products, 'search_term': query}
     return render(request, 'products/search_results.html', context)
 
-product_list = all_products  
+product_list = all_products
