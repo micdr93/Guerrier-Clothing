@@ -4,13 +4,28 @@ from home import views as home_views
 from home.views import instant_logout
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.sitemaps.views import sitemap
 
 handler404 = 'guerrier_clothing.views.handler404'
 handler500 = 'guerrier_clothing.views.handler500'
 
+
+from products.sitemaps import (
+    StaticViewSitemap,
+    ProductSitemap,
+    FilterSitemap,
+)
+
+sitemaps = {
+    'static': StaticViewSitemap,
+    'products': ProductSitemap,
+    'filters': FilterSitemap,
+}
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
+    
     
     # Home
     path('', home_views.index, name='index'),
@@ -46,8 +61,9 @@ urlpatterns = [
     
     # Logout (using your custom view)
     path('logout/', instant_logout, name='logout'),
+
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap')
 ]
 
-# Add this as a separate statement
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

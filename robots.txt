@@ -4,3 +4,5 @@ Disallow: /bag/
 Disallow: /profiles/
 Disallow: /checkout/
 Disallow: /admin/
+
+Sitemap: https://guerrier-184e74af35e6.herokuapp.com/sitemap.xml
