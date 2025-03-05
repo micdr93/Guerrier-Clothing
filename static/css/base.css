@@ -419,3 +419,9 @@ button[data-bs-toggle="collapse"] {
     border-color: #000 !important;
     box-shadow: none !important;
 }
+
+#search-toggler {
+    background-color: transparent;
+    border: none;
+  }
+  
