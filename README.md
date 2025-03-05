@@ -66,6 +66,16 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 - Enable customers to contact the business with questions or feedback
 
 
+#### Project Goals
+
+- Develop a full-featured e-commerce platform using Django
+- Implement responsive design for all device types
+- Create a secure authentication system with user profiles
+- Build a robust product management system for administrators
+- Integrate Stripe for secure payment processing
+- Implement SEO best practices for improved visibility
+
+
 ### Wireframes
 
 I created detailed wireframes for both desktop and mobile versions of all main pages to guide the development process.
