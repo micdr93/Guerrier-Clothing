@@ -38,7 +38,7 @@ class ProductForm(forms.ModelForm):
         ],
         error_messages={
             'min_value': "Price must be a positive number",
-            'max_value': "Price cannot exceed $10,000",
+            'max_value': "Price cannot exceed €10,000",
             'invalid': "Enter a valid price"
         }
     )

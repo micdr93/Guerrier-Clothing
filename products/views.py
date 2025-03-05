@@ -186,8 +186,8 @@ class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 def search_results(request):
     query = request.GET.get('q', '').strip()
     products = Product.objects.filter(
-        Q(name__icontains=query) |
-        Q(description__icontains=query) |
+        Q(name__icontains=query) | 
+        Q(description__icontains=query) | 
         Q(category__name__icontains=query)
     ).distinct()
     context = {'products': products, 'search_term': query}
