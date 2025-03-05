@@ -17,8 +17,7 @@ import random
 from decimal import Decimal
 
 def all_products(request):
-    """A view to show all products, including filtering and sorting"""
-    products = Product.objects.filter(is_active=True)
+    products = Product.active_products()
     
     # Search query handling
     query = request.GET.get('q')
@@ -31,25 +30,25 @@ def all_products(request):
     
     # Handle special homeware filter parameter
     if request.GET.get('homeware_filter') == 'true':
-        # Define homeware category names
-        homeware_categories = ['mugs', 'coasters', 'skateboard_decks']
+        # Define homeware category names exactly as they appear in your database
+        homeware_categories = ['Mugs', 'Coasters', 'Skateboard Decks']
         products = products.filter(category__name__in=homeware_categories)
-        # For display purposes
-        category = 'homeware'
-    # Add this block to handle clothing filter
+        category = 'Homeware'
+    
+    # Handle clothing filter parameter
     elif request.GET.get('clothing_filter') == 'true':
-        # Define clothing category names
-        clothing_categories = ['shirts', 'hats']
+        # Define clothing category names exactly as they appear in your database
+        clothing_categories = ['Shirts', 'Hats']
         products = products.filter(category__name__in=clothing_categories)
-        # For display purposes
-        category = 'clothing'
+        category = 'Clothing'
+    
     else:
         # Regular category filtering
         category = request.GET.get('category')
         if category:
             products = products.filter(category__name__iexact=category)
     
-    # Sorting logic
+    
     sort = request.GET.get('sort')
     direction = request.GET.get('direction', 'asc')
     
@@ -62,7 +61,6 @@ def all_products(request):
     elif sort == 'rating':
         products = products.order_by('rating' if direction == 'asc' else '-rating')
     
-    # Wishlist context
     wishlist = None
     if request.user.is_authenticated:
         wishlist = Wishlist.objects.filter(user=request.user).first()
@@ -77,7 +75,6 @@ def all_products(request):
         'wishlist': wishlist,
         'current_sorting': f'{sort}_{direction}' if sort and direction else 'None_None',
     }
-    
     return render(request, 'products/products.html', context)
 
 def product_detail(request, product_id):
@@ -221,5 +218,22 @@ class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         messages.success(self.request, self.success_message)
         return super().delete(request, *args, **kwargs)
+
+def search_results(request):
+    query = request.GET.get('q', '')
     
+    # Search across product name, description, and category
+    products = Product.objects.filter(
+        Q(name__icontains=query) | 
+        Q(description__icontains=query) | 
+        Q(category__name__icontains=query)
+    )
+    
+    context = {
+        'products': products,
+        'search_term': query,
+    }
+    
+    return render(request, 'products/search_results.html', context)
+
 product_list = all_products  

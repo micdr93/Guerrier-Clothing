@@ -29,13 +29,11 @@
     <ul class="navbar-nav text-center">
       <!-- Search Bar -->
       <li class="nav-item me-3">
-        <form class="d-flex" action="{% url 'products' %}" method="GET">
-          <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-secondary" type="submit">
-            <i class="fas fa-search"></i>
-          </button>
+        <form class="d-flex" action="{% url 'products:products' %}" method="GET">
+            <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-dark" type="submit">Search</button>
         </form>
-      </li>
+    </li>
       <!-- Wishlist Icon -->
       <li class="nav-item me-3">
         <a class="nav-link" href="{% url 'wishlist:wishlist_home' %}" aria-label="Wishlist">

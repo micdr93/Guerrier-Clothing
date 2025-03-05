@@ -5,9 +5,6 @@ from django.utils import timezone
 from decimal import Decimal
 
 class Category(models.Model):
-    """
-    Model to represent product categories.
-    """
     class Meta:
         verbose_name_plural = 'Categories'
 
@@ -22,9 +19,6 @@ class Category(models.Model):
         return self.friendly_name
 
 class Size(models.Model):
-    """
-    Model to represent available sizes for products.
-    """
     SIZE_CHOICES = [
         ('S', 'Small'),
         ('M', 'Medium'),
@@ -39,9 +33,7 @@ class Size(models.Model):
         return self.get_name_display()
 
 class Product(models.Model):
-    """
-    Enhanced Product model with additional features and validations.
-    """
+    updated = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name='products')
     sizes = models.ManyToManyField(Size, blank=True, related_name='products')
     
@@ -50,7 +42,7 @@ class Product(models.Model):
     description = models.TextField(max_length=1000, default="Default description")
     
     price = models.DecimalField(
-        max_digits=10,  # Increased to handle larger prices 
+        max_digits=10,
         decimal_places=2, 
         validators=[
             MinValueValidator(Decimal('0.01'), "Price must be greater than zero"),
@@ -74,7 +66,6 @@ class Product(models.Model):
         upload_to='images/product_images/'
     )
     
-    # Soft delete fields
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -84,36 +75,21 @@ class Product(models.Model):
         return self.name
 
     def soft_delete(self):
-        """
-        Soft delete the product instead of hard deleting
-        """
         self.is_active = False
         self.deleted_at = timezone.now()
         self.save()
 
     def restore(self):
-        """
-        Restore a soft-deleted product
-        """
         self.is_active = True
         self.deleted_at = None
         self.save()
 
     def get_available_sizes(self):
-        """
-        Return list of available sizes for this product
-        """
         return list(self.sizes.all())
 
     @classmethod
     def active_products(cls):
-        """
-        Returns only active products
-        """
         return cls.objects.filter(is_active=True)
 
     def format_price(self):
-        """
-        Format price with EURO symbol
-        """
         return f"€{self.price:.2f}"
