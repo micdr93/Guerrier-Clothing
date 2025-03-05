@@ -96,6 +96,8 @@ This project was developed using agile methodologies, breaking down the project 
 - As a site owner, I want to receive order notifications
 - As a site owner, I want to promote special offers and new products
 
+[Link to GitHub Projects Board](https://github.com/users/micdr93/projects/5)
+
 ### Wireframes
 
 I created detailed wireframes for both desktop and mobile versions of all main pages to guide the development process.
