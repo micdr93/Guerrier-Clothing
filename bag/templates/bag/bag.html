@@ -1,4 +1,3 @@
-<!-- bag.html -->
 {% extends "base.html" %}
 {% load static %}
 
@@ -7,7 +6,7 @@
     <h1 class="mb-4">Your Bag</h1>
 
     <!-- If there are bag items, display them -->
-    {% if bag_items %}
+    {% if cart %}
         <div class="row">
             <div class="col-12 col-md-8">
                 <table class="table">
@@ -21,10 +20,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in bag_items %}
-                            <tr>
+                        {% for item in cart %}
+                            <tr class="cart-item" data-product-id="{{ item.product.id }}">
                                 <td>
-                                    <!-- Product Image & Name -->
                                     <div class="d-flex align-items-center">
                                         {% if item.product.image %}
                                             <img src="{{ item.product.image.url }}"
@@ -35,7 +33,6 @@
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <!-- Update quantity form (or +/- links) -->
                                     <form action="{% url 'update_bag' item.product.id %}" method="POST" class="d-inline">
                                         {% csrf_token %}
                                         <input type="number"
@@ -55,11 +52,9 @@
                                 </td>
                                 <td class="text-end">
                                     <!-- Remove button -->
-                                    <form action="{% url 'bag:remove_from_cart' item.product.id %}" method="POST">
+                                    <form action="{% url 'bag:remove_from_cart' item.product.id %}" method="POST" class="remove-item-form">
                                         {% csrf_token %}
-                                        <button type="submit"
-                                                class="btn btn-sm btn-outline-danger"
-                                                aria-label="Remove item">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger" aria-label="Remove item">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </form>
@@ -69,27 +64,41 @@
                     </tbody>
                 </table>
             </div> <!-- col-md-8 -->
-
-            <div class="col-12 col-md-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Order Summary</h5>
-                        <p class="mb-2">Subtotal: €{{ bag_subtotal }}</p>
-                        <!-- If you have shipping or tax, include them here -->
-                        <!-- <p class="mb-2">Shipping: €{{ shipping_cost }}</p> -->
-                        <!-- <p class="mb-2">Tax: €{{ tax }}</p> -->
-                        <h4 class="mt-3">Total: €{{ bag_total }}</h4>
-
-                        <a href="{% url 'checkout:checkout' %}" class="btn btn-primary w-100 mt-3">Proceed to Checkout</a>
-                    </div>
-                </div>
-            </div> <!-- col-md-4 -->
         </div> <!-- row -->
-
     {% else %}
-        <!-- If the bag is empty -->
         <p>Your bag is currently empty.</p>
-        <a href="{% url 'products' %}" class="btn btn-outline-secondary">Continue Shopping</a>
     {% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const removeButtons = document.querySelectorAll('.remove-item-form');
+
+  removeButtons.forEach(function(button) {
+    button.addEventListener('submit', function(e) {
+      e.preventDefault();  // Prevent the page from refreshing
+      const form = this;
+      
+      // Send an AJAX request to the server to remove the item
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+          'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Remove the item from the list
+          form.closest('.cart-item').remove();
+        } else {
+          alert("There was an error removing the product.");
+        }
+      })
+      .catch(error => console.error('Error:', error));
+    });
+  });
+});
+</script>
 {% endblock %}

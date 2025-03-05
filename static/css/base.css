@@ -137,3 +137,11 @@ button:hover,
     background: #333 !important;
     color: #fff !important;
 }
+
+
+/* Custom smaller button */
+.btn-sm-custom {
+    padding: 0.25rem 0.5rem;  /* Adjust padding */
+    font-size: 0.8rem;  /* Smaller text size */
+    border-radius: 0.2rem;  /* Optional: smaller border radius */
+}

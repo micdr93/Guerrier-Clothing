@@ -1,41 +1,87 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container">
-    <h1>Shopping Cart</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in cart %}
-            <tr>
-                <td>{{ item.product.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.product.price }}</td>
-                <td>{{ item.total_price }}</td>
-                <td>
-                    <!-- Adjust your remove link to use product.id or whatever you need -->
-                    <a href="{% url 'bag:remove_from_cart' item.product.id %}" class="btn btn-danger">
-                        Remove
-                
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<div class="container my-5">
+    <h1 class="mb-4">Your Bag</h1>
 
-    <div class="total mt-3">
-        <h3>Total: {{ cart_total }}</h3>
-        <a href="{% url 'checkout:checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+    <!-- If there are bag items, display them -->
+    {% if cart %}
+        <div class="row">
+            <div class="col-12">
+                <!-- Add a wrapper for scrollable table on smaller screens -->
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Item</th>
+                                <th scope="col" class="text-center">Quantity</th>
+                                <th scope="col" class="text-end">Price</th>
+                                <th scope="col" class="text-end">Subtotal</th>  
+                                <th scope="col"></th> <!-- Remove button column -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in cart %}
+                                <tr class="cart-item" data-product-id="{{ item.product.id }}">
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            {% if item.product.image %}
+                                                <img src="{{ item.product.image.url }}"
+                                                     alt="{{ item.product.name }}"
+                                                     style="width: 50px; height: auto; margin-right: 10px;">
+                                            {% endif %}
+                                            <span>{{ item.product.name }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <form action="{% url 'bag:update_bag' item.product.id %}" method="POST" class="d-inline">
+                                            {% csrf_token %}
+                                            <input type="number"
+                                                   name="quantity"
+                                                   value="{{ item.quantity }}"
+                                                   min="1"
+                                                   class="form-control form-control-sm d-inline-block"
+                                                   style="width: 60px;">
+                                                   <button type="submit" class="btn btn-sm-custom btn-secondary">Update</button>
 
+                                        </form>
+                                    </td>
+                                    <td class="text-end">
+                                        €{{ item.product.price }}
+                                    </td>
+                                    <td class="text-end">
+                                        €{{ item.line_total }}  <!-- Display the line_total -->
+                                    </td>
+                                    <td class="text-end">
+                                        <!-- Remove button -->
+                                        <form action="{% url 'bag:remove_from_cart' item.product.id %}" method="POST">
+                                            {% csrf_token %}
+                                            <<button type="submit" class="btn btn-sm-custom btn-outline-danger" aria-label="Remove item">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                            
+                                        </form>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div> <!-- table-responsive -->
+            </div> <!-- col-12 -->
+        </div> <!-- row -->
+    {% else %}
+        <p>Your bag is currently empty.</p>
+    {% endif %}
+</div>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-md-6 text-center text-md-start">
+            <h3>Total: €{{ cart_total }}</h3>
+        </div>
+        <div class="col-12 col-md-6 text-center text-md-end">
+            <a href="{% url 'checkout:checkout' %}" class="btn btn-sm btn-primary">Proceed to Checkout</a> <!-- Smaller checkout button -->
+        </div>
     </div>
 </div>
 {% endblock %}
