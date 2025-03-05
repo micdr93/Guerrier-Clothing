@@ -8,28 +8,34 @@ from .forms import NewsletterForm
 from .models import NewsletterSubscription
 
 def index(request):
-
-    if request.method == 'POST':
-        newsletter_form = NewsletterForm(request.POST)
+    # Initialize newsletter form
+    newsletter_form = NewsletterForm()
+    
+    # Handle POST request (newsletter signup)
+    if request.method == 'POST' and 'email' in request.POST:
+        email = request.POST.get('email')
+        # Create a form instance manually
+        newsletter_form = NewsletterForm({'email': email})
         if newsletter_form.is_valid():
             try:
-                newsletter_form.save()
+                subscriber = newsletter_form.save()
                 messages.success(request, "Thank you for subscribing to our newsletter!")
             except:
                 messages.error(request, "You're already subscribed to our newsletter.")
-    else:
-        newsletter_form = NewsletterForm()
-        
+    
+    # Create context with banner image and newsletter form
     context = {
         'banner_image': '/media/banners/banner.png',
-        'newsletter_form': newsletter_form
+        'newsletter_form': newsletter_form,
     }
+    
+    # Return the HttpResponse
     return render(request, 'home/index.html', context)
 
 def instant_logout(request):
     logout(request)
     messages.success(request, "You have been successfully logged out.")
-    return redirect('home')
+    return redirect('index')  # Changed from 'home' to 'index' for consistency
 
 def shirts_view(request):
     products = Product.objects.filter(category__name__iexact='shirts')
@@ -92,20 +98,18 @@ def contact(request):
     return render(request, "home/contact.html", context)
 
 def all_products(request):
-    return render(request, 'products.html', {})
+    # Updated to use products_view for all_products
+    return redirect('products')
 
 # Homeware views using long-term fix with proper category assignments
 def mugs_view(request):
-    
     products = Product.objects.filter(category__id=3)
     return render(request, 'home/mugs.html', {'products': products})
 
 def coasters_view(request):
-    
     products = Product.objects.filter(category__id=4)
     return render(request, 'home/coasters.html', {'products': products})
 
 def skateboard_decks_view(request):
-
     products = Product.objects.filter(category__id=5)
     return render(request, 'home/skateboard_decks.html', {'products': products})

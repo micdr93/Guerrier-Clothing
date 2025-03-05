@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from home import views as home_views
-from home.views import instant_logout, all_products
+from home.views import instant_logout
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -14,12 +14,12 @@ urlpatterns = [
     
     # Home
     path('', home_views.index, name='index'),
-    path('', include('home.urls')),  # if you have additional home app URLs
-    path('products/', all_products, name='all_products'),
+    path('', include('home.urls')),  # additional home app URLs
+    path('products/', home_views.all_products, name='all_products'),
     
     # Products (and "clothing" if needed)
     path('products/', include(('products.urls', 'products'), namespace='products')),
-    path('clothing/', include(('products.urls', 'products'), namespace='clothing')),  # if you want a separate namespace
+    path('clothing/', include(('products.urls', 'products'), namespace='clothing')),
     
     # Bag / Cart
     path('bag/', include(('bag.urls', 'bag'), namespace='bag')),
