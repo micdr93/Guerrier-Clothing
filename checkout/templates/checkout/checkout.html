@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load checkout_tags %} 
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
@@ -19,8 +20,30 @@
     <h1>Checkout</h1>
     <div class="row">
         <div class="col-12 col-lg-6">
-            <div class="order-summary">
-                <p class="mb-2"><strong>Order Total:</strong> €{{ grand_total|floatformat:2 }}</p>
+            <div class="order-summary mb-4">
+                <h4 class="mb-3">Order Summary</h4>
+                {% for item_id, item_data in bag.items %}
+                    {% with product=all_products|get_item:item_id %}
+                    <div class="row mb-3">
+                        <div class="col-3">
+                            {% if product.image %}
+                                <img class="img-fluid checkout-img" src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% else %}
+                                <img class="img-fluid checkout-img" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                            {% endif %}
+                        </div>
+                        <div class="col-9">
+                            <p class="my-0"><strong>{{ product.name }}</strong></p>
+                            <p class="my-0 small text-muted">Qty: {{ item_data }}</p>
+                            <p class="my-0 small text-muted">€{{ product.price }}</p>
+                        </div>
+                    </div>
+                    {% endwith %}
+                {% endfor %}
+                <hr>
+                <p class="mb-0"><strong>Order Total:</strong> €{{ total|floatformat:2 }}</p>
+                <p class="mb-0"><strong>Delivery:</strong> €{{ delivery|floatformat:2 }}</p>
+                <p class="mb-0"><strong>Grand Total:</strong> €{{ grand_total|floatformat:2 }}</p>
             </div>
         </div>
         <div class="col-12 col-lg-6">
@@ -31,7 +54,6 @@
             <div id="id_client_secret" hidden>{{ client_secret }}</div>
 
             <form action="{% url 'checkout:checkout' %}" method="POST" id="payment-form">
-
                 {% csrf_token %}
                 <fieldset class="rounded px-3 mb-3">
                     <legend class="small text-black">Personal Details</legend>

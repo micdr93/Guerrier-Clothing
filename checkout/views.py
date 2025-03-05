@@ -133,10 +133,25 @@ def checkout(request):
 
         order_form = OrderForm()
 
+    # Get all products in the bag to display images
+    bag = request.session.get('bag', {})
+    all_products = {}
+    for item_id in bag:
+        try:
+            product = Product.objects.get(id=item_id)
+            all_products[item_id] = product
+        except Product.DoesNotExist:
+            pass
+
     context = {
         'order_form': order_form,
         'stripe_public_key': stripe_public_key,
         'client_secret': client_secret,
+        'bag': bag,
+        'all_products': all_products,
+        'total': current_bag.get('total', 0),
+        'delivery': current_bag.get('delivery', 0),
+        'grand_total': current_bag.get('grand_total', 0),
     }
     return render(request, 'checkout/checkout.html', context)
 

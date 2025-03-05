@@ -48,3 +48,9 @@
   border-radius: 0.25rem;
   margin-bottom: 1rem;
 }
+
+.checkout-img {
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+}
