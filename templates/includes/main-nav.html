@@ -1,68 +1,78 @@
 <div class="d-none d-lg-block">
   <div class="collapse navbar-collapse" id="main-nav">
     <ul class="navbar-nav me-auto text-center">
-      <a class="navbar-brand" href="{% url 'home' %}">GUERRIER</a>
+      <li class="nav-item">
+        <a class="navbar-brand" href="{% url 'home' %}">GUERRIER</a>
+      </li>
+
       <!-- Clothing Dropdown -->
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="clothing-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="clothing-link" data-bs-toggle="dropdown" aria-expanded="false">
           Clothing
         </a>
-        <div class="dropdown-menu border-0" aria-labelledby="clothing-link">
-          <a class="dropdown-item" href="{% url 'products' %}?clothing_filter=true">All Clothing</a>
-          <a class="dropdown-item" href="{% url 'shirts_view' %}">Shirts</a>
-          <a class="dropdown-item" href="{% url 'hats_view' %}">Hats</a>
-        </div>
+        <ul class="dropdown-menu border-0" aria-labelledby="clothing-link">
+          <li><a class="dropdown-item" href="{% url 'products' %}?clothing_filter=true">All Clothing</a></li>
+          <li><a class="dropdown-item" href="{% url 'shirts_view' %}">Shirts</a></li>
+          <li><a class="dropdown-item" href="{% url 'hats_view' %}">Hats</a></li>
+        </ul>
       </li>
-      <!-- Homeware Dropdown for Desktop -->
+
+      <!-- Homeware Dropdown -->
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="homeware-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle" href="#" id="homeware-link" data-bs-toggle="dropdown" aria-expanded="false">
           Homeware
         </a>
-        <div class="dropdown-menu border-0" aria-labelledby="homeware-link">
-          <a class="dropdown-item" href="{% url 'products' %}?homeware_filter=true">All Homeware</a>
-          <a class="dropdown-item" href="{% url 'mugs_view' %}">Mugs</a>
-          <a class="dropdown-item" href="{% url 'coasters_view' %}">Coasters</a>
-          <a class="dropdown-item" href="{% url 'skateboard_decks_view' %}">Skateboard Decks</a>
-        </div>
+        <ul class="dropdown-menu border-0" aria-labelledby="homeware-link">
+          <li><a class="dropdown-item" href="{% url 'products' %}?homeware_filter=true">All Homeware</a></li>
+          <li><a class="dropdown-item" href="{% url 'mugs_view' %}">Mugs</a></li>
+          <li><a class="dropdown-item" href="{% url 'coasters_view' %}">Coasters</a></li>
+          <li><a class="dropdown-item" href="{% url 'skateboard_decks_view' %}">Skateboard Decks</a></li>
+        </ul>
       </li>
     </ul>
+
     <ul class="navbar-nav text-center">
-        <!-- Search form -->
+      <!-- Search Form -->
+      <li class="nav-item">
         <form method="GET" action="{% url 'products:search_results' %}">
           <div class="input-group w-100">
-              <input class="form-control border border-black rounded-0" type="text" name="q" placeholder="Search">
-              <div class="input-group-append">
-                  <button class="form-control btn btn-black border border-black rounded-0" type="submit">
-                      <span class="icon">
-                          <i class="fas fa-search" aria-hidden="true"></i>
-                      </span>
-                  </button>
-              </div>
+            <input class="form-control border border-black rounded-0" type="text" name="q" placeholder="Search">
+            <div class="input-group-append">
+              <button class="form-control btn btn-black border border-black rounded-0" type="submit">
+                <span class="icon">
+                  <i class="fas fa-search" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
           </div>
         </form>
+      </li>
+
       <!-- Wishlist Icon -->
       <li class="nav-item me-3">
         <a class="nav-link" href="{% url 'wishlist:wishlist_home' %}" aria-label="Wishlist">
           <i class="fa-regular fa-heart"></i>
         </a>
       </li>
-      <!-- Cart / Bag Icon -->
+
+      <!-- Cart Icon -->
       <li class="nav-item me-3">
         <a class="nav-link" href="{% url 'bag:view_bag' %}" aria-label="Bag">
           <i class="fas fa-shopping-cart"></i>
         </a>
       </li>
+
       <!-- Account Icon -->
       <li class="nav-item dropdown me-3">
         {% if user.is_authenticated %}
-          <a class="nav-link dropdown-toggle" href="#" id="account-link" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="account-link" data-bs-toggle="dropdown" aria-expanded="false">
             <i class="fas fa-user"></i>
           </a>
-          <div class="dropdown-menu border-0" aria-labelledby="account-link">
-            <a class="dropdown-item" href="{% url 'profiles:home' %}">My Profile</a>
-            <a class="dropdown-item" href="{% url 'wishlist:wishlist_home' %}">Wishlist</a>
-            <a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a>
-          </div>
+          <ul class="dropdown-menu border-0" aria-labelledby="account-link">
+            <li><a class="dropdown-item" href="{% url 'profiles:home' %}">My Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'wishlist:wishlist_home' %}">Wishlist</a></li>
+            <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
+          </ul>
         {% else %}
           <a class="nav-link" href="{% url 'account_login' %}" aria-label="Login">
             <i class="fas fa-user"></i>
