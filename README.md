@@ -237,7 +237,7 @@ The color palette was chosen to reflect the brand's bold and urban aesthetic whi
 
 ### Images
 
-- All images and products on the site were created by myself, using Adobe Photoshop
+- All images and products on the site were created by myself, using Adobe Photoshop.
 
 ## Business Model
 
