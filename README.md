@@ -158,7 +158,7 @@ The project uses a relational database model with the following main models:
 
 ### Home Page
 - Newsletter signup form
-
+- Easy to use navigation and clean design
 
 ![Home Page](documentation/features/homepage.png)
 
@@ -198,10 +198,39 @@ The project uses a relational database model with the following main models:
 
 ### Future Features
 
+- Icons that change colour: When interacting with an icon, for example in Wishlist, the heart turns solid to identify an item already in the Wishlist.
+- Improved Django Admin Features: There is scope for improving the Ux/ui with added features such as revenue tracking and sales forecasting.
 
 
+## Design
+
+### Colour Scheme
+
+The color palette was chosen to reflect the brand's bold and urban aesthetic while ensuring accessibility and readability throughout the site.
+- Primary: #1A1A1A (Dark Gray/Black) - Used for text and to create contrast
+- Secondary: #FFFFFF - Used for text on dark backgrounds and for background for a clean look
+- Accent: #555555 (Dark Gray/Black) - Used on buttons and certain areas of text to 
 
 
+## Business Model
+
+Guerrier operates as a B2C (Business to Consumer) e-commerce platform, selling premium streetwear directly to customers. The business focuses on quality over quantity, with limited edition drops to create exclusivity.
+
+### Marketing Strategy
+
+- Social Media Marketing through Instagram and TikTok targeting the 18-35 demographic
+- Email Marketing with a newsletter subscription option for new product launches and promotions
+- Influencer collaborations with local Dublin fashion influencers
+- Content Marketing through blog posts about streetwear culture and fashion trends
+
+### SEO
+
+- Keyword research focused on streetwear, Dublin fashion, and urban clothing
+- Optimized meta tags and descriptions
+- Custom robots.txt and sitemap.xml files
+- Descriptive alt text for all images
+- Semantic HTML throughout the site
+- Optimized site loading speed
 
 # Technologies
 
