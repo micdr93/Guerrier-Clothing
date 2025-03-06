@@ -1,43 +1,58 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var stripePublicKey = stripePublicKey || document.getElementById("stripe-public-key").textContent.trim();
-    var clientSecret = clientSecret || document.getElementById("client-secret-data").textContent.trim();
-    var stripe = Stripe(stripePublicKey);
-    var elements = stripe.elements();
-    var style = {
+    console.log("stripe_elements.js loaded");
+
+    // Read the public key and client secret from JSON script tags
+    const stripePublicKey = JSON.parse(
+        document.getElementById("id_stripe_public_key").textContent
+    );
+    const clientSecret = JSON.parse(
+        document.getElementById("id_client_secret").textContent
+    );
+
+    const stripe = Stripe(stripePublicKey);
+    const elements = stripe.elements();
+
+    const style = {
         base: {
             color: '#32325d',
             fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-            fontSmoothing: 'antialiased',
             fontSize: '16px',
             '::placeholder': { color: '#aab7c4' }
         },
         invalid: {
-            color: '#fa755a',
-            iconColor: '#fa755a'
+            color: '#fa755a'
         }
     };
-    var card = elements.create('card', { style: style });
+
+    const card = elements.create('card', { style });
     card.mount('#card-element');
+
     card.addEventListener('change', function(event) {
-        var displayError = document.getElementById('card-errors');
+        const errorDiv = document.getElementById('card-errors');
         if (event.error) {
-            displayError.textContent = event.error.message;
+            errorDiv.textContent = event.error.message;
         } else {
-            displayError.textContent = '';
+            errorDiv.textContent = '';
         }
     });
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', function(event) {
-        event.preventDefault();
-        var submitButton = document.getElementById('submit-button');
+
+    const form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const submitButton = document.getElementById('submit-button');
         submitButton.disabled = true;
-        submitButton.innerHTML = '<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span> Processing...';
-        var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        var postData = {
-            'csrfmiddlewaretoken': csrfToken,
-            'client_secret': clientSecret,
-            'save_info': document.getElementById('id-save-info').checked ? 'true' : 'false'
+        submitButton.innerHTML = 'Processing...';
+
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        const saveInfo = document.getElementById('id-save-info').checked ? 'true' : 'false';
+
+        // Step 1: Cache checkout data
+        const postData = {
+            csrfmiddlewaretoken: csrfToken,
+            client_secret: clientSecret,
+            save_info: saveInfo
         };
+
         fetch('/checkout/cache_checkout_data/', {
             method: 'POST',
             headers: {
@@ -45,7 +60,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 'X-CSRFToken': csrfToken
             },
             body: new URLSearchParams(postData)
-        }).then(function() {
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Cache checkout data failed');
+            }
+            // Step 2: Confirm card payment
             return stripe.confirmCardPayment(clientSecret, {
                 payment_method: {
                     card: card,
@@ -63,10 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             });
-        }).then(function(result) {
+        })
+        .then(result => {
             if (result.error) {
-                var errorElement = document.getElementById('card-errors');
-                errorElement.textContent = result.error.message;
+                const errorDiv = document.getElementById('card-errors');
+                errorDiv.textContent = result.error.message;
                 submitButton.disabled = false;
                 submitButton.innerHTML = 'Complete Order';
             } else {
@@ -74,7 +95,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     form.submit();
                 }
             }
-        }).catch(function(error) {
+        })
+        .catch(error => {
+            console.error("Error:", error);
             submitButton.disabled = false;
             submitButton.innerHTML = 'Complete Order';
         });

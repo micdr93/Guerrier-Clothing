@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg
+from django.db.models import Q, Avg
 from django.views.generic import DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
@@ -18,44 +18,56 @@ def calculate_average_rating(product):
         return reviews.aggregate(Avg('rating'))['rating__avg']
     return 0
 
+
+
 def all_products(request, category=None):
     products = Product.active_products()
     query_category = request.GET.get('category', category)
     query = request.GET.get('q', '').strip()
+    active_category = None
 
+    # Handle search query
     if query:
-        filtered = products.filter(
+        products = products.filter(
             Q(name__icontains=query) |
             Q(description__icontains=query) |
             Q(category__name__icontains=query)
         ).distinct()
-        products = filtered
-        active_category = None
-    else:
-        if request.GET.get('homeware_filter') == 'true':
-            homeware_categories = ['mugs', 'coasters', 'skateboard_decks']
-            products = products.filter(category__name__in=homeware_categories)
-            active_category = 'Homeware'
-        elif request.GET.get('clothing_filter') == 'true':
-            clothing_categories = ['shirts', 'Hats']
-            products = products.filter(category__name__in=clothing_categories)
-            active_category = 'Clothing'
-        elif query_category:
-            products = products.filter(category__name__iexact=query_category)
-            active_category = query_category
-        else:
-            active_category = None
+        
+    # Handle category filtering
+    elif request.GET.get('homeware_filter') == 'true':
+        homeware_categories = ['mugs', 'coasters', 'skateboard_decks']
+        products = products.filter(category__name__in=homeware_categories)
+        active_category = 'Homeware'
+        
+    elif request.GET.get('clothing_filter') == 'true':
+        clothing_categories = ['shirts', 'Hats']
+        products = products.filter(category__name__in=clothing_categories)
+        active_category = 'Clothing'
+        
+    elif query_category:
+        products = products.filter(category__name__iexact=query_category)
+        active_category = query_category
 
+    # Handle sorting
     sort = request.GET.get('sort')
     direction = request.GET.get('direction', 'asc')
-    if sort == 'price':
-        products = products.order_by('price' if direction == 'asc' else '-price')
-    elif sort == 'name':
-        products = products.order_by('name' if direction == 'asc' else '-name')
-    elif sort == 'category':
-        products = products.order_by('category__name' if direction == 'asc' else '-category__name')
-    elif sort == 'rating':
-        products = products.order_by('rating' if direction == 'asc' else '-rating')
+    
+    if sort:
+        sort_field = f"{'' if direction == 'asc' else '-'}{sort}"
+        
+        if sort == 'price':
+            products = products.order_by(f"{'' if direction == 'asc' else '-'}price")
+        elif sort == 'name':
+            products = products.order_by(f"{'' if direction == 'asc' else '-'}name")
+        elif sort == 'category':
+            products = products.order_by(f"{'' if direction == 'asc' else '-'}category__name")
+        elif sort == 'rating':
+            # Handle None values for rating
+            if direction == 'asc':
+                products = products.order_by('rating')
+            else:
+                products = products.order_by('-rating')
 
     wishlist = None
     if request.user.is_authenticated:

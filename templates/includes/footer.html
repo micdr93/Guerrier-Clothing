@@ -6,8 +6,12 @@
         <h5 class="text-uppercase fw-bold">About Us</h5>
         <ul class="nav flex-column">
           <!-- Links related to the company -->
-          <li class="nav-item mb-2"><a href="{% url 'index' %}" class="nav-link p-0 text-dark">Home</a></li>
-          <li class="nav-item mb-2"><a href="{% url 'contact' %}" class="nav-link p-0 text-dark">Contact</a></li>
+          <li class="nav-item mb-2">
+            <a href="{% url 'index' %}" class="nav-link p-0 text-dark">Home</a>
+          </li>
+          <li class="nav-item mb-2">
+            <a href="{% url 'contact' %}" class="nav-link p-0 text-dark">Contact</a>
+          </li>
         </ul>
       </div>
       <div class="col-6 col-md-3 mb-3">
@@ -15,8 +19,12 @@
         <!-- Get Help section -->
         <ul class="nav flex-column">
           <!-- Links related to getting help -->
-          <li class="nav-item mb-2"><a href="{% url 'privacy_policy' %}" class="nav-link p-0 text-dark">Privacy Policy</a></li>
-          <li class="nav-item mb-2"><a href="{% url 'returns' %}" class="nav-link p-0 text-dark">Returns</a></li>
+          <li class="nav-item mb-2">
+            <a href="{% url 'privacy_policy' %}" class="nav-link p-0 text-dark">Privacy Policy</a>
+          </li>
+          <li class="nav-item mb-2">
+            <a href="{% url 'returns' %}" class="nav-link p-0 text-dark">Returns</a>
+          </li>
         </ul>
       </div>
       <div class="col-md-6 mb-3">
@@ -32,17 +40,23 @@
         </form>
       </div>
     </div>
-  <!-- Copyright and social media links -->
-<div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
-  <p>© 2025 Guerrier Clothing. All rights reserved.</p>
-  <div>
-    <p class="text-center text-sm-start">123 Grafton Street, Dublin 2, Ireland</p>
+    <!-- Copyright and social media links -->
+    <div class="d-flex flex-column flex-sm-row justify-content-between pt-4 mt-4 border-top">
+      <p>© 2025 Guerrier Clothing. All rights reserved.</p>
+      <div>
+        <p class="text-center text-sm-start">123 Grafton Street, Dublin 2, Ireland</p>
+      </div>
+      <ul class="list-unstyled d-flex">
+        <li class="ms-3">
+          <a class="link-dark" 
+             href="https://www.facebook.com/people/Guerrier/61572317841699/" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             aria-label="Facebook">
+            <i class="fa-brands fa-facebook"></i>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
-  <ul class="list-unstyled d-flex">
-    <li class="ms-3">
-      <a class="link-dark" href="https://www.facebook.com/people/Guerrier/61572317841699/" target="_blank" rel="noopener noreferrer" onclick="window.open(this.href, '_blank'); return false;" aria-label="Facebook">
-        <i class="fa-brands fa-facebook"></i>
-      </a>
-    </li>
-  </ul>
-</div>
+</footer>

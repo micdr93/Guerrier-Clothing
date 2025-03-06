@@ -37,9 +37,13 @@ def checkout(request):
         return redirect(reverse('products'))
     if request.method == 'POST':
         form = OrderForm(request.POST)
+        client_secret_val = request.POST.get('client_secret')
+        if not client_secret_val:
+            messages.error(request, "Payment information is missing. Please try again.")
+            return redirect(reverse('checkout:checkout'))
         if form.is_valid():
             order = form.save(commit=False)
-            pid = request.POST.get('client_secret').split('_secret')[0]
+            pid = client_secret_val.split('_secret')[0]
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
             if request.user.is_authenticated:

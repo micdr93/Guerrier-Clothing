@@ -1,5 +1,7 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
+from django.http import HttpResponse, JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 from products.models import Product
 from recommendations.utils import get_recommended_items
 
@@ -57,33 +59,58 @@ def add_to_bag(request, product_id):
 
     return redirect('bag:view_bag')  # Redirect to view_bag
 
+@csrf_exempt
 def remove_from_bag(request, product_id):
-    bag = request.session.get('bag', {})
-    product_key = str(product_id)
+    """Remove the item from the shopping bag"""
+    
+    try:
+        product = get_object_or_404(Product, pk=product_id)
+        bag = request.session.get('bag', {})
+        
+        product_key = str(product_id)
+        if product_key in bag:
+            del bag[product_key]
+            messages.success(request, f'Removed {product.name} from your bag')
+        
+        request.session['bag'] = bag
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': True})
+        
+        return redirect(reverse('bag:view_bag'))
+    
+    except Exception as e:
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'error': str(e)}, status=500)
+        
+        messages.error(request, f'Error removing item: {e}')
+        return redirect(reverse('bag:view_bag'))
 
-    # Check if the item exists in the bag
-    if product_key in bag:
-        del bag[product_key]  # Remove the item from the bag
-        request.session['bag'] = bag  # Update the session with the modified bag
-
-    return redirect('bag:view_bag')  # Redirect back to the bag view
-
+@csrf_exempt
 def update_bag(request, product_id):
-    bag = request.session.get('bag', {})
-    product_key = str(product_id)
-
-    # Check if the product is in the bag and update the quantity
-    if product_key in bag:
-        quantity = request.POST.get('quantity', 1)  # Get the updated quantity from the form
-        try:
-            quantity = int(quantity)  # Ensure it's an integer
-            if quantity > 0:
-                bag[product_key] = quantity  # Update the quantity in the bag
-            else:
-                del bag[product_key]  # If quantity is 0 or less, remove the item
-        except ValueError:
-            pass  # Handle invalid quantity values gracefully
-
-    # Save the updated session and redirect to the cart view
-    request.session['bag'] = bag
-    return redirect('bag:view_bag')  # Redirect back to the cart
+    """Update the quantity of the specified product to the specified amount"""
+    
+    try:
+        product = get_object_or_404(Product, pk=product_id)
+        quantity = int(request.POST.get('quantity', 1))
+        
+        bag = request.session.get('bag', {})
+        product_key = str(product_id)
+        
+        if quantity > 0:
+            bag[product_key] = quantity
+            messages.success(request, f'Updated {product.name} quantity to {quantity}')
+        else:
+            if product_key in bag:
+                del bag[product_key]
+                messages.success(request, f'Removed {product.name} from your bag')
+        
+        request.session['bag'] = bag
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'success': True})
+        
+        return redirect(reverse('bag:view_bag'))
+    except Exception as e:
+        messages.error(request, f'Error updating bag: {e}')
+        return redirect(reverse('bag:view_bag'))
