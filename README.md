@@ -190,6 +190,18 @@ The project uses a relational database model with the following main models:
 
 ![User Profile](documentation/features/user-profile.png)
 
+#### Admin Features
+- Product management (add, edit, delete)
+- Order management and processing
+- User management
+- Content management for homepage
+
+### Future Features
+
+
+
+
+
 
 # Technologies
 
