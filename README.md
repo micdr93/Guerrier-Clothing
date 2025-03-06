@@ -182,6 +182,15 @@ The project uses a relational database model with the following main models:
 
 ![Checkout](documentation/features/checkout.png)
 
+#### User Account
+- Registration and login functionality
+- Profile with saved delivery information
+- Order history
+- Personal wishlist management
+
+![User Profile](documentation/features/user-profile.png)
+
+
 # Technologies
 
 ## Languages Used
