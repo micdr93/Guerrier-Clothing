@@ -160,19 +160,24 @@ The project uses a relational database model with the following main models:
 - Newsletter signup form
 - Easy to use navigation and clean design
 
-![Home Page](documentation/features/homepage.png)
+![Home Page](documentation/readme_images/footer.png)
+
 
 ### Products Pages
 - Pagination for easy browsing
+- Can click product for more detail
+- Can add to wishlist straight away
 
-![Products Page](documentation/features/products-page.png)
+![Products Page](documentation/readme_images/footer.png)
+
 
 #### Shopping Basket
 - Add, remove and update quantities
 - Price calculation with subtotals
 - "Continue shopping" and "Proceed to checkout" options
 
-![Shopping Basket](documentation/features/basket.png)
+![Shopping Basket](documentation/readme_images/footer.png)
+
 
 #### Checkout
 - Secure form for shipping information
@@ -180,14 +185,14 @@ The project uses a relational database model with the following main models:
 - Stripe integration for payments
 - Order confirmation with email notification
 
-![Checkout](documentation/features/checkout.png)
+![Checkout](documentation/readme_images/footer.png)
 
 
 #### Footer 
 - The footer is present on all pages of the site.
 - It features links to contact, returns, privacy policy and links back to the home page.
-- The footer also incorperates links to our MailChimp newsletter signup and a link to our FaceBook marketing page.
-![Footer](documentation/readme_images/footer.png)x
+- The footer also incorperates links to our newsletter signup and a link to our FaceBook marketing page.
+![Footer](documentation/readme_images/footer.png)
 
 #### User Account
 - Registration and login functionality
@@ -195,7 +200,7 @@ The project uses a relational database model with the following main models:
 - Order history
 - Personal wishlist management
 
-![User Profile](documentation/features/user-profile.png)
+![User Profile](documentation/readme_images/footer.png)
 
 #### Admin Features
 - Product management (add, edit, delete)
@@ -214,10 +219,14 @@ The project uses a relational database model with the following main models:
 ### Colour Scheme
 
 The color palette was chosen to reflect the brand's bold and urban aesthetic while ensuring accessibility and readability throughout the site.
+
 - Primary: #1A1A1A (Dark Gray/Black) - Used for text and to create contrast
 - Secondary: #FFFFFF - Used for text on dark backgrounds and for background for a clean look
 - Accent: #555555 (Dark Gray/Black) - Used on buttons and certain areas of text to 
 
+### Images
+
+- All images and products on the site were created by myself, using Adobe Photoshop
 
 ## Business Model
 
@@ -225,9 +234,9 @@ Guerrier operates as a B2C (Business to Consumer) e-commerce platform, selling p
 
 ### Marketing Strategy
 
-- Social Media Marketing through 
+- The footer incorperates links to our newsletter signup and a link to our FaceBook marketing page.
 - Email Marketing with a newsletter subscription option for new product launches and promotions
-- Influencer collaborations with local Dublin fashion influencers
+
 
 ### SEO
 
@@ -248,22 +257,26 @@ Guerrier operates as a B2C (Business to Consumer) e-commerce platform, selling p
 
 ## Frameworks Used
 
-* [Django](https://www.djangoproject.com/)
-* [Bootstrap](https://blog.getbootstrap.com/) 
+* [Django](https://www.djangoproject.com/) - Python web framework used as the main architecture
+* [Bootstrap](https://blog.getbootstrap.com/) - Frontend framework for responsive design
+* [jQuery](https://jquery.com/) - JavaScript library for DOM manipulation
+* [Font Awesome](https://fontawesome.com/) - Icon library used throughout the site
+
 
 ## Libraries And Installed Packages
 
 * [crispy-bootstrap4](https://pypi.org/project/crispy-bootstrap4/) - Template pack used for django-crispy-forms
-* [django-crispy-forms](https://pypi.org/project/crispy-bootstrap4/) - Used to render forms throughout the project.
-* [dj-database-url](https://pypi.org/project/dj-database-url/) - A package used to utilize DATABASE_URL environment variable.  
-* [django-allauth](https://django-allauth.readthedocs.io/en/latest/) - Allows authentication, registration and account management in Django.
-* [django-countries, v7.2.1](https://pypi.org/project/django-countries/7.2.1/) - Django application used to provide country choices for use with forms, and a country field for models.
-* [gunicorn](https://gunicorn.org/) - A Python WSGI HTTP Server for UNIX.
-* [psycopg2](https://pypi.org/project/psycopg2/) - A PostgreSQL database adapter.
-* [django storages](https://django-storages.readthedocs.io/en/latest/) - Collection of custom storage backends for Django.
-* [stripe==7.8.1](https://pypi.org/project/stripe/) - A Python library for Stripe’s API.
-* [django-summernote](https://github.com/summernote/django-summernote) - Is a simple WYSIWYG editor.
-
+* [django-crispy-forms](https://pypi.org/project/crispy-bootstrap4/) - Used to render forms throughout the project
+* [dj-database-url](https://pypi.org/project/dj-database-url/) - A package used to utilize DATABASE_URL environment variable  
+* [django-allauth](https://django-allauth.readthedocs.io/en/latest/) - Allows authentication, registration and account management
+* [django-countries, v7.2.1](https://pypi.org/project/django-countries/7.2.1/) - Django application for country choices in forms and models
+* [gunicorn](https://gunicorn.org/) - A Python WSGI HTTP Server for UNIX
+* [psycopg2](https://pypi.org/project/psycopg2/) - A PostgreSQL database adapter
+* [django storages](https://django-storages.readthedocs.io/en/latest/) - Collection of custom storage backends for Django
+* [stripe==7.8.1](https://pypi.org/project/stripe/) - A Python library for Stripe's API
+* [django-summernote](https://github.com/summernote/django-summernote) - WYSIWYG editor for Django admin
+* [Pillow](https://pypi.org/project/Pillow/) - Python Imaging Library for image processing
+* [boto3](https://pypi.org/project/boto3/) - AWS SDK for Python used for S3 bucket storage
 
 
 ## Tools And Resources
