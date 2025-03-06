@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const stripePublicKey = document.getElementById('id_stripe_public_key').textContent.trim();
-    const clientSecret = document.getElementById('id_client_secret').textContent.trim();
-    const stripe = Stripe(stripePublicKey);
-    const elements = stripe.elements();
-    const style = {
+    var stripePublicKey = stripePublicKey || document.getElementById("stripe-public-key").textContent.trim();
+    var clientSecret = clientSecret || document.getElementById("client-secret-data").textContent.trim();
+    var stripe = Stripe(stripePublicKey);
+    var elements = stripe.elements();
+    var style = {
         base: {
             color: '#32325d',
             fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
@@ -16,24 +16,24 @@ document.addEventListener('DOMContentLoaded', function() {
             iconColor: '#fa755a'
         }
     };
-    const card = elements.create('card', { style: style });
+    var card = elements.create('card', { style: style });
     card.mount('#card-element');
     card.addEventListener('change', function(event) {
-        const displayError = document.getElementById('card-errors');
+        var displayError = document.getElementById('card-errors');
         if (event.error) {
             displayError.textContent = event.error.message;
         } else {
             displayError.textContent = '';
         }
     });
-    const form = document.getElementById('payment-form');
+    var form = document.getElementById('payment-form');
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        const submitButton = document.getElementById('submit-button');
+        var submitButton = document.getElementById('submit-button');
         submitButton.disabled = true;
         submitButton.innerHTML = '<span class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span> Processing...';
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-        const postData = {
+        var csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        var postData = {
             'csrfmiddlewaretoken': csrfToken,
             'client_secret': clientSecret,
             'save_info': document.getElementById('id-save-info').checked ? 'true' : 'false'
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }).then(function(result) {
             if (result.error) {
-                const errorElement = document.getElementById('card-errors');
+                var errorElement = document.getElementById('card-errors');
                 errorElement.textContent = result.error.message;
                 submitButton.disabled = false;
                 submitButton.innerHTML = 'Complete Order';

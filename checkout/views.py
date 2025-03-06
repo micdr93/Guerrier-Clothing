@@ -13,8 +13,11 @@ import stripe, json
 
 @require_POST
 def cache_checkout_data(request):
+    client_secret = request.POST.get('client_secret')
+    if not client_secret:
+        return HttpResponse("Missing client_secret", status=400)
     try:
-        pid = request.POST.get('client_secret').split('_secret')[0]
+        pid = client_secret.split('_secret')[0]
         stripe.api_key = settings.STRIPE_SECRET_KEY
         stripe.PaymentIntent.modify(pid, metadata={
             'save_info': request.POST.get('save_info'),
@@ -22,7 +25,7 @@ def cache_checkout_data(request):
         return HttpResponse(status=200)
     except Exception as e:
         messages.error(request, 'Sorry, your payment cannot be processed right now. Please try again later.')
-        return HttpResponse(content=e, status=400)
+        return HttpResponse(content=str(e), status=400)
 
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
@@ -65,7 +68,6 @@ def checkout(request):
         else:
             messages.error(request, "There was an error with your form. Please double-check your information.")
     else:
-        stripe.api_key = stripe_secret_key
         current_bag = bag_contents(request)
         total = current_bag.get('grand_total')
         stripe_total = round(total * 100)
@@ -98,6 +100,11 @@ def checkout(request):
             'order_form': form,
             'stripe_public_key': stripe_public_key,
             'client_secret': intent.client_secret,
+            'bag': bag,
+            'all_products': {item_id: Product.objects.get(id=item_id) for item_id in bag},
+            'total': current_bag.get('total', 0),
+            'delivery': current_bag.get('delivery', 0),
+            'grand_total': current_bag.get('grand_total', 0),
         }
         return render(request, template, context)
 
