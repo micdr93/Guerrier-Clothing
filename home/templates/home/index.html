@@ -5,7 +5,7 @@
 <div class="container-fluid px-0">
     <div class="row no-gutters">
         <div class="col-12">
-            <a href="{% url 'all_products' %}" class="hero-banner d-block">
+            <a href="{% url 'products:products' %}" class="hero-banner d-block">
                 <img src="{% static 'media/banners/banner.png' %}" alt="Shop All Guerrier Products">
                 <div class="banner-overlay">
                     <h2 class="banner-text">Shop The Collection</h2>
@@ -18,60 +18,71 @@
 
 {% block content %}
 <div class="container mt-4">
-    <div class="row mb-4">
-        <div class="col">
-            <!-- Introductory text block -->
-            <div class="text-center">
-                <h1>Welcome to Guerrier</h1>
-                <p>
-                    A bold streetwear brand inspired by the spirit of warriors. Based in the vibrant streets of Dublin, Guerrier draws its name from the French word for warrior, representing strength, courage, and resilience.
-                </p>
-                <p>
-                    Our mission is simple: to create clothing that empowers you to take on life's challenges with confidence. Designed with a blend of cutting-edge streetwear aesthetics and premium-quality craftsmanship, Guerrier is your go-to armor for standing out and standing strong.
-                </p>
-            </div>
+
+ 
+
+  <!-- Product Grid -->
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+      <div class="card">
+        {% if product.image %}
+          <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+        {% else %}
+          <img src="{% static 'media/noimage.png' %}" class="card-img-top" alt="{{ product.name }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ product.name }}</h5>
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-text">€{{ product.price }}</p>
+          <a href="#" class="btn btn-primary">Add to Cart</a>
         </div>
+      </div>
     </div>
-    <div class="row">
-        {% for product in products %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
-                <div class="card-body">
-                    <h5 class="card-title">{{ product.name }}</h5>
-                    <p class="card-text">{{ product.description }}</p>
-                    <p class="card-text">€{{ product.price }}</p>
-                    <a href="#" class="btn btn-primary">Add to Cart</a>
-                </div>
+    {% endfor %}
+  </div>
+  
+  <!-- Newsletter Section -->
+  <div class="container-fluid bg-light py-5 mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h2 class="mb-4">Join Our Newsletter</h2>
+        <p class="mb-4">Sign up to receive updates on new products, exclusive offers, and streetwear trends.</p>
+        <form method="POST" class="d-flex justify-content-center">
+          {% csrf_token %}
+          <div class="input-group mb-3 w-75">
+            {{ newsletter_form.email }}
+            <button class="btn btn-dark" type="submit">Subscribe</button>
+          </div>
+        </form>
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} mt-3">
+              {{ message }}
             </div>
-        </div>
-        {% endfor %}
+          {% endfor %}
+        {% endif %}
+      </div>
     </div>
-    
-    <!-- Newsletter Section - INSIDE the content block -->
-    <div class="container-fluid bg-light py-5 mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
-                <h2 class="mb-4">Join Our Newsletter</h2>
-                <p class="mb-4">Sign up to receive updates on new products, exclusive offers, and streetwear trends.</p>
-                
-                <form method="POST" class="d-flex justify-content-center">
-                    {% csrf_token %}
-                    <div class="input-group mb-3 w-75">
-                        {{ newsletter_form.email }}
-                        <button class="btn btn-dark" type="submit">Subscribe</button>
-                    </div>
-                </form>
-                
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} mt-3">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
-    </div>
+  </div>
+
 </div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#sort-selector').on('change', function() {
+      var selectedVal = $(this).val();
+      var currentUrl = new URL(window.location.href);
+      if(selectedVal !== "reset") {
+        var parts = selectedVal.split("_");
+        currentUrl.searchParams.set("sort", parts[0]);
+        currentUrl.searchParams.set("direction", parts[1]);
+      } else {
+        currentUrl.searchParams.delete("sort");
+        currentUrl.searchParams.delete("direction");
+      }
+      window.location.href = currentUrl.toString();
+    });
+  });
+</script>
 {% endblock %}
