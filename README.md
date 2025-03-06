@@ -182,6 +182,13 @@ The project uses a relational database model with the following main models:
 
 ![Checkout](documentation/features/checkout.png)
 
+
+#### Footer 
+- The footer is present on all pages of the site.
+- It features links to contact, returns, privacy policy and links back to the home page.
+- The footer also incorperates links to our MailChimp newsletter signup and a link to our FaceBook marketing page.
+![Footer](documentation/readme_images/footer.png)x
+
 #### User Account
 - Registration and login functionality
 - Profile with saved delivery information
@@ -218,10 +225,9 @@ Guerrier operates as a B2C (Business to Consumer) e-commerce platform, selling p
 
 ### Marketing Strategy
 
-- Social Media Marketing through Instagram and TikTok targeting the 18-35 demographic
+- Social Media Marketing through 
 - Email Marketing with a newsletter subscription option for new product launches and promotions
 - Influencer collaborations with local Dublin fashion influencers
-- Content Marketing through blog posts about streetwear culture and fashion trends
 
 ### SEO
 
