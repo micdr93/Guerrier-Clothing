@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container my-4">
+  {% if category %}
+    <h2>{{ category.friendly_name|default:category.name }}</h2>
+  {% else %}
+    <h2>All Products</h2>
+  {% endif %}
+
+ 
+  <!-- Products Grid -->
+  <div class="row">
+    {% for product in products %}
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100 border-0">
+          {% if product.image %}
+            <a href="{% url 'products:product_detail' product.id %}">
+              <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+            </a>
+          {% else %}
+            <a href="{% url 'products:product_detail' product.id %}">
+              <img class="card-img-top img-fluid" src="{% static 'media/noimage.png' %}" alt="{{ product.name }}">
+            </a>
+          {% endif %}
+          <div class="card-body pb-0">
+            <p class="mb-0">{{ product.name }}</p>
+          </div>
+          <div class="card-footer bg-white pt-0 border-0 text-left">
+            <p class="lead mb-0 font-weight-bold">€{{ product.price }}</p>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12 text-center">
+        <p>No products found.</p>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sortSelector = document.getElementById('sort-selector');
+  if (sortSelector) {
+    sortSelector.addEventListener('change', function() {
+      const selectedVal = sortSelector.value;
+      const currentUrl = new URL(window.location.href);
+      if (selectedVal !== "reset") {
+        const parts = selectedVal.split("_");
+        currentUrl.searchParams.set("sort", parts[0]);
+        currentUrl.searchParams.set("direction", parts[1]);
+      } else {
+        currentUrl.searchParams.delete("sort");
+        currentUrl.searchParams.delete("direction");
+      }
+      window.location.href = currentUrl.toString();
+    });
+  }
+});
+</script>
+{% endblock %}
