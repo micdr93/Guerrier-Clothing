@@ -159,6 +159,29 @@ The project uses a relational database model with the following main models:
 ### Home Page
 - Newsletter signup form
 
+
+![Home Page](documentation/features/homepage.png)
+
+### Products Pages
+- Pagination for easy browsing
+
+![Products Page](documentation/features/products-page.png)
+
+#### Shopping Basket
+- Add, remove and update quantities
+- Price calculation with subtotals
+- "Continue shopping" and "Proceed to checkout" options
+
+![Shopping Basket](documentation/features/basket.png)
+
+#### Checkout
+- Secure form for shipping information
+- Order summary
+- Stripe integration for payments
+- Order confirmation with email notification
+
+![Checkout](documentation/features/checkout.png)
+
 # Technologies
 
 ## Languages Used
