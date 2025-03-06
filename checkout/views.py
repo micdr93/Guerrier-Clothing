@@ -10,7 +10,7 @@ from bag.contexts import bag_contents
 from profiles.models import UserProfile
 from django.contrib.auth.decorators import login_required
 import stripe, json
-from .utils import send_confirmation_email
+from .utils import send_confirmation_email, convert_country
 
 @require_POST
 def cache_checkout_data(request):
@@ -20,9 +20,7 @@ def cache_checkout_data(request):
     try:
         pid = client_secret.split('_secret')[0]
         stripe.api_key = settings.STRIPE_SECRET_KEY
-        stripe.PaymentIntent.modify(pid, metadata={
-            'save_info': request.POST.get('save_info'),
-        })
+        stripe.PaymentIntent.modify(pid, metadata={'save_info': request.POST.get('save_info')})
         return HttpResponse(status=200)
     except Exception as e:
         messages.error(request, 'Sorry, your payment cannot be processed right now. Please try again later.')
@@ -44,6 +42,7 @@ def checkout(request):
             return redirect(reverse('checkout:checkout'))
         if form.is_valid():
             order = form.save(commit=False)
+            order.country = convert_country(order.country)
             pid = client_secret_val.split('_secret')[0]
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
@@ -115,18 +114,10 @@ def checkout(request):
 
 def checkout_success(request, order_number):
     order = get_object_or_404(Order, order_number=order_number)
-    
-    # Send confirmation email
     send_confirmation_email(order)
-    
-    messages.success(
-        request,
-        f'Order successfully processed! Your order number is {order_number}. A confirmation email has been sent to {order.email}.'
-    )
-    
+    messages.success(request, f'Order successfully processed! Your order number is {order_number}. A confirmation email has been sent to {order.email}.')
     if 'bag' in request.session:
         del request.session['bag']
-        
     return render(request, 'checkout/checkout_success.html', {'order': order})
 
 @login_required
