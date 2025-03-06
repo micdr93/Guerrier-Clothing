@@ -1,7 +1,7 @@
+{% load checkout_tags %}
 {% extends "base.html" %}
 {% load static %}
 {% load crispy_forms_tags %}
-{% load checkout_tags %} 
 
 {% block extra_css %}
   <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
@@ -48,35 +48,28 @@
         </div>
         <div class="col-12 col-lg-6">
             <p class="text-muted">Please fill out the form below to complete your order</p>
-
-            <!-- Hidden Stripe keys rendered as JSON script tags -->
             {{ stripe_public_key|json_script:"id_stripe_public_key" }}
             {{ client_secret|json_script:"id_client_secret" }}
-
             <form action="{% url 'checkout:checkout' %}" method="POST" id="payment-form">
                 {% csrf_token %}
-                <fieldset class="rounded px-3 mb-3">
-                    <legend class="small text-black">Personal Details</legend>
-                    {{ order_form.full_name|as_crispy_field }}
-                    {{ order_form.email|as_crispy_field }}
-                </fieldset>
-                <fieldset class="rounded px-3 mb-3">
-                    <legend class="small text-black">Delivery Details</legend>
-                    {{ order_form.phone_number|as_crispy_field }}
-                    {{ order_form.country|as_crispy_field }}
-                    {{ order_form.postcode|as_crispy_field }}
-                    {{ order_form.town_or_city|as_crispy_field }}
-                    {{ order_form.street_address1|as_crispy_field }}
-                    {{ order_form.street_address2|as_crispy_field }}
-                </fieldset>
+                {{ order_form.full_name|as_crispy_field }}
+                {{ order_form.email|as_crispy_field }}
+                {{ order_form.phone_number|as_crispy_field }}
+                {{ order_form.country|as_crispy_field }}
+                {{ order_form.postcode|as_crispy_field }}
+                {{ order_form.town_or_city|as_crispy_field }}
+                {{ order_form.street_address1|as_crispy_field }}
+                {{ order_form.street_address2|as_crispy_field }}
+                <div class="form-group">
+                    <input type="checkbox" name="save_info" id="id-save-info">
+                    <label for="id-save-info"> Save this information to my profile</label>
+                </div>
                 <fieldset class="rounded px-3 mb-3">
                     <legend class="small text-black">Payment Details</legend>
-                    <!-- This div will be populated by Stripe JS -->
                     <div id="card-element" class="mb-3 p-2 border rounded"></div>
-                    
-                    <!-- Used to display form errors -->
                     <div id="card-errors" role="alert" class="text-danger mt-2"></div>
                 </fieldset>
+                <input type="hidden" name="client_secret" value="{{ client_secret }}">
                 <button type="submit" class="btn btn-primary w-100" id="submit-button">Complete Order</button>
             </form>
         </div>
@@ -86,6 +79,10 @@
 
 {% block postloadjs %}
 {{ block.super }}
+<script>
+    var stripePublicKey = "{{ stripe_public_key }}";
+    var clientSecret = "{{ client_secret }}";
+</script>
 <script src="https://js.stripe.com/v3/"></script>
 <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
 {% endblock %}
