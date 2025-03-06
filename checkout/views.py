@@ -10,6 +10,7 @@ from bag.contexts import bag_contents
 from profiles.models import UserProfile
 from django.contrib.auth.decorators import login_required
 import stripe, json
+from .utils import send_confirmation_email
 
 @require_POST
 def cache_checkout_data(request):
@@ -114,12 +115,18 @@ def checkout(request):
 
 def checkout_success(request, order_number):
     order = get_object_or_404(Order, order_number=order_number)
+    
+    # Send confirmation email
+    send_confirmation_email(order)
+    
     messages.success(
         request,
-        f'Order successfully processed! Your order number is {order_number}. A confirmation email will be sent to {order.email}.'
+        f'Order successfully processed! Your order number is {order_number}. A confirmation email has been sent to {order.email}.'
     )
+    
     if 'bag' in request.session:
         del request.session['bag']
+        
     return render(request, 'checkout/checkout_success.html', {'order': order})
 
 @login_required

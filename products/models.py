@@ -33,6 +33,22 @@ class Size(models.Model):
         return self.get_name_display()
 
 class Product(models.Model):
+    COLOR_CHOICES = [
+        ('black', 'Black'),
+        ('white', 'White'),
+        ('red', 'Red'),
+        ('blue', 'Blue'),
+        ('green', 'Green'),
+        ('yellow', 'Yellow'),
+        ('gray', 'Gray'),
+    ]
+    
+    GENDER_CHOICES = [
+        ('M', 'Men'),
+        ('W', 'Women'),
+        ('U', 'Unisex'),
+    ]
+    
     updated = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name='products')
     sizes = models.ManyToManyField(Size, blank=True, related_name='products')
@@ -66,7 +82,17 @@ class Product(models.Model):
         upload_to='images/product_images/'
     )
     
+    color = models.CharField(max_length=20, choices=COLOR_CHOICES, blank=True, null=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='U')
+    
     is_active = models.BooleanField(default=True)
+    is_new = models.BooleanField(default=False)
+    on_sale = models.BooleanField(default=False)
+    discount_percent = models.IntegerField(default=0)
+    featured = models.BooleanField(default=False)
+    in_stock = models.BooleanField(default=True)
+    stock_qty = models.IntegerField(default=0)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -93,3 +119,9 @@ class Product(models.Model):
 
     def format_price(self):
         return f"€{self.price:.2f}"
+        
+    def get_discount_price(self):
+        if self.on_sale and self.discount_percent > 0:
+            discount = self.price * (Decimal(self.discount_percent) / 100)
+            return self.price - discount
+        return self.price

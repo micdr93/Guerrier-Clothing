@@ -90,25 +90,18 @@ AUTHENTICATION_BACKENDS = [
 
 SITE_ID = 1
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME')
-EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD')
-DEFAULT_FROM_EMAIL = 'noreply@guerrier-184e74af35e6.herokuapp.com'
-
+# Email settings
 if 'DEVELOPMENT' in os.environ:
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-    DEFAULT_FROM_EMAIL = 'noreply@guerrier-dev.com'
+    DEFAULT_FROM_EMAIL = 'guerrierclothing@example.com'
 else:
     EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'smtp.sendgrid.net'
-    EMAIL_PORT = 587
     EMAIL_USE_TLS = True
-    EMAIL_HOST_USER = os.environ.get('SENDGRID_USERNAME')
-    EMAIL_HOST_PASSWORD = os.environ.get('SENDGRID_PASSWORD')
-    DEFAULT_FROM_EMAIL = 'noreply@guerrier-184e74af35e6.herokuapp.com'
+    EMAIL_PORT = 587
+    EMAIL_HOST = 'smtp.gmail.com'  # Use your email provider
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+    DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'guerrierclothing@example.com')
 
 # Authentication settings
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
