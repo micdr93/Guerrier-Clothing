@@ -47,7 +47,7 @@
         <li class="list-group-item mb-3">
           <strong>Order Number:</strong> {{ order.order_number }}<br>
           <strong>Date:</strong> {{ order.date|date:"M d, Y H:i" }}<br>
-          <strong>Grand Total:</strong> ${{ order.grand_total }}<br>
+          <strong>Grand Total:</strong> €{{ order.grand_total }}<br>
           <a href="{% url 'checkout:order_detail' order.order_number %}" class="btn btn-sm btn-primary mt-2">
             View Details
           </a>

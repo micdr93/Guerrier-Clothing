@@ -2,23 +2,22 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
-from django.db.models import Avg, Q
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic import UpdateView, DeleteView 
+from django.db.models import Avg
+from django.views.generic import DeleteView, UpdateView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
 from .forms import ProductForm, ReviewsForm
-from .models import Product, Category
+from .models import Product
 from reviews.models import Review
 from wishlist.models import Wishlist
 import random
 
-# Function to calculate the average rating for a product
 def calculate_average_rating(product):
     reviews = Review.objects.filter(product=product)
     if reviews.exists():
         return reviews.aggregate(Avg('rating'))['rating__avg']
     return 0
 
-# Display all products with filtering and sorting
 def all_products(request, category=None):
     products = Product.active_products()
     query_category = request.GET.get('category', category)
@@ -38,7 +37,7 @@ def all_products(request, category=None):
             products = products.filter(category__name__in=homeware_categories)
             active_category = 'Homeware'
         elif request.GET.get('clothing_filter') == 'true':
-            clothing_categories = ['shirts', 'hats']
+            clothing_categories = ['shirts', 'Hats']
             products = products.filter(category__name__in=clothing_categories)
             active_category = 'Clothing'
         elif query_category:
@@ -73,23 +72,7 @@ def all_products(request, category=None):
     }
     return render(request, 'products/products.html', context)
 
-# Update review view
-class UpdateReview(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Review
-    form_class = ReviewsForm
-    template_name = "products/edit_review.html"
-    success_message = "Your review was updated!"
-
-    def test_func(self):
-        review = self.get_object()
-        user = self.request.user
-        return user == review.user or user.is_superuser
-
-    def get_success_url(self):
-        return reverse("products:product_detail", kwargs={"product_id": self.object.product_id})
-    
-# Delete a review (only the user who created it or admin can delete)
-class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class DeleteReview(LoginRequiredMixin, DeleteView):
     model = Review
     template_name = "products/delete_review.html"
     success_message = "Review deleted successfully."
@@ -97,63 +80,61 @@ class DeleteReview(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     def test_func(self):
         review = self.get_object()
         user = self.request.user
-        # Ensure the user deleting the review is either the one who created it or an admin
         return user == review.user or user.is_superuser
 
     def get_success_url(self):
-        return reverse_lazy("products:product_detail", kwargs={"product_id": self.object.product.id})
+        return reverse_lazy("products:product_detail", kwargs={"product_id": self.object.product_id})
 
-    def delete(self, request, *args, **kwargs):
-        messages.success(self.request, self.success_message)
-        return super().delete(request, *args, **kwargs)
+class UpdateReview(LoginRequiredMixin, UpdateView):
+    model = Review
+    form_class = ReviewsForm
+    template_name = "products/edit_review.html"
 
-# Display the product details, including the reviews and the average rating
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, "Your review has been updated!")
+        return redirect(reverse_lazy("products:product_detail", kwargs={"product_id": self.object.product_id}))
+
 def product_detail(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     reviews = Review.objects.filter(product=product).order_by("-created_on")
     related_products = list(Product.objects.filter(category=product.category).exclude(pk=product_id))
     if len(related_products) >= 4:
         related_products = random.sample(related_products, 4)
-
-    # Calculate average rating
-    avg_rating = calculate_average_rating(product)
-    
     context = {
         "product": product,
         "reviews": reviews,
         "related_products": related_products,
-        "avg_rating": avg_rating,
     }
     if request.user.is_authenticated:
         context["wishlist"] = Wishlist.objects.filter(user=request.user, items__product__id=product_id).exists()
-    
     return render(request, "products/product_detail.html", context)
 
-# Add a review for a product
 @login_required
 def add_review(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
+    
+    # If the user has already reviewed this product, prevent adding another review
+    if Review.objects.filter(product=product, user=request.user).exists():
+        messages.error(request, "You have already reviewed this product.")
+        return redirect(reverse("products:product_detail", args=[product.id]))
+
     if request.method == "POST":
         review_form = ReviewsForm(request.POST)
         if review_form.is_valid():
-            try:
-                Review.objects.create(
-                    product=product,
-                    user=request.user,
-                    title=request.POST["title"],
-                    review=request.POST["review"],
-                    rating=request.POST["rating"]  # Save the rating as well
-                )
-                messages.success(request, "Your review has been successfully added!")
-                return redirect(reverse("products:product_detail", args=[product.id]))
-            except IntegrityError:
-                messages.error(request, "You have already reviewed this product.")
-                return redirect(reverse("products:product_detail", args=[product.id]))
+            # Save the review
+            review = review_form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            review.save()
+
+            messages.success(request, "Your review has been successfully added!")
+            return redirect(reverse("products:product_detail", args=[product.id]))
         else:
-            messages.error(request, "Your review has not been submitted.")
+            messages.error(request, "There was an error with your review submission. Please try again.")
+    
     return redirect(reverse("products:product_detail", args=[product.id]))
 
-# Add a new product (admin only)
 @login_required
 def add_product(request):
     if not request.user.is_superuser:
@@ -173,7 +154,6 @@ def add_product(request):
     context = {'form': form}
     return render(request, template, context)
 
-# Edit product (admin only)
 @login_required
 def edit_product(request, product_id):
     if not request.user.is_superuser:
@@ -195,7 +175,6 @@ def edit_product(request, product_id):
     context = {'form': form, 'product': product}
     return render(request, template, context)
 
-# Delete a product (admin only)
 @login_required
 def delete_product(request, product_id):
     if not request.user.is_superuser:
@@ -206,7 +185,6 @@ def delete_product(request, product_id):
     messages.success(request, 'Product deleted!')
     return redirect(reverse('products:products'))
 
-# Search products based on query
 def search_results(request):
     query = request.GET.get('q', '').strip()
     products = Product.objects.filter(

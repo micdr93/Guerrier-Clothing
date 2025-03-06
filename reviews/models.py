@@ -35,3 +35,7 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.title} - {self.product.name}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        self.product.update_rating()
