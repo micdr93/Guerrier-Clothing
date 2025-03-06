@@ -202,6 +202,17 @@ The project uses a relational database model with the following main models:
 
 ![User Profile](documentation/readme_images/footer.png)
 
+#### Recommended Items
+- In a users wishlist, it displays the user's selected wishlist items but also displays a
+   recommended for you area below, showcasing similar products,
+
+#### Reviews
+   - Users can leave reviews on products, and can rate them between 1-5.
+
+#### Wishlist
+
+-  Shows the users wishlist. Users need to be logged in to view the wishlist.
+
 #### Admin Features
 - Product management (add, edit, delete)
 - Order management and processing
@@ -212,7 +223,7 @@ The project uses a relational database model with the following main models:
 
 - Icons that change colour: When interacting with an icon, for example in Wishlist, the heart turns solid to identify an item already in the Wishlist.
 - Improved Django Admin Features: There is scope for improving the Ux/ui with added features such as revenue tracking and sales forecasting.
-
+- Increased number of products, with various prices to possibly implement a 
 
 ## Design
 
