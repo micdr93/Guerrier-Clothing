@@ -226,7 +226,8 @@ The project uses a relational database model with the following main models:
 
 - Icons that change colour: When interacting with an icon, for example in Wishlist, the heart turns solid to identify an item already in the Wishlist.
 - Improved Django Admin Features: There is scope for improving the Ux/ui with added features such as revenue tracking and sales forecasting.
-- Increased number of products, with various prices to possibly implement a 
+- Increased number of products.
+- MailChimp and other integrations
 
 ## Design
 
@@ -295,15 +296,19 @@ Guerrier operates as a B2C (Business to Consumer) e-commerce platform, selling p
 
 ## Tools And Resources
 
-* [GitPod](https://www.gitpod.io/) - Used as a coding environment.
+* [GitPod](https://www.gitpod.io/) - Initially used as a coding environment.
+* [VSCode](https://code.visualstudio.com/) - Used as a coding environment.
 * [GitHub](https://github.com/) - Used for creating application repository, version control, organising workflow utilising agile functionality of GitHub project, issues and milestones.
 * [Heroku](https://heroku.com) - Used to deploy live project.
-* [AmIResponsive](https://ui.dev/amiresponsive) - Used for obtaining screenshot of the application on various devices.
 * [PostgreSQL CI Database](https://dbs.ci-dbs.net/) - Used to create a database
 * [JSHint](https://jshint.com/) - Used to validate JavaScript.
 * [W3C Markup Validation Service](https://validator.w3.org/) - Used to validate HTML.
 * [CSS Validation Service](https://jigsaw.w3.org/css-validator/) - Used to validate CSS.
 * [CI Python Linter](https://pep8ci.herokuapp.com/#) - Used to validate Python.
+* [Conventional Commits](https://www.conventionalcommits.org/) - Used to improve commit messaging
+* [Dillinger](https://dillinger.io/) - Used for markup preview
+* [OneCompiler](https://onecompiler.com/) - Used for testing and previewing code
+* [Adobe Suite](https://www.adobe.com/) - Used for creating product images.
 
 # Credits
 ## Listed below are sources of information which helped me in the making of this project
