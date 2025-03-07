@@ -309,6 +309,8 @@ Guerrier operates as a B2C (Business to Consumer) e-commerce platform, selling p
 * [Dillinger](https://dillinger.io/) - Used for markup preview
 * [OneCompiler](https://onecompiler.com/) - Used for testing and previewing code
 * [Adobe Suite](https://www.adobe.com/) - Used for creating product images.
+* [Mermaid Live Editor](https://mermaid.live/edit) - Used for creating the ERD using Mermaid, a JavaScript based diagramming and charting tool
+
 
 # Credits
 ## Listed below are sources of information which helped me in the making of this project
