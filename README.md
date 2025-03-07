@@ -201,7 +201,7 @@ The project uses a relational database model with the following main models:
 - Order history
 - Personal wishlist management
 
-![User Profile](documentation/readme_images/user_profile.pngpng)
+![User Profile](documentation/readme_images/user_profile.png)
 
 #### Recommended Items
 - In a users wishlist, it displays the user's selected wishlist items but also displays a recommended for you area below, showcasing similar products.
@@ -209,10 +209,12 @@ The project uses a relational database model with the following main models:
 
 #### Reviews
    - Users can leave reviews on products, and can rate them between 1-5.
+![Reviews](documentation/readme_images/reviews.png)
 
 #### Wishlist
 
 -  Shows the users wishlist. Users need to be logged in to view the wishlist.
+![Wishlist](documentation/readme_images/wishlist.png)
 
 #### Admin Features
 - Product management (add, edit, delete)
