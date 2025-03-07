@@ -7,6 +7,7 @@ import uuid
 
 class Order(models.Model):
     order_number = models.CharField(max_length=32, null=False, editable=False)
+    original_bag = models.TextField(null=False, blank=False, default='')
     user_profile = models.ForeignKey(
         UserProfile, 
         on_delete=models.SET_NULL, 
@@ -59,6 +60,7 @@ class OrderLineItem(models.Model):
     )
     product = models.ForeignKey(Product, null=False, blank=False, on_delete=models.CASCADE)
     quantity = models.IntegerField(null=False, blank=False, default=0)
+    product_size = models.CharField(max_length=2, null=True, blank=True)
     lineitem_total = models.DecimalField(max_digits=6, decimal_places=2, null=False, blank=False)
 
     def save(self, *args, **kwargs):
