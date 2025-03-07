@@ -33,22 +33,6 @@ class Size(models.Model):
         return self.get_name_display()
 
 class Product(models.Model):
-    COLOR_CHOICES = [
-        ('black', 'Black'),
-        ('white', 'White'),
-        ('red', 'Red'),
-        ('blue', 'Blue'),
-        ('green', 'Green'),
-        ('yellow', 'Yellow'),
-        ('gray', 'Gray'),
-    ]
-    
-    GENDER_CHOICES = [
-        ('M', 'Men'),
-        ('W', 'Women'),
-        ('U', 'Unisex'),
-    ]
-    
     updated = models.DateTimeField(auto_now=True)
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name='products')
     sizes = models.ManyToManyField(Size, blank=True, related_name='products')
@@ -82,8 +66,8 @@ class Product(models.Model):
         upload_to='images/product_images/'
     )
     
-    color = models.CharField(max_length=20, choices=COLOR_CHOICES, blank=True, null=True)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, default='U')
+    color = models.CharField(max_length=20, blank=True, null=True)
+    gender = models.CharField(max_length=1, default='U')
     
     is_active = models.BooleanField(default=True)
     is_new = models.BooleanField(default=False)
@@ -96,6 +80,15 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
+
+    def update_rating(self):
+        from django.db.models import Avg
+        reviews = self.reviews.all()
+        if reviews.exists():
+            self.rating = round(reviews.aggregate(Avg('rating'))['rating__avg'], 1)
+        else:
+            self.rating = 0
+        self.save(update_fields=['rating'])
 
     def __str__(self):
         return self.name

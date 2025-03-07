@@ -6,9 +6,10 @@ from django.db.models import Q, Avg, Min, Max
 from django.views.generic import DeleteView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
-from .forms import ProductForm, ReviewsForm
+from .forms import ProductForm
 from .models import Product, Category, Size
 from reviews.models import Review
+from reviews.forms import ReviewForm
 from wishlist.models import Wishlist
 import random
 
@@ -17,7 +18,6 @@ def calculate_average_rating(product):
     if reviews.exists():
         return reviews.aggregate(Avg('rating'))['rating__avg']
     return 0
-
 def all_products(request, category=None):
     products = Product.active_products()
     categories = Category.objects.all()
@@ -27,22 +27,11 @@ def all_products(request, category=None):
     min_price = price_range['price__min']
     max_price = price_range['price__max']
     
-    # Get all available sizes and colors
-    sizes = Size.objects.all()
-    colors = Product.objects.exclude(color=None).values_list('color', flat=True).distinct()
-    
     # Initialize filter variables
     query_category = request.GET.get('category', category)
     query = request.GET.get('q', '').strip()
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
-    selected_sizes = request.GET.getlist('size')
-    selected_colors = request.GET.getlist('color')
-    selected_genders = request.GET.getlist('gender')
-    only_in_stock = request.GET.get('in_stock') == 'on'
-    only_on_sale = request.GET.get('on_sale') == 'on'
-    only_new = request.GET.get('is_new') == 'on'
-    only_featured = request.GET.get('featured') == 'on'
     
     filter_applied = False
     active_category = None
@@ -82,41 +71,6 @@ def all_products(request, category=None):
     if price_max:
         filter_applied = True
         products = products.filter(price__lte=float(price_max))
-    
-    # Size filtering
-    if selected_sizes:
-        filter_applied = True
-        products = products.filter(sizes__name__in=selected_sizes).distinct()
-    
-    # Color filtering
-    if selected_colors:
-        filter_applied = True
-        products = products.filter(color__in=selected_colors)
-    
-    # Gender filtering
-    if selected_genders:
-        filter_applied = True
-        products = products.filter(gender__in=selected_genders)
-    
-    # Stock filtering
-    if only_in_stock:
-        filter_applied = True
-        products = products.filter(in_stock=True)
-    
-    # Sale filtering
-    if only_on_sale:
-        filter_applied = True
-        products = products.filter(on_sale=True)
-    
-    # New products filtering
-    if only_new:
-        filter_applied = True
-        products = products.filter(is_new=True)
-    
-    # Featured products filtering
-    if only_featured:
-        filter_applied = True
-        products = products.filter(featured=True)
 
     # Handle sorting
     sort = request.GET.get('sort')
@@ -150,22 +104,19 @@ def all_products(request, category=None):
         'categories': categories,
         'wishlist': wishlist,
         'current_sorting': f'{sort}_{direction}' if sort and direction else 'None_None',
-        'sizes': sizes,
-        'colors': colors,
         'min_price': min_price,
         'max_price': max_price,
         'current_price_min': price_min or min_price,
         'current_price_max': price_max or max_price,
-        'selected_sizes': selected_sizes,
-        'selected_colors': selected_colors,
-        'selected_genders': selected_genders,
-        'only_in_stock': only_in_stock,
-        'only_on_sale': only_on_sale,
-        'only_new': only_new,
-        'only_featured': only_featured,
         'filter_applied': filter_applied,
     }
-    return render(request, 'products/products.html', context)
+    
+    # Add cache control headers to prevent caching issues
+    response = render(request, 'products/products.html', context)
+    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+    response['Pragma'] = 'no-cache'
+    response['Expires'] = '0'
+    return response
 
 class DeleteReview(LoginRequiredMixin, DeleteView):
     model = Review
@@ -182,7 +133,7 @@ class DeleteReview(LoginRequiredMixin, DeleteView):
 
 class UpdateReview(LoginRequiredMixin, UpdateView):
     model = Review
-    form_class = ReviewsForm
+    form_class = ReviewForm
     template_name = "products/edit_review.html"
 
     def form_valid(self, form):
@@ -191,42 +142,31 @@ class UpdateReview(LoginRequiredMixin, UpdateView):
         return redirect(reverse_lazy("products:product_detail", kwargs={"product_id": self.object.product_id}))
 
 def product_detail(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
+    # Always get a fresh product instance from the database
+    product = get_object_or_404(Product.objects.select_related('category'), pk=product_id)
+    
+    # Check if a review was just added
+    if 'review_added' in request.GET or 'review_deleted' in request.GET:
+        # Force a recalculation of the rating to ensure it's up to date
+        product.update_rating()
+        # Refresh the product instance to get the latest data
+        product.refresh_from_db()
+        
     reviews = Review.objects.filter(product=product).order_by("-created_on")
     related_products = list(Product.objects.filter(category=product.category).exclude(pk=product_id))
     if len(related_products) >= 4:
         related_products = random.sample(related_products, 4)
+    
     context = {
         "product": product,
         "reviews": reviews,
         "related_products": related_products,
     }
+    
     if request.user.is_authenticated:
         context["wishlist"] = Wishlist.objects.filter(user=request.user, items__product__id=product_id).exists()
+    
     return render(request, "products/product_detail.html", context)
-
-@login_required
-def add_review(request, product_id):
-    product = get_object_or_404(Product, pk=product_id)
-    
-    if Review.objects.filter(product=product, user=request.user).exists():
-        messages.error(request, "You have already reviewed this product.")
-        return redirect(reverse("products:product_detail", args=[product.id]))
-
-    if request.method == "POST":
-        review_form = ReviewsForm(request.POST)
-        if review_form.is_valid():
-            review = review_form.save(commit=False)
-            review.product = product
-            review.user = request.user
-            review.save()
-
-            messages.success(request, "Your review has been successfully added!")
-            return redirect(reverse("products:product_detail", args=[product.id]))
-        else:
-            messages.error(request, "There was an error with your review submission. Please try again.")
-    
-    return redirect(reverse("products:product_detail", args=[product.id]))
 
 @login_required
 def add_product(request):
