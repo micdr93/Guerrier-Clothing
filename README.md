@@ -7,7 +7,7 @@ Our mission is simple: to create clothing that empowers you to take on life’s 
 * [Link to App](https://guerrier-184e74af35e6.herokuapp.com/) 
   
 
-![Home Screen](documentation/readme_images/shirtspagedesktop.png)
+![Home Screen](documentation/readme_images/homepage.png)
 
 ---
 
@@ -140,7 +140,7 @@ The project uses a relational database model with the following main models:
 - **Wishlist**: User-saved favorite products
 - **Review**: User feedback on products
 
-[Database Schema](documentation/db-schema.png)
+[Database Schema](documentation/readme_images/erd1.png)
 
 ## Features
 
@@ -157,10 +157,11 @@ The project uses a relational database model with the following main models:
 ![Navigation Bar](documentation/readme_images/navbar.png)
 
 ### Home Page
+- Call to action to encourage users to browse products instantly
 - Newsletter signup form
 - Easy to use navigation and clean design
 
-![Home Page](documentation/readme_images/footer.png)
+![Home Page](documentation/readme_images/homepage.png)
 
 
 ### Products Pages
@@ -168,15 +169,15 @@ The project uses a relational database model with the following main models:
 - Can click product for more detail
 - Can add to wishlist straight away
 
-![Products Page](documentation/readme_images/footer.png)
+![Products Page](documentation/readme_images/product_pages.png)
 
 
-#### Shopping Basket
+#### Shopping Cart
 - Add, remove and update quantities
 - Price calculation with subtotals
 - "Continue shopping" and "Proceed to checkout" options
 
-![Shopping Basket](documentation/readme_images/footer.png)
+![Shopping Cart](documentation/readme_images/shopping_cart.png)
 
 
 #### Checkout
@@ -185,7 +186,7 @@ The project uses a relational database model with the following main models:
 - Stripe integration for payments
 - Order confirmation with email notification
 
-![Checkout](documentation/readme_images/footer.png)
+![Checkout](documentation/readme_images/checkout.png)
 
 
 #### Footer 
@@ -200,11 +201,11 @@ The project uses a relational database model with the following main models:
 - Order history
 - Personal wishlist management
 
-![User Profile](documentation/readme_images/footer.png)
+![User Profile](documentation/readme_images/user_profile.pngpng)
 
 #### Recommended Items
-- In a users wishlist, it displays the user's selected wishlist items but also displays a
-   recommended for you area below, showcasing similar products,
+- In a users wishlist, it displays the user's selected wishlist items but also displays a recommended for you area below, showcasing similar products.
+![Recommended Items](documentation/readme_images/recommended_items.png)
 
 #### Reviews
    - Users can leave reviews on products, and can rate them between 1-5.
