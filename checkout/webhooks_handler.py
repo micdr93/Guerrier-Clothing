@@ -8,6 +8,47 @@ from products.models import Product
 from profiles.models import UserProfile
 from .utils import send_confirmation_email, convert_country
 
+@require_POST
+@csrf_exempt
+def webhook(request):
+    """Listen for webhooks from Stripe"""
+    # Setup
+    wh_secret = settings.STRIPE_WEBHOOK_SECRET
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+
+    # Debug logging
+    print(f"Webhook secret first 5 chars: {wh_secret[:5] if wh_secret else 'None'}")
+    print(f"Webhook secret length: {len(wh_secret) if wh_secret else 0}")
+
+    # Get the webhook data and verify its signature
+    payload = request.body
+    print(f"Payload length: {len(payload)}")
+    
+    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+    print(f"Signature header present: {sig_header is not None}")
+    print(f"Signature header first 10 chars: {sig_header[:10] if sig_header else 'None'}")
+    
+    # Debug for request headers
+    stripe_headers = [k for k in request.META.keys() if k.startswith('HTTP_') and 'STRIPE' in k]
+    print(f"Stripe-related headers: {stripe_headers}")
+    
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, wh_secret
+        )
+        print("✅ Webhook signature verification successful")
+    except ValueError as e:
+        print(f"❌ Invalid payload: {str(e)}")
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        print(f"❌ Invalid signature: {str(e)}")
+        return HttpResponse(status=400)
+    except Exception as e:
+        print(f"❌ Unexpected error: {str(e)}")
+        return HttpResponse(content=str(e), status=400)
+    
 class StripeWH_Handler:
     def __init__(self, request):
         self.request = request
