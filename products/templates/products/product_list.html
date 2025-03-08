@@ -40,24 +40,5 @@
   </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const sortSelector = document.getElementById('sort-selector');
-  if (sortSelector) {
-    sortSelector.addEventListener('change', function() {
-      const selectedVal = sortSelector.value;
-      const currentUrl = new URL(window.location.href);
-      if (selectedVal !== "reset") {
-        const parts = selectedVal.split("_");
-        currentUrl.searchParams.set("sort", parts[0]);
-        currentUrl.searchParams.set("direction", parts[1]);
-      } else {
-        currentUrl.searchParams.delete("sort");
-        currentUrl.searchParams.delete("direction");
-      }
-      window.location.href = currentUrl.toString();
-    });
-  }
-});
-</script>
+
 {% endblock %}

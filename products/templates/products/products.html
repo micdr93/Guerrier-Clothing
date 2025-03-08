@@ -8,38 +8,52 @@
       <h2>Guerrier Streetwear</h2>
     </div>
   </div>
+  
   <div class="row mb-4">
     <div class="col-12">
-      <div class="card border-light">
+      <div class="card border-light shadow-sm">
         <div class="card-body">
-          <form method="GET" action="{% url 'products:products' %}" id="filter-form" class="d-flex">
-            <select name="category" id="category-filter" class="form-select me-2 flex-grow-1">
-              <option value="">All Categories</option>
-              {% for category in categories %}
-                <option value="{{ category.name }}" {% if current_categories == category.friendly_name or current_categories == category.name %}selected{% endif %}>
-                  {{ category.friendly_name|default:category.name }}
-                </option>
-              {% endfor %}
-            </select>
-            <button type="submit" class="btn btn-primary me-2">Filter</button>
-            <a href="{% url 'products:products' %}" class="btn btn-outline-secondary">Clear</a>
+          <form method="GET" action="{% url 'products:products' %}" id="filter-form" class="row g-3 align-items-end">
+            <div class="col-12 col-md-3">
+              <label for="category-filter" class="form-label">Category</label>
+              <select name="category" id="category-filter" class="form-select">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                  <option value="{{ category.name }}" {% if current_categories == category.friendly_name or current_categories == category.name %}selected{% endif %}>
+                    {{ category.friendly_name|default:category.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-12 col-md-3">
+              <label for="sort-filter" class="form-label">Sort By</label>
+              <select name="sort" id="sort-filter" class="form-select">
+                <option value="">Default</option>
+                <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (High to Low)</option>
+                <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (Low to High)</option>
+                <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+                <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+              </select>
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="price-min" class="form-label">Min Price</label>
+              <input type="number" step="0.01" name="price_min" id="price-min" class="form-control" value="{{ current_price_min }}">
+            </div>
+            <div class="col-6 col-md-2">
+              <label for="price-max" class="form-label">Max Price</label>
+              <input type="number" step="0.01" name="price_max" id="price-max" class="form-control" value="{{ current_price_max }}">
+            </div>
+            <div class="col-12 text-end">
+              <button type="submit" class="btn btn-dark text-white">Filter</button>
+              <a href="{% url 'products:products' %}" class="btn btn-outline-dark">Clear</a>
+            </div>
           </form>
         </div>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="col-12 d-flex justify-content-between align-items-center mb-3">
-      <p class="m-0">{{ products|length }} Products{% if current_categories %} in <strong>{{ current_categories }}</strong>{% endif %}</p>
-      <select id="sort-selector" class="form-select ms-auto" style="width: auto;">
-        <option value="reset" {% if current_sorting == 'None_None' %}selected{% endif %}>Sort by...</option>
-        <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (low to high)</option>
-        <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (high to low)</option>
-        <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
-        <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
-      </select>
-    </div>
-  </div>
+  
+ 
   <div class="row">
     {% for product in products %}
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -88,24 +102,5 @@
     {% endfor %}
   </div>
 </div>
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const sortSelector = document.getElementById('sort-selector');
-  if (sortSelector) {
-    sortSelector.addEventListener('change', function() {
-      const selectedVal = sortSelector.value;
-      const currentUrl = new URL(window.location.href);
-      if (selectedVal !== "reset") {
-        const parts = selectedVal.split("_");
-        currentUrl.searchParams.set("sort", parts[0]);
-        currentUrl.searchParams.set("direction", parts[1]);
-      } else {
-        currentUrl.searchParams.delete("sort");
-        currentUrl.searchParams.delete("direction");
-      }
-      window.location.href = currentUrl.toString();
-    });
-  }
-});
-</script>
+
 {% endblock %}

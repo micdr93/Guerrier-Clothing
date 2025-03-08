@@ -69,21 +69,5 @@
     </div>
 </div>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        $('#sort-selector').on('change', function() {
-            var selectedVal = $(this).val();
-            var currentUrl = new URL(window.location.href);
-            if(selectedVal !== "reset") {
-                var parts = selectedVal.split("_");
-                currentUrl.searchParams.set("sort", parts[0]);
-                currentUrl.searchParams.set("direction", parts[1]);
-            } else {
-                currentUrl.searchParams.delete("sort");
-                currentUrl.searchParams.delete("direction");
-            }
-            window.location.href = currentUrl.toString();
-        });
-    });
-</script>
+
 {% endblock %}
