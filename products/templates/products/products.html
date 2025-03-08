@@ -35,9 +35,6 @@
                 {% endfor %}
               </select>
             </div>
-            {% if search_term %}
-              <input type="hidden" name="q" value="{{ search_term }}">
-            {% endif %}
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-primary">Apply Filters</button>
               <a href="{% url 'products:products' %}" class="btn btn-outline-secondary">Clear Filters</a>
@@ -50,54 +47,121 @@
   
   <div class="row">
     <div class="product-container col-10 offset-1">
-        <div class="row mt-1 mb-2">
-            <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
-                <div class="sort-select-wrapper w-50">
-                    <select id="sort-selector" class="custom-select custom-select-sm rounded-0 border border-{% if current_sorting != 'None_None' %}info{% else %}black{% endif %}">
-                        <!-- Options for sorting products -->
-                        <option value="reset" {% if current_sorting == 'None_None' %}selected{% endif %}>Sort by...</option>
-                        <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (low to high)</option>
-                        <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (high to low)</option>
-                        <option value="rating_asc" {% if current_sorting == 'rating_asc' %}selected{% endif %}>Rating (low to high)</option>
-                        <option value="rating_desc" {% if current_sorting == 'rating_desc' %}selected{% endif %}>Rating (high to low)</option>
-                        <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
-                        <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
-                        <option value="category_asc" {% if current_sorting == 'category_asc' %}selected{% endif %}>Category (A-Z)</option>
-                        <option value="category_desc" {% if current_sorting == 'category_desc' %}selected{% endif %}>Category (Z-A)</option>
-                        <option value="brand_asc" {% if current_sorting == 'brand_asc' %}selected{% endif %}>Brand (A-Z)</option>
-                        <option value="brand_desc" {% if current_sorting == 'brand_desc' %}selected{% endif %}>Brand (Z-A)</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-12 col-md-6 order-md-first">
-  
-  <div class="row">
-    {% for product in products %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-      <div class="card h-100">
-        {% if product.image %}
-          <a href="{% url 'products:product_detail' product.id %}">
-            <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-          </a>
-        {% else %}
-          <a href="{% url 'products:product_detail' product.id %}">
-            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-          </a>
-        {% endif %}
-        <div class="card-body">
-          <h5 class="card-title">{{ product.name }}</h5>
-          <p class="card-text">{{ product.format_price }}</p>
+      <div class="row mt-1 mb-2">
+        <div class="col-12 col-md-6 my-auto order-md-last d-flex justify-content-center justify-content-md-end">
+          <div class="sort-select-wrapper w-50">
+            <select id="sort-selector" class="custom-select custom-select-sm rounded-0 border border-{% if current_sorting != 'None_None' %}info{% else %}black{% endif %}">
+              <option value="reset" {% if current_sorting == 'None_None' %}selected{% endif %}>Sort by...</option>
+              <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (low to high)</option>
+              <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (high to low)</option>
+              <option value="rating_asc" {% if current_sorting == 'rating_asc' %}selected{% endif %}>Rating (low to high)</option>
+              <option value="rating_desc" {% if current_sorting == 'rating_desc' %}selected{% endif %}>Rating (high to low)</option>
+              <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+              <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+              <option value="category_asc" {% if current_sorting == 'category_asc' %}selected{% endif %}>Category (A-Z)</option>
+              <option value="category_desc" {% if current_sorting == 'category_desc' %}selected{% endif %}>Category (Z-A)</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-first">
+          <p class="text-muted mt-3 text-center text-md-left">
+            {{ products|length }} Products 
+            {% if current_categories %} in <strong>{{ current_categories }}</strong>{% endif %}
+          </p>
         </div>
       </div>
-    </div>
-    {% empty %}
-      <div class="col-12 text-center">
-        <p>No products found.</p>
+
+      <div class="row">
+        {% for product in products %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+          <div class="card h-100 border-0">
+            {% if product.image %}
+              <a href="{% url 'products:product_detail' product.id %}">
+                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+              </a>
+            {% else %}
+              <a href="{% url 'products:product_detail' product.id %}">
+                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+              </a>
+            {% endif %}
+            <div class="card-body pb-0">
+              <p class="mb-0">{{ product.name }}</p>
+              {% if product.category %}
+              <p class="small text-muted mt-1">
+                {% if product.category.name|lower == 'skateboard decks' %}
+                  <a href="/homeware/skateboard-decks/">
+                    <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                  </a>
+                {% elif product.category.name|lower == 'shirts' %}
+                  <a href="/shirts/">
+                    <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                  </a>
+                {% elif product.category.name|lower == 'hats' %}
+                  <a href="/hats/">
+                    <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                  </a>
+                {% elif product.category.name|lower == 'mugs' %}
+                  <a href="/homeware/mugs/">
+                    <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                  </a>
+                {% elif product.category.name|lower == 'coasters' %}
+                  <a href="/homeware/coasters/">
+                    <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                  </a>
+                {% else %}
+                  <a href="{% url 'products:products' %}?category={{ product.category.name }}">
+                    <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                  </a>
+                {% endif %}
+              </p>
+              {% endif %}
+            </div>
+            <div class="card-footer bg-white pt-0 border-0 text-left">
+              <p class="lead mb-0 font-weight-bold">€{{ product.price }}</p>
+              {% if product.rating %}
+              <small class="text-muted">
+                <i class="fas fa-star mr-1"></i>{{ product.rating }} / 5
+              </small>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% empty %}
+          <div class="col-12 text-center">
+            <p>No products found.</p>
+          </div>
+        {% endfor %}
       </div>
-    {% endfor %}
+    </div>
   </div>
 </div>
-{% endblock %}
 
-{% block postloadjs %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const sortSelector = document.getElementById('sort-selector');
+  if (sortSelector) {
+    sortSelector.addEventListener('change', function() {
+      const selectedVal = sortSelector.value;
+      const currentUrl = new URL(window.location.href);
+      if (selectedVal !== "reset") {
+        const parts = selectedVal.split("_");
+        currentUrl.searchParams.set("sort", parts[0]);
+        currentUrl.searchParams.set("direction", parts[1]);
+      } else {
+        currentUrl.searchParams.delete("sort");
+        currentUrl.searchParams.delete("direction");
+      }
+      window.location.href = currentUrl.toString();
+    });
+  }
+  
+  // Direct fix for Skateboard Decks links
+  document.querySelectorAll('a[href*="skateboard"]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = '/homeware/skateboard-decks/';
+    });
+  });
+});
+</script>
 {% endblock %}

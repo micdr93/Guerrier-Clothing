@@ -2,15 +2,17 @@ from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
 from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse_lazy
 from django.db.models import Q, Avg, Min, Max
 from django.views.generic import DeleteView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 from .forms import ProductForm
 from .models import Product, Category, Size
 from reviews.models import Review
 from reviews.forms import ReviewForm
 from wishlist.models import Wishlist
+
 import random
 
 def calculate_average_rating(product):
@@ -18,17 +20,44 @@ def calculate_average_rating(product):
     if reviews.exists():
         return reviews.aggregate(Avg('rating'))['rating__avg']
     return 0
+
 def all_products(request, category=None):
+    query_category = request.GET.get('category', category)
+    
+    if query_category:
+        query_category_lower = str(query_category).lower().strip()
+        
+        category_redirects = {
+            'hats': 'hats_view',
+            'hat': 'hats_view',
+            'shirts': 'shirts_view',
+            'shirt': 'shirts_view',
+            'mugs': 'mugs_view',
+            'mug': 'mugs_view',
+            'coasters': 'coasters_view',
+            'coaster': 'coasters_view',
+            'skateboard_decks': 'skateboard_decks_view',
+            'skateboard decks': 'skateboard_decks_view',
+            'skateboard deck': 'skateboard_decks_view'
+        }
+        
+        if query_category_lower in category_redirects:
+            return redirect(category_redirects[query_category_lower])
+        
+        try:
+            category_obj = Category.objects.get(name__iexact=query_category)
+            if category_obj.name.lower() in ['hats', 'shirts', 'mugs', 'coasters', 'skateboard decks']:
+                return redirect(category_redirects[category_obj.name.lower()])
+        except Category.DoesNotExist:
+            pass
+
     products = Product.active_products()
     categories = Category.objects.all()
     
-    # Get min and max prices for range filters
     price_range = products.aggregate(Min('price'), Max('price'))
     min_price = price_range['price__min']
     max_price = price_range['price__max']
     
-    # Initialize filter variables
-    query_category = request.GET.get('category', category)
     query = request.GET.get('q', '').strip()
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
@@ -36,7 +65,6 @@ def all_products(request, category=None):
     filter_applied = False
     active_category = None
     
-    # Handle search query
     if query:
         filter_applied = True
         products = products.filter(
@@ -45,7 +73,6 @@ def all_products(request, category=None):
             Q(category__name__icontains=query)
         ).distinct()
     
-    # Handle category filtering
     elif request.GET.get('homeware_filter') == 'true':
         filter_applied = True
         homeware_categories = ['mugs', 'coasters', 'skateboard_decks']
@@ -60,10 +87,14 @@ def all_products(request, category=None):
         
     elif query_category:
         filter_applied = True
-        products = products.filter(category__name__iexact=query_category)
-        active_category = query_category
+        try:
+            category_obj = Category.objects.get(name__iexact=query_category)
+            products = products.filter(category=category_obj)
+            active_category = category_obj.friendly_name or category_obj.name
+        except Category.DoesNotExist:
+            products = products.filter(category__name__icontains=query_category)
+            active_category = query_category
     
-    # Price filtering
     if price_min:
         filter_applied = True
         products = products.filter(price__gte=float(price_min))
@@ -72,7 +103,6 @@ def all_products(request, category=None):
         filter_applied = True
         products = products.filter(price__lte=float(price_max))
 
-    # Handle sorting
     sort = request.GET.get('sort')
     direction = request.GET.get('direction', 'asc')
     
@@ -84,13 +114,11 @@ def all_products(request, category=None):
         elif sort == 'category':
             products = products.order_by(f"{'' if direction == 'asc' else '-'}category__name")
         elif sort == 'rating':
-            # Handle None values for rating
             if direction == 'asc':
                 products = products.order_by('rating')
             else:
                 products = products.order_by('-rating')
     else:
-        # Default sorting (featured products first, then newest)
         products = products.order_by('-featured', '-created_at')
 
     wishlist = None
@@ -111,12 +139,7 @@ def all_products(request, category=None):
         'filter_applied': filter_applied,
     }
     
-    # Add cache control headers to prevent caching issues
-    response = render(request, 'products/products.html', context)
-    response['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
-    response['Pragma'] = 'no-cache'
-    response['Expires'] = '0'
-    return response
+    return render(request, 'products/products.html', context)
 
 class DeleteReview(LoginRequiredMixin, DeleteView):
     model = Review
@@ -142,14 +165,10 @@ class UpdateReview(LoginRequiredMixin, UpdateView):
         return redirect(reverse_lazy("products:product_detail", kwargs={"product_id": self.object.product_id}))
 
 def product_detail(request, product_id):
-    # Always get a fresh product instance from the database
     product = get_object_or_404(Product.objects.select_related('category'), pk=product_id)
     
-    # Check if a review was just added
     if 'review_added' in request.GET or 'review_deleted' in request.GET:
-        # Force a recalculation of the rating to ensure it's up to date
         product.update_rating()
-        # Refresh the product instance to get the latest data
         product.refresh_from_db()
         
     reviews = Review.objects.filter(product=product).order_by("-created_on")

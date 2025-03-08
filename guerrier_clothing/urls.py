@@ -56,6 +56,7 @@ urlpatterns = [
     path("contact/", home_views.contact, name="contact"),
     path('shirts/', home_views.shirts_view, name='shirts'),
     path('hats/', home_views.hats_view, name='hats'),
+    path('skateboard-decks/', home_views.skateboard_decks_view, name='skateboard_decks'),
     
     # Use AllAuth's logout view
     path('logout/', LogoutView.as_view(), name='logout'),
