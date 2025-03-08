@@ -34,7 +34,7 @@
                         <div class="card h-100 border-0">
                             {% if product.id in wishlist_item_ids %}
                                 <!-- Already in wishlist; show remove link -->
-                                <a href= "{% url 'bag:remove_from_cart' item.product.id %}" aria-label="Remove product from Wishlist">
+                                <a href="{% url 'wishlist:remove_from_wishlist' product.id %}" aria-label="Remove product from Wishlist">
                                     <div class="wishlist-badge">
                                         <i class="fa-regular fa-heart"></i>
                                     </div>
@@ -64,6 +64,35 @@
 
                             <div class="card-body pb-0">
                                 <p class="mb-0">{{ product.name }}</p>
+                                {% if product.category %}
+                                <p class="small text-muted mt-1">
+                                    {% if product.category.name|lower == 'skateboard decks' %}
+                                    <a href="{% url 'skateboard_decks_view' %}" class="skateboard-link">
+                                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                    </a>
+                                    {% elif product.category.name|lower == 'shirts' %}
+                                    <a href="{% url 'shirts_view' %}">
+                                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                    </a>
+                                    {% elif product.category.name|lower == 'hats' %}
+                                    <a href="{% url 'hats_view' %}">
+                                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                    </a>
+                                    {% elif product.category.name|lower == 'mugs' %}
+                                    <a href="{% url 'mugs_view' %}">
+                                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                    </a>
+                                    {% elif product.category.name|lower == 'coasters' %}
+                                    <a href="{% url 'coasters_view' %}">
+                                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                    </a>
+                                    {% else %}
+                                    <a href="{% url 'products:products' %}?category={{ product.category.name }}">
+                                        <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                                    </a>
+                                    {% endif %}
+                                </p>
+                                {% endif %}
                             </div>
                             <div class="card-footer bg-white pt-0 border-0 text-left">
                                 <div class="row">
@@ -71,14 +100,6 @@
                                         <p class="mb-0 text-left font-weight-bold">
                                             €{{ product.price }}
                                         </p>
-                                        {% if product.brand %}
-                                            <p class="small mt-1 mb-0">
-                                                <a class="text-muted" href="{% url 'products' %}?brand={{ product.brand.name }}">
-                                                    <i class="fas fa-tag mr-1"></i>
-                                                    {{ product.brand.friendly_name }}
-                                                </a>
-                                            </p>
-                                        {% endif %}
                                         {% if product.rating %}
                                             <small class="text-muted">
                                                 <i class="fas fa-star mr-1"></i>{{ product.rating }} / 5
@@ -88,9 +109,6 @@
                                         {% endif %}
                                     </div>
                                 </div>
-
-                             
-
                             </div>
                         </div>  <!-- .card -->
                     </div>  <!-- .col -->
@@ -99,4 +117,26 @@
         </div>  <!-- .product-container -->
     </div>  <!-- .row -->
 </div>  <!-- .container-fluid -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Skateboard links - handle all possible variations
+  document.querySelectorAll('.skateboard-link, a[href*="skateboard"]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = '/homeware/skateboard-decks/';
+    });
+  });
+  
+  // Also target any links containing "Skateboard Decks" in text
+  document.querySelectorAll('a').forEach(function(link) {
+    if (link.innerText && link.innerText.toLowerCase().includes('skateboard')) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = '/homeware/skateboard-decks/';
+      });
+    }
+  });
+});
+</script>
 {% endblock %}

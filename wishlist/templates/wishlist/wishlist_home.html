@@ -11,7 +11,7 @@
                 <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                     <div class="card h-100 border-0">
                        
-                        <a href="{% url 'bag:remove_from_bag' item.product.id %}" aria-label="Remove from wishlist">
+                        <a href="{% url 'wishlist:remove_from_wishlist' item.product.id %}" aria-label="Remove from wishlist">
                             <div class="wishlist-badge">
                                 <i class="fas fa-heart" style="color: #000;"></i>
                             </div>
@@ -34,6 +34,35 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ item.product.name }}</h5>
                             <p class="card-text">€{{ item.product.price }}</p>
+                            {% if item.product.category %}
+                            <p class="small text-muted mt-1">
+                                {% if item.product.category.name|lower == 'skateboard decks' %}
+                                <a href="{% url 'skateboard_decks_view' %}" class="skateboard-link">
+                                    <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
+                                </a>
+                                {% elif item.product.category.name|lower == 'shirts' %}
+                                <a href="{% url 'shirts_view' %}">
+                                    <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
+                                </a>
+                                {% elif item.product.category.name|lower == 'hats' %}
+                                <a href="{% url 'hats_view' %}">
+                                    <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
+                                </a>
+                                {% elif item.product.category.name|lower == 'mugs' %}
+                                <a href="{% url 'mugs_view' %}">
+                                    <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
+                                </a>
+                                {% elif item.product.category.name|lower == 'coasters' %}
+                                <a href="{% url 'coasters_view' %}">
+                                    <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
+                                </a>
+                                {% else %}
+                                <a href="{% url 'products:products' %}?category={{ item.product.category.name }}">
+                                    <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
+                                </a>
+                                {% endif %}
+                            </p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -63,7 +92,29 @@
         
     {% else %}
         <p>Your wishlist is empty</p>
-        <a href="{% url 'products' %}" class="btn btn-primary">Continue Shopping</a>
+        <a href="{% url 'products:products' %}" class="btn btn-primary">Continue Shopping</a>
     {% endif %}
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Skateboard links - handle all possible variations
+  document.querySelectorAll('.skateboard-link, a[href*="skateboard"]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      window.location.href = '/homeware/skateboard-decks/';
+    });
+  });
+  
+  // Also target any links containing "Skateboard Decks" in text
+  document.querySelectorAll('a').forEach(function(link) {
+    if (link.innerText && link.innerText.toLowerCase().includes('skateboard')) {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = '/homeware/skateboard-decks/';
+      });
+    }
+  });
+});
+</script>
 {% endblock %}

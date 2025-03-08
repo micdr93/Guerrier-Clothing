@@ -25,29 +25,25 @@ def all_products(request, category=None):
     query_category = request.GET.get('category', category)
     
     if query_category:
-        query_category_lower = str(query_category).lower().strip()
+        query_category_normalized = str(query_category).lower().replace('-', ' ').replace('_', ' ').strip()
         
         category_redirects = {
             'hats': 'hats_view',
-            'hat': 'hats_view',
             'shirts': 'shirts_view',
-            'shirt': 'shirts_view',
-            'mugs': 'mugs_view',
-            'mug': 'mugs_view',
+            'mugs': 'mugs_view', 
             'coasters': 'coasters_view',
-            'coaster': 'coasters_view',
-            'skateboard_decks': 'skateboard_decks_view',
             'skateboard decks': 'skateboard_decks_view',
-            'skateboard deck': 'skateboard_decks_view'
         }
         
-        if query_category_lower in category_redirects:
-            return redirect(category_redirects[query_category_lower])
-        
+        if query_category_normalized in category_redirects:
+            return redirect(category_redirects[query_category_normalized])
+            
         try:
             category_obj = Category.objects.get(name__iexact=query_category)
-            if category_obj.name.lower() in ['hats', 'shirts', 'mugs', 'coasters', 'skateboard decks']:
-                return redirect(category_redirects[category_obj.name.lower()])
+            db_category_name = category_obj.name.lower().replace('-', ' ').replace('_', ' ')
+            
+            if db_category_name in category_redirects:
+                return redirect(category_redirects[db_category_name])
         except Category.DoesNotExist:
             pass
 
