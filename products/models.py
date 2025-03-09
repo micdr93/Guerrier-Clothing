@@ -33,7 +33,7 @@ class Size(models.Model):
         return self.get_name_display()
 
 class Product(models.Model):
-    updated = models.DateTimeField(auto_now=True)
+    # Removed redundant "updated" field; use created_at and updated_at below.
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL, related_name='products')
     sizes = models.ManyToManyField(Size, blank=True, related_name='products')
     
