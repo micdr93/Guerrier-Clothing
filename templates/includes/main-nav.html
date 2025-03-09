@@ -24,20 +24,59 @@
         </ul>
       </li>
     </ul>
+
     <ul class="navbar-nav text-center">
-      <li class="nav-item">
+      <!-- Search Form -->
+      <li class="nav-item me-3">
         <form method="GET" action="{% url 'products:search_results' %}">
-          <div class="input-group w-100">
-            <input class="form-control border border-black rounded-0" type="text" name="q" placeholder="Search">
-            <div class="input-group-append">
-              <button class="form-control btn btn-black border border-black rounded-0" type="submit">
-                <span class="icon"><i class="fas fa-search" aria-hidden="true"></i></span>
-              </button>
-            </div>
+          <div class="input-group">
+            <input
+              class="form-control border border-black rounded-0"
+              type="text"
+              name="q"
+              placeholder="Search" />
+            <button
+              class="form-control btn btn-black border border-black rounded-0"
+              type="submit">
+              <span class="icon">
+                <i class="fas fa-search" aria-hidden="true"></i>
+              </span>
+            </button>
           </div>
         </form>
       </li>
-      <!-- ... rest of nav items ... -->
+
+      <!-- Wishlist -->
+      <li class="nav-item me-3">
+        <a class="nav-link" href="{% url 'wishlist:wishlist_home' %}" aria-label="Wishlist">
+          <i class="fa-regular fa-heart"></i>
+        </a>
+      </li>
+
+      <!-- Bag/Cart -->
+      <li class="nav-item me-3">
+        <a class="nav-link" href="{% url 'bag:view_bag' %}" aria-label="Bag">
+          <i class="fas fa-shopping-cart"></i>
+        </a>
+      </li>
+
+      <!-- Account/Login/Logout -->
+      <li class="nav-item dropdown me-3">
+        {% if user.is_authenticated %}
+          <a class="nav-link dropdown-toggle" href="#" id="account-link" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fas fa-user"></i>
+          </a>
+          <ul class="dropdown-menu border-0" aria-labelledby="account-link">
+            <li><a class="dropdown-item" href="{% url 'profiles:home' %}">My Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'wishlist:wishlist_home' %}">Wishlist</a></li>
+            <li><a class="dropdown-item" href="{% url 'account_logout' %}">Logout</a></li>
+          </ul>
+        {% else %}
+          <a class="nav-link" href="{% url 'account_login' %}" aria-label="Login">
+            <i class="fas fa-user"></i>
+          </a>
+        {% endif %}
+      </li>
     </ul>
   </div>
 </div>

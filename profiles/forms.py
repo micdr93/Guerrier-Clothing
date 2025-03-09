@@ -12,6 +12,7 @@ class ReviewsForm(forms.Form):
 
 class UserProfileForm(forms.ModelForm):
     full_name = forms.CharField(max_length=100, required=False)
+    email = forms.EmailField(required=True)
 
     class Meta:
         model = UserProfile
@@ -28,14 +29,12 @@ class UserProfileForm(forms.ModelForm):
             'default_street_address2': 'Street Address 2',
             'default_county': 'County, State or Locality',
         }
-
         for field in self.fields:
             if field != 'default_country':
                 if self.fields[field].required:
-                    placeholder = f'{placeholders.get(field, field)} *'
+                    placeholder = f"{placeholders.get(field, field)} *"
                 else:
                     placeholder = placeholders.get(field, field)
                 self.fields[field].widget.attrs['placeholder'] = placeholder
-            
             self.fields[field].widget.attrs['class'] = 'border-black rounded-0 profile-form-input'
             self.fields[field].label = False

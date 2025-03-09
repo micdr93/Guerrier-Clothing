@@ -1,0 +1,56 @@
+.StripeElement,
+.stripe-style-input {
+  box-sizing: border-box;
+  height: 40px;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+  -webkit-transition: box-shadow 150ms ease;
+  transition: box-shadow 150ms ease;
+}
+
+.StripeElement--focus,
+.stripe-style-input:focus,
+.stripe-style-input:active {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
+
+#card-element {
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+  padding: 12px;
+  background-color: #fff;
+}
+
+#card-errors {
+  color: #dc3545;
+  font-size: 0.875em;
+  margin-top: 0.5rem;
+}
+
+#submit-button {
+  margin-top: 1rem;
+}
+
+.order-summary {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.checkout-img {
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+}
