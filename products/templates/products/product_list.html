@@ -49,8 +49,8 @@
             {% endif %}
             {% if user.is_staff %}
               <div class="mt-2">
-                <a href="{% url 'products:edit_product' product.id %}" class="btn btn-sm btn-primary">Edit</a>
-                <a href="{% url 'products:delete_product' product.id %}" class="btn btn-sm btn-danger">Delete</a>
+                <a href="{% url 'products:edit_product' product.id %}" class="btn btn-sm btn-black">Edit</a>
+                <a href="{% url 'products:delete_product' product.id %}" class="btn btn-sm btn-black">Delete</a>
               </div>
             {% endif %}
           </div>
