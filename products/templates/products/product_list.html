@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
 <div class="container my-4">
   {% if category %}
@@ -18,7 +17,7 @@
             </a>
           {% else %}
             <a href="{% url 'products:product_detail' product.id %}">
-              <img class="card-img-top img-fluid" src="{% static 'media/noimage.png' %}" alt="{{ product.name }}">
+              <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
             </a>
           {% endif %}
           <div class="card-body pb-0">
@@ -34,7 +33,9 @@
               {% elif product.category.name|lower == 'coasters' %}
                 <a href="{% url 'home:coasters_view' %}"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
               {% elif product.category.name|lower == 'skateboard decks' %}
-                <a href="/homeware/skateboard-decks/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              <a href="/skateboard-decks/">
+                <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+              </a>
               {% else %}
                 <a href="{% url 'products:products' %}?category={{ product.category.name }}"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
               {% endif %}

@@ -80,7 +80,9 @@
             {% elif product.category.name|lower == 'coasters' %}
               <a href="/homeware/coasters/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
             {% elif product.category.name|lower == 'skateboard decks' %}
-              <a href="/homeware/skateboard-decks/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+            <a href="/skateboard-decks/">
+            <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+          </a>
             {% else %}
               <a href="{% url 'products:products' %}?category={{ product.category.name }}"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
             {% endif %}
@@ -95,7 +97,7 @@
           {% if user.is_staff %}
               <div class="mt-2">
                 <a href="{% url 'products:edit_product' product.id %}" class="btn btn-sm btn-black">Edit</a>
-                <a href="{% url 'products:delete_product' product.id %}" class="btn btn-sm btn-black">Delete</a>
+                <a href="{% url 'products:delete_product' product.id %}" class="btn btn-sm btn-bla">Delete</a>
               </div>
             {% endif %}
         </div>
