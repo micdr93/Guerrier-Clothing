@@ -34,5 +34,6 @@ urlpatterns = [
 ]
 
 
-if not settings.DEBUG:
+if settings.DEBUG:
+    print("serving media from:", settings.MEDIA_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
