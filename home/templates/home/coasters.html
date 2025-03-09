@@ -76,7 +76,7 @@
                                         <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
                                     </a>
                                     {% elif product.category.name|lower == 'coasters' %}
-                                    <a href="{% url 'coasters_view' %}">
+                                    <a href="{% url 'home:coasters_view' %}">
                                         <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
                                     </a>
                                     {% else %}

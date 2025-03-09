@@ -18,7 +18,7 @@ def index(request):
             except:
                 messages.error(request, "You're already subscribed to our newsletter.")
     context = {
-        'banner_image': '/media/banners/banner.png',
+        'banner_image': '/media/banners/backgroundimg.png',
         'newsletter_form': newsletter_form,
     }
     return render(request, 'home/index.html', context)

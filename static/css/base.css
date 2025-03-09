@@ -1,12 +1,15 @@
-/* Apply Anton font to the navigation logo */
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
+
+/* Navigation Logo */
 .navbar-brand {
     font-family: 'Anton', sans-serif;
     font-size: 2.5rem; /* Adjust size as needed */
     font-weight: normal; /* Anton is naturally bold */
-    text-transform: uppercase; /* Ensure consistency */
-    letter-spacing: 1px; /* Improve readability */
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
+/* Global Reset */
 html, body {
     margin: 0;
     padding: 0;
@@ -27,6 +30,7 @@ body {
     }
 }
 
+/* Navbar & Dropdown */
 .navbar {
     z-index: 1050;
     position: relative;
@@ -37,9 +41,8 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Dropdown hover effect */
 .dropdown-menu .dropdown-item:hover {
-    background-color: rgba(0, 0, 0, 0.1); /* Increased hover contrast */
+    background-color: rgba(0, 0, 0, 0.1);
 }
 
 .guerrier-logo {
@@ -51,7 +54,7 @@ body {
     font-weight: 900;
 }
 
-/* Footer styling */
+/* Footer Styling */
 .footer {
     background-color: #fff;
     padding: 2rem 0;
@@ -71,49 +74,38 @@ body {
     background-color: #333 !important;
 }
 
-/* Mobile and tablet navigation improvements */
+/* Mobile and Tablet Navigation Improvements */
 @media (min-width: 992px) {
-    /* Increase spacing between nav items */
     .navbar-nav .nav-item {
         margin-right: 2rem;
     }
-
-    /* Remove margin from last item */
     .navbar-nav .nav-item:last-child {
         margin-right: 0;
     }
-
-    /* Adjust navbar padding */
     .navbar {
         padding-top: 1.2rem;
         padding-bottom: 1.2rem;
     }
-
-    /* Improve dropdown positioning */
     .dropdown-menu {
         margin-top: 0.5rem;
         border-radius: 0;
         border-top: 2px solid #000;
         padding: 0.8rem 0;
     }
-
-    /* Navbar collapse */
     .navbar-collapse {
         display: flex;
         justify-content: space-between;
     }
-
     .navbar-brand {
         margin-right: 3rem;
         padding-right: 1rem;
     }
-
-    /* Adjust the right side buttons/links */
     .navbar .d-flex.align-items-center > * {
         margin-left: 1.5rem;
     }
 }
 
+/* Form Controls */
 .form-control {
     border-color: #000;
     border-width: 1px;
@@ -124,7 +116,7 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
 }
 
-/* Global button styles */
+/* Global Button Styles */
 button,
 .btn {
     padding: 0.75rem 1.5rem;
@@ -138,10 +130,48 @@ button:hover,
     color: #fff !important;
 }
 
-
-/* Custom smaller button */
 .btn-sm-custom {
-    padding: 0.25rem 0.5rem;  /* Adjust padding */
-    font-size: 0.8rem;  /* Smaller text size */
-    border-radius: 0.2rem;  /* Optional: smaller border radius */
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    border-radius: 0.2rem;
+}
+
+/* Hero Banner Styling */
+.hero-banner {
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+
+.hero-banner img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.banner-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4); /* semi-transparent overlay */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 1rem;
+}
+
+.banner-text {
+    font-size: 2rem;
+    color: #fff;
+    text-align: center;
+    margin: 0;
+}
+
+/* Adjust Hero Banner for Mobile */
+@media (max-width: 576px) {
+    .banner-text {
+        font-size: 1.5rem;
+    }
 }

@@ -7,10 +7,10 @@
         <ul class="nav flex-column">
           <!-- Links related to the company -->
           <li class="nav-item mb-2">
-            <a href="{% url 'index' %}" class="nav-link p-0 text-dark">Home</a>
+            <a href="{% url 'home:index' %}" class="nav-link p-0 text-dark">Home</a>
           </li>
           <li class="nav-item mb-2">
-            <a href="{% url 'contact' %}" class="nav-link p-0 text-dark">Contact</a>
+            <a href="{% url 'home:contact' %}" class="nav-link p-0 text-dark">Contact</a>
           </li>
         </ul>
       </div>
@@ -20,7 +20,7 @@
         <ul class="nav flex-column">
           <!-- Links related to getting help -->
           <li class="nav-item mb-2">
-            <a href="{% url 'privacy_policy' %}" class="nav-link p-0 text-dark">Privacy Policy</a>
+            <a href="{% url 'home:privacy_policy' %}" class="nav-link p-0 text-dark">Privacy Policy</a>
           </li>
           <li class="nav-item mb-2">
             <a href="{% url 'returns' %}" class="nav-link p-0 text-dark">Returns</a>

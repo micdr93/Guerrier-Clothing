@@ -6,18 +6,17 @@
     <div class="row">
         <!-- Sidebar -->
         <div class="col-md-3">
-            <div class="list-group">
-                <a href="{% url 'profiles:home' %}" class="list-group-item list-group-item-action active">Profile Overview</a>
-                <a href="{% url 'profiles:edit' %}" class="list-group-item list-group-item-action">Edit Profile</a>
-                
-                <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action text-danger">Logout</a>
-            </div>
+          <div class="list-group border bg-black border-dark">
+            <a href="{% url 'profiles:home' %}" class="list-group-item  bg-black list-group-item-action active">Profile Overview</a>
+            <a href="{% url 'profiles:edit' %}" class="list-group-item list-group-item-action">Edit Profile</a>
+            <a href="{% url 'account_logout' %}" class="list-group-item list-group-item-action text-danger">Logout</a>
+          </div>
         </div>
 
         <!-- Profile Details -->
         <div class="col-md-9">
             <div class="card">
-                <div class="card-header bg-primary text-white">
+                <div class="card-header bg-black text-white">
                     <h4>Welcome, {{ user.username }}</h4>
                 </div>
                 <div class="card-body">
@@ -32,7 +31,7 @@
                         <p><strong>Address:</strong> {{ profile.address }}</p>
                     {% endif %}
 
-                    <a href="{% url 'profiles:edit' %}" class="btn btn-primary">Edit Profile</a>
+                    <a href="{% url 'profiles:edit' %}" class="btn btn-dark">Edit Profile</a>
                 </div>
             </div>
 
@@ -48,7 +47,7 @@
           <strong>Order Number:</strong> {{ order.order_number }}<br>
           <strong>Date:</strong> {{ order.date|date:"M d, Y H:i" }}<br>
           <strong>Grand Total:</strong> €{{ order.grand_total }}<br>
-          <a href="{% url 'checkout:order_detail' order.order_number %}" class="btn btn-sm btn-primary mt-2">
+          <a href="{% url 'checkout:order_detail' order.order_number %}" class="btn btn-dark mt-2">
             View Details
           </a>
         </li>

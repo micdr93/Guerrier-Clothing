@@ -37,23 +37,23 @@
                             {% if item.product.category %}
                             <p class="small text-muted mt-1">
                                 {% if item.product.category.name|lower == 'skateboard decks' %}
-                                <a href="{% url 'skateboard_decks_view' %}" class="skateboard-link">
+                                <a href="{% url 'home:skateboard_decks_view' %}" class="skateboard-link">
                                     <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
                                 </a>
                                 {% elif item.product.category.name|lower == 'shirts' %}
-                                <a href="{% url 'shirts_view' %}">
+                                <a href="{% url 'home:shirts_view' %}">
                                     <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
                                 </a>
                                 {% elif item.product.category.name|lower == 'hats' %}
-                                <a href="{% url 'hats_view' %}">
+                                <a href="{% url 'home:hats_view' %}">
                                     <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
                                 </a>
                                 {% elif item.product.category.name|lower == 'mugs' %}
-                                <a href="{% url 'mugs_view' %}">
+                                <a href="{% url 'home:mugs_view' %}">
                                     <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
                                 </a>
                                 {% elif item.product.category.name|lower == 'coasters' %}
-                                <a href="{% url 'coasters_view' %}">
+                                <a href="{% url 'home:coasters_view' %}">
                                     <i class="fas fa-tag mr-1"></i>{{ item.product.category.friendly_name }}
                                 </a>
                                 {% else %}

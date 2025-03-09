@@ -1,73 +1,56 @@
 <div class="d-lg-none">
   <nav class="navbar navbar-light bg-white">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'home' %}">GUERRIER</a>
-
-      <!-- Navbar toggler button -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-        data-bs-target="#mobile-nav" aria-controls="mobile-nav" aria-expanded="false"
-        aria-label="Toggle navigation" style="background-color: transparent !important;">
+      <a class="navbar-brand" href="{% url 'home:index' %}">GUERRIER</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-nav" aria-controls="mobile-nav" aria-expanded="false" aria-label="Toggle navigation" style="background-color: transparent !important;">
         <span class="navbar-toggler-icon"></span>
       </button>
-
-      <!-- Search toggler button -->
       <button id="search-toggler" class="btn" aria-label="Toggle search bar">
         <i class="fa fa-search"></i>
       </button>
-
-      <!-- Collapsible Navbar Content -->
       <div class="collapse navbar-collapse" id="mobile-nav">
         <ul class="navbar-nav">
-          <!-- Clothing Dropdown -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="clothing-mobile" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="clothing-mobile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Clothing
             </a>
             <ul class="dropdown-menu" aria-labelledby="clothing-mobile">
-              <li><a class="dropdown-item" href="{% url 'shirts_view' %}">Shirts</a></li>
-              <li><a class="dropdown-item" href="{% url 'hats_view' %}">Hats</a></li>
+              <li><a class="dropdown-item" href="{% url 'home:shirts_view' %}">Shirts</a></li>
+              <li><a class="dropdown-item" href="{% url 'home:hats_view' %}">Hats</a></li>
             </ul>
           </li>
-
-          <!-- Homeware Dropdown -->
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="homeware-mobile" role="button"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" href="#" id="homeware-mobile" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Homeware
             </a>
             <ul class="dropdown-menu" aria-labelledby="homeware-mobile">
-              <li><a class="dropdown-item" href="{% url 'mugs_view' %}">Mugs</a></li>
-              <li><a class="dropdown-item" href="{% url 'coasters_view' %}">Coasters</a></li>
-              <li><a class="dropdown-item" href="{% url 'skateboard_decks_view' %}">Skateboard Decks</a></li>
+              <li><a class="dropdown-item" href="{% url 'home:mugs_view' %}">Mugs</a></li>
+              <li><a class="dropdown-item" href="{% url 'home:coasters_view' %}">Coasters</a></li>
+              <li><a class="dropdown-item" href="{% url 'home:skateboard_decks_view' %}">Skateboard Decks</a></li>
             </ul>
           </li>
-
-          <!-- User Authentication Links -->
           {% if user.is_authenticated %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'profiles:home' %}">My Profile</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'wishlist:wishlist_home' %}">Wishlist</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'profiles:home' %}">My Profile</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'wishlist:wishlist_home' %}">Wishlist</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_logout' %}">Logout</a>
+            </li>
           {% else %}
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'account_login' %}">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'account_signup' %}">Register</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_signup' %}">Register</a>
+            </li>
           {% endif %}
         </ul>
       </div>
-
-      <!-- Mobile Search Bar -->
       <div class="container-fluid mt-2" id="mobile-search">
-        <form method="GET" action="{% url 'products' %}" class="d-flex">
+        <form method="GET" action="{% url 'products:search_results' %}" class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search" name="q">
           <button class="btn btn-dark" type="submit">Search</button>
         </form>

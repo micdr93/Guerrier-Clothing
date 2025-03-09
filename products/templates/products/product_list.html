@@ -8,9 +8,6 @@
   {% else %}
     <h2>All Products</h2>
   {% endif %}
-
- 
-  <!-- Products Grid -->
   <div class="row">
     {% for product in products %}
       <div class="col-6 col-md-4 col-lg-3 mb-4">
@@ -26,9 +23,35 @@
           {% endif %}
           <div class="card-body pb-0">
             <p class="mb-0">{{ product.name }}</p>
+            {% if product.category %}
+            <p class="small text-muted mt-1">
+              {% if product.category.name|lower == 'shirts' %}
+                <a href="/shirts/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% elif product.category.name|lower == 'hats' %}
+                <a href="/hats/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% elif product.category.name|lower == 'mugs' %}
+                <a href="/homeware/mugs/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% elif product.category.name|lower == 'coasters' %}
+                <a href="{% url 'home:coasters_view' %}"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% elif product.category.name|lower == 'skateboard decks' %}
+                <a href="/homeware/skateboard-decks/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% else %}
+                <a href="{% url 'products:products' %}?category={{ product.category.name }}"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% endif %}
+            </p>
+            {% endif %}
           </div>
           <div class="card-footer bg-white pt-0 border-0 text-left">
             <p class="lead mb-0 font-weight-bold">€{{ product.price }}</p>
+            {% if product.rating %}
+              <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
+            {% endif %}
+            {% if user.is_staff %}
+              <div class="mt-2">
+                <a href="{% url 'products:edit_product' product.id %}" class="btn btn-sm btn-primary">Edit</a>
+                <a href="{% url 'products:delete_product' product.id %}" class="btn btn-sm btn-danger">Delete</a>
+              </div>
+            {% endif %}
           </div>
         </div>
       </div>
@@ -39,6 +62,4 @@
     {% endfor %}
   </div>
 </div>
-
-
 {% endblock %}

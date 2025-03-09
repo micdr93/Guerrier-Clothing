@@ -1,73 +1,87 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block page_header %}
-<div class="container-fluid px-0">
-    <div class="row no-gutters">
-        <div class="col-12">
-            <a href="{% url 'products:products' %}" class="hero-banner d-block">
-                <img src="{% static 'media/banner.png' %}" alt="Shop All Guerrier Products">
-                <div class="banner-overlay">
-                    <h2 class="banner-text">Shop The Collection</h2>
-                </div>
-            </a>
-        </div>
+<div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+    <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+  </div>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src="{% static 'images/carousel1.png' %}" class="d-block w-100" alt="Slide 1">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Be the best version of yourself.</p>
+      </div>
     </div>
+    <div class="carousel-item">
+      <img src="{% static 'images/carousel2.png' %}" class="d-block w-100" alt="Slide 2">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Break down barriers and reach your goals.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src="{% static 'images/carousel3.png' %}" class="d-block w-100" alt="Slide 3">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Shop all our latest deals!</p>
+      </div>
+    </div>
+  </div>
+  <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
 </div>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <!-- Brand Introduction Section -->
-    <div class="row justify-content-center mb-5">
-        <div class="col-md-10">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4 p-md-5">
-                    <h2 class="text-center mb-4">Welcome to <strong>Guerrier</strong></h2>
-                    <div class="brand-story">
-                        <p class="lead text-center">A bold streetwear brand inspired by the spirit of warriors. Based in the vibrant streets of Dublin, Guerrier draws its name from the French word for <em>warrior</em>, representing strength, courage, and resilience.</p>
-                        
-                        <p class="text-center">Our mission is simple: to create clothing that empowers you to take on life's challenges with confidence. Designed with a blend of cutting-edge streetwear aesthetics and premium-quality craftsmanship, Guerrier is your go-to armor for standing out and standing strong.</p>
-                    </div>
-                    <div class="text-center mt-4">
-                        <a href="{% url 'products:products' %}" class="btn btn-dark">Explore Our Collection</a>
-                    </div>
-                </div>
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-10">
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4 p-md-5">
+          <h2 class="text-center mb-4">Welcome to <strong>Guerrier</strong></h2>
+          <div class="brand-story">
+            <p class="lead text-center">A bold streetwear brand inspired by the spirit of warriors. Based in the vibrant streets of Dublin, Guerrier draws its name from the French word for <em>warrior</em>, representing strength, courage, and resilience.</p>
+            <p class="text-center">Our mission is simple: to create clothing that empowers you to take on life's challenges with confidence. Designed with a blend of cutting-edge streetwear aesthetics and premium-quality craftsmanship, Guerrier is your go-to armor for standing out and standing strong.</p>
+          </div>
+          <div class="text-center mt-4">
+            <a href="{% url 'products:products' %}" class="btn btn-dark">Explore Our Collection</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid bg-light py-5 mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8 text-center">
+        <h2 class="mb-4">Join Our Newsletter</h2>
+        <p class="mb-4">Sign up to receive updates on new products, exclusive offers, and streetwear trends.</p>
+        <form method="POST" class="d-flex justify-content-center">
+          {% csrf_token %}
+          <div class="input-group mb-3 w-75">
+            {{ newsletter_form.email }}
+            <button class="btn btn-dark" type="submit">Subscribe</button>
+          </div>
+        </form>
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} mt-3">
+              {{ message }}
             </div>
-        </div>
+          {% endfor %}
+        {% endif %}
+      </div>
     </div>
-
-    <!-- Newsletter Section -->
-    <div class="container-fluid bg-light py-5 mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8 text-center">
-                <h2 class="mb-4">Join Our Newsletter</h2>
-                <p class="mb-4">Sign up to receive updates on new products, exclusive offers, and streetwear trends.</p>
-                <form method="POST" class="d-flex justify-content-center">
-                    {% csrf_token %}
-                    <div class="input-group mb-3 w-75">
-                        {{ newsletter_form.email }}
-                        <button class="btn btn-dark" type="submit">Subscribe</button>
-                    </div>
-                </form>
-                {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }} mt-3">
-                            {{ message }}
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            </div>
-        </div>
+  </div>
+  <div class="container mt-4">
+    <div class="text-center">
+      <span class="btn btn-dark d-block mb-2">FREE DELIVERY ON ALL ORDERS OVER €50</span>
     </div>
-
-    <!-- Free Delivery Message Near the Bottom -->
-    <div class="container mt-4">
-        <div class="text-center">
-            <span class="btn btn-dark d-block mb-2">FREE DELIVERY ON ALL ORDERS OVER €50</span>
-        </div>
-    </div>
+  </div>
 </div>
-
-
 {% endblock %}
