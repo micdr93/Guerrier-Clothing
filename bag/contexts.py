@@ -4,15 +4,10 @@ from django.shortcuts import get_object_or_404
 from products.models import Product
 
 def bag_contents(request):
-    """
-    Context processor for bag contents
-    """
     bag_items = []
     total = 0
     product_count = 0
     bag = request.session.get('bag', {})
-
-    print(f"Session Bag: {bag}")  # Debugging
 
     for item_id, item_quantity in bag.items():
         try:
@@ -24,20 +19,22 @@ def bag_contents(request):
                 'product': product,
                 'quantity': item_quantity,
                 'line_total': line_total,
-                'total_price': line_total,  # Add for compatibility
             })
         except Product.DoesNotExist:
             continue
 
-    print(f"Total Price in Bag Context: {total}")  # Debugging
+    # Calculate delivery fee using settings.FREE_DELIVERY_THRESHOLD and settings.STANDARD_DELIVERY_PERCENTAGE
+    if total < settings.FREE_DELIVERY_THRESHOLD:
+        delivery = total * (Decimal(settings.STANDARD_DELIVERY_PERCENTAGE) / Decimal(100))
+    else:
+        delivery = Decimal('0.00')
 
-    grand_total = total  # If using delivery costs, add them here.
+    grand_total = total + delivery
 
     return {
         'bag_items': bag_items,
-        'cart': bag_items,  # Added cart as an alias for bag_items
         'total': total,
-        'cart_total': total,  # Added cart_total as an alias for total
         'product_count': product_count,
+        'delivery': delivery,
         'grand_total': grand_total,
     }

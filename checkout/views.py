@@ -41,11 +41,16 @@ def checkout(request):
             messages.error(request, "Payment information is missing. Please try again.")
             return redirect(reverse('checkout:checkout'))
         if form.is_valid():
+            current_bag = bag_contents(request)
             order = form.save(commit=False)
             order.country = convert_country(order.country)
             pid = client_secret_val.split('_secret')[0]
             order.stripe_pid = pid
             order.original_bag = json.dumps(bag)
+            # Set order totals from bag contents
+            order.order_total = current_bag.get('total')
+            order.delivery_cost = current_bag.get('delivery')
+            order.grand_total = current_bag.get('grand_total')
             if request.user.is_authenticated:
                 profile = UserProfile.objects.get(user=request.user)
                 order.user_profile = profile

@@ -30,9 +30,10 @@
                     {% endwith %}
                 {% endfor %}
                 <hr>
-                <p class="mb-0"><strong>Order Total:</strong> €{{ total|floatformat:2 }}</p>
-                <p class="mb-0"><strong>Delivery:</strong> €{{ delivery|floatformat:2 }}</p>
-                <p class="mb-0"><strong>Grand Total:</strong> €{{ grand_total|floatformat:2 }}</p>
+                <p>Total: €{{ total }}</p>
+                <p>Delivery: €{{ delivery }}</p>
+                <p>Grand Total: €{{ grand_total }}</p>
+
             </div>
         </div>
 

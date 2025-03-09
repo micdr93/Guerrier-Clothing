@@ -64,3 +64,19 @@ def delete_review(request, review_id):
     else:
         messages.error(request, "You don't have permission to delete this review.")
         return redirect('products:product_detail', product_id=review.product.id)
+    
+@login_required
+def edit_review(request, review_id):
+    review = get_object_or_404(Review, pk=review_id)
+    if request.user != review.user and not request.user.is_superuser:
+        messages.error(request, "You don't have permission to edit this review.")
+        return redirect('products:product_detail', product_id=review.product.id)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Your review has been updated!")
+            return redirect('products:product_detail', product_id=review.product.id)
+    else:
+        form = ReviewForm(instance=review)
+    return render(request, 'reviews/edit_review.html', {'form': form, 'review': review})
