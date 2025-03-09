@@ -60,9 +60,9 @@ class Product(models.Model):
             MaxValueValidator(5, "Rating cannot exceed 5")
         ]
     )
-    image = models.ImageField(null=True, blank=True, upload_to='images/product_images/'
+    image = models.ImageField(null=True, blank=True, upload_to='product_images/')
 
-    )
+    
     
     color = models.CharField(max_length=20, blank=True, null=True)
     gender = models.CharField(max_length=1, default='U')
