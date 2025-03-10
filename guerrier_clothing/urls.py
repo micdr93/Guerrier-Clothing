@@ -4,11 +4,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from django.urls import re_path
+from django.views.static import serve  # Import Django's built-in serve function
 from products.sitemaps import (
     StaticViewSitemap, ProductSitemap, CategorySitemap
 )
 from products import views as product_views
-from custom_storages import serve_media_in_production
 
 sitemaps = {
     'static': StaticViewSitemap,
@@ -34,11 +34,11 @@ urlpatterns = [
     path('homeware/skateboard-decks/', product_views.skateboard_decks_view, name='homeware_skateboard_decks'),
 ]
 
-# For development
+# Always serve media files regardless of DEBUG setting
+urlpatterns += [
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
+]
+
+# Only serve static files in development
 if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-# For production
-else:
-    urlpatterns += [
-        re_path(r'^media/(?P<path>.*)$', serve_media_in_production),
-    ]
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
