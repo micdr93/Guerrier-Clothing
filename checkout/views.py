@@ -23,12 +23,15 @@ def cache_checkout_data(request):
         stripe.PaymentIntent.modify(pid, metadata={
             'bag': json.dumps(request.session.get('bag', {})),
             'save_info': request.POST.get('save_info'),
-            'username': request.user,
+            'username': request.user if request.user.is_authenticated else 'AnonymousUser',
         })
         return HttpResponse(status=200)
     except Exception as e:
-        messages.error(request, 'Sorry, your payment cannot be processed right now. Please try again later.')
-        return HttpResponse(content=e, status=400)
+        messages.error(
+            request,
+            'Sorry, your payment cannot be processed right now. Please try again later.'
+        )
+        return HttpResponse(content=str(e), status=400)
 
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
@@ -86,6 +89,7 @@ def checkout(request):
                             option=option
                         )
 
+            # Save the "save_info" flag in session
             request.session['save_info'] = 'save_info' in request.POST
 
             return redirect(reverse('checkout:checkout_success', args=[order.order_number]))
@@ -93,7 +97,7 @@ def checkout(request):
             messages.error(request, "There was an error with your form. Please double-check your information.")
             # Fall through to re-render the form below
 
-    # For GET (or when POST fails), display the checkout form.
+    # GET request or if POST fails:
     bag = request.session.get('bag', {})
     if not bag:
         messages.error(request, "There's nothing in your bag at the moment.")
@@ -102,7 +106,7 @@ def checkout(request):
     current_bag = bag_contents(request)
     total = current_bag.get('grand_total', 0)
     stripe_total = round(total * 100)
-    # Create a PaymentIntent
+    # Create a PaymentIntent dynamically
     intent = stripe.PaymentIntent.create(
         amount=stripe_total,
         currency=getattr(settings, 'STRIPE_CURRENCY', 'eur'),
