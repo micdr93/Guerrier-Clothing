@@ -7,7 +7,7 @@
 <div class="container mt-5">
     <h2>Order Details for Order: {{ order.order_number }}</h2>
     <p><strong>Date:</strong> {{ order.date|date:"M d, Y H:i" }}</p>
-    <p><strong>Grand Total:</strong> ${{ order.grand_total }}</p>
+    <p><strong>Grand Total:</strong> €{{ order.grand_total }}</p>
     
     <h3>Items:</h3>
     {% if order.lineitems.all %}
