@@ -175,3 +175,24 @@ button:hover,
         font-size: 1.5rem;
     }
 }
+
+/* Make dropdown items black with no underline */
+.dropdown-menu .dropdown-item {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+  .dropdown-menu .dropdown-item:hover {
+    background-color: #f8f9fa; /* or any hover color you prefer */
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+  
+  /* Ensure top-level nav links are black with no underline */
+  .navbar-nav .nav-link {
+    color: #000 !important;
+    text-decoration: none !important;
+  }
+  .navbar-nav .nav-link:hover {
+    color: #333 !important; /* or another hover color */
+    text-decoration: none !important;
+  }
