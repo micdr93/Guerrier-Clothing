@@ -78,7 +78,7 @@ def contact(request):
         if form.is_valid():
             form.save()
             messages.success(request, "Thank you, your email has been sent. We will contact you shortly.")
-            return redirect("contact")
+            return redirect("home:contact")
         else:
             messages.error(request, "Form submission failed. Please check the form and try again.")
     else:
