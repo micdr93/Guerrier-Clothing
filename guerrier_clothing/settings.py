@@ -3,14 +3,15 @@ from pathlib import Path
 import dj_database_url
 import django_on_heroku
 from dotenv import load_dotenv
+
+# Load environment variables
 load_dotenv()
 
-if os.path.exists("env.py"):
-    import env
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = 'DEVELOPMENT' in os.environ
+
+# Security and Debug Configuration
+SECRET_KEY = os.environ.get('SECRET_KEY', 'fallback-secret-key-for-local-dev')
+DEBUG = os.environ.get('DEVELOPMENT', 'False').lower() == 'true'
 
 ALLOWED_HOSTS = [
     'guerrier-184e74af35e6.herokuapp.com', 
@@ -18,6 +19,7 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 
+# Application Definition
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,6 +60,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'guerrier_clothing.urls'
 
+# Template Configuration
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -77,6 +80,7 @@ TEMPLATES = [
     },
 ]
 
+# Authentication Configuration
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -93,6 +97,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/'
 ACCOUNT_ADAPTER = 'home.adapters.CustomAccountAdapter'
 WSGI_APPLICATION = 'guerrier_clothing.wsgi.application'
 
+# Database Configuration
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
@@ -105,6 +110,7 @@ else:
         }
     }
 
+# Password Validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -112,21 +118,25 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
+# Business Configuration
 FREE_DELIVERY_THRESHOLD = 50
 STANDARD_DELIVERY_PERCENTAGE = 10
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+# Payment Configuration
 STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY', '')
 STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY', '')
-STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET', '')
 
+# Static and Media Files
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
@@ -134,11 +144,13 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Security Settings
 CSRF_TRUSTED_ORIGINS = [
     'https://guerrier-184e74af35e6.herokuapp.com',
     'http://127.0.0.1:8000'
 ]
 
+# Email Configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
@@ -147,8 +159,10 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS')
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
 
+# Static Files Storage
 STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
+# Heroku-specific Security Settings
 if 'DYNO' in os.environ:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
@@ -158,4 +172,5 @@ if 'DYNO' in os.environ:
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
 
+# Heroku Configuration
 django_on_heroku.settings(locals(), staticfiles=False)
