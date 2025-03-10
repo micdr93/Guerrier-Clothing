@@ -10,8 +10,13 @@ if os.path.exists("env.py"):
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = False
-ALLOWED_HOSTS = ['guerrier-184e74af35e6.herokuapp.com', '127.0.0.1']
+DEBUG = 'DEVELOPMENT' in os.environ
+
+ALLOWED_HOSTS = [
+    'guerrier-184e74af35e6.herokuapp.com', 
+    '127.0.0.1', 
+    'localhost'
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -129,7 +134,10 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CSRF_TRUSTED_ORIGINS = ['https://guerrier-184e74af35e6.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://guerrier-184e74af35e6.herokuapp.com',
+    'http://127.0.0.1:8000'
+]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
@@ -139,14 +147,15 @@ EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASS')
 DEFAULT_FROM_EMAIL = os.environ.get('EMAIL_HOST_USER')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
-# Security settings for production
-if not DEBUG:
+if 'DYNO' in os.environ:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
 
-# Configure django-on-heroku
 django_on_heroku.settings(locals(), staticfiles=False)
