@@ -34,16 +34,24 @@ from wishlist.models import Wishlist
 from reviews.models import Review
 from reviews.forms import ReviewForm
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from products.models import Product, Category
+from wishlist.models import Wishlist
+from django.db.models import Min, Max, Q, Avg
+import random
+
 def all_products(request, category=None):
     query_category = request.GET.get('category', category)
     if query_category:
-        query_category_normalized = str(query_category).lower().replace('-', ' ').replace('_', ' ').strip()
+        query_category_normalized = query_category.lower().replace('-', ' ').replace('_', ' ').strip()
         category_redirects = {
-            'hats': 'hats_view',
-            'shirts': 'shirts_view',
-            'mugs': 'mugs_view', 
-            'coasters': 'coasters_view',
-            'skateboard decks': 'skateboard_decks_view',
+            'hats': 'products:hats_view',
+            'shirts': 'products:shirts_view',
+            'mugs': 'products:mugs_view',
+            'coasters': 'products:coasters_view',
+            'skateboard decks': 'products:skateboard_decks_view',
+            'skateboard_decks': 'products:skateboard_decks_view',
         }
         if query_category_normalized in category_redirects:
             url = reverse(category_redirects[query_category_normalized])
@@ -54,22 +62,14 @@ def all_products(request, category=None):
             return redirect(url)
         try:
             category_obj = Category.objects.get(name__iexact=query_category)
-            db_category_name = category_obj.name.lower().replace('-', ' ').replace('_', ' ')
-            if db_category_name in category_redirects:
-                url = reverse(category_redirects[db_category_name])
-                qs = request.GET.copy()
-                qs.pop('category', None)
-                if qs:
-                    url = f"{url}?{qs.urlencode()}"
-                return redirect(url)
+            products = Product.active_products().filter(category=category_obj)
         except Category.DoesNotExist:
-            pass
+            products = Product.active_products().filter(category__name__icontains=query_category)
+    else:
+        products = Product.active_products()
 
-    products = Product.active_products()
     categories = Category.objects.all()
     price_range = products.aggregate(Min('price'), Max('price'))
-    min_price = price_range['price__min']
-    max_price = price_range['price__max']
     query = request.GET.get('q', '').strip()
     price_min = request.GET.get('price_min')
     price_max = request.GET.get('price_max')
@@ -89,7 +89,7 @@ def all_products(request, category=None):
         active_category = 'Homeware'
     elif request.GET.get('clothing_filter') == 'true':
         filter_applied = True
-        products = products.filter(category__name__in=['shirts', 'Hats'])
+        products = products.filter(category__name__in=['shirts', 'hats'])
         active_category = 'Clothing'
     elif query_category:
         filter_applied = True
@@ -135,13 +135,14 @@ def all_products(request, category=None):
         'categories': categories,
         'wishlist': wishlist,
         'current_sorting': sort_param if sort_param else 'None_None',
-        'min_price': min_price,
-        'max_price': max_price,
-        'current_price_min': price_min or min_price,
-        'current_price_max': price_max or max_price,
+        'min_price': price_range['price__min'] or 0,
+        'max_price': price_range['price__max'] or 0,
+        'current_price_min': price_min or (price_range['price__min'] or 0),
+        'current_price_max': price_max or (price_range['price__max'] or 0),
         'filter_applied': filter_applied,
     }
     return render(request, 'products/products.html', context)
+
 
 def mugs_view(request):
     products = Product.objects.filter(category__id=3)
