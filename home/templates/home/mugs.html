@@ -64,7 +64,7 @@
                                         <p class="mb-0 text-left font-weight-bold">€{{ product.price }}</p>
                                         {% if product.brand %}
                                             <p class="small mt-1 mb-0">
-                                                <a class="text-muted" href="{% url 'products' %}?brand={{ product.brand.name }}">
+                                                <a class="text-muted" href="{% url 'products:products' %}?brand={{ product.brand.name }}">
                                                     <i class="fas fa-tag mr-1"></i>
                                                     {{ product.brand.friendly_name }}
                                                 </a>
