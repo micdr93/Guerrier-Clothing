@@ -57,7 +57,7 @@
                             {% else %}
                                 <a href="{% url 'products:product_detail' product.id %}">
                                     <img class="card-img-top img-fluid"
-                                         src="{{ MEDIA_URL }}noimage.png"
+                                         src="{{ MEDIA_URL }}noimage.webp"
                                          alt="{{ product.name }}">
                                 </a>
                             {% endif %}
@@ -110,13 +110,13 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>  <!-- .card -->
-                    </div>  <!-- .col -->
+                        </div>
+                    </div>
                 {% endfor %}
-            </div>  <!-- .row -->
-        </div>  <!-- .product-container -->
-    </div>  <!-- .row -->
-</div>  <!-- .container-fluid -->
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}

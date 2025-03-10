@@ -30,20 +30,16 @@
                 </div>
             </div>
 
-            <!-- The .row wraps the product columns -->
             <div class="row">
                 {% for product in products %}
-                    <!-- Each product goes in a Bootstrap column -->
                     <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                         <div class="card h-100 border-0">
 
                             {% if product.id in wishlist_item_ids %}
-                                <!-- Already in wishlist; show remove link -->
                                 <a href="{% url 'wishlist:remove_from_wishlist' product.id %}" aria-label="Remove product from Wishlist">
                                     <div class="wishlist-badge"><i class="fa-regular fa-heart"></i></div>
                                 </a>
                             {% else %}
-                                <!-- Not in wishlist; show add link -->
                                 <a href="{% url 'wishlist:add_to_wishlist' product.id %}" aria-label="Add product to Wishlist">
                                     <div class="wishlist-badge"><i class="fa-regular fa-heart"></i></div>
                                 </a>
@@ -58,7 +54,7 @@
                             {% else %}
                                 <a href="{% url 'products:product_detail' product.id %}">
                                     <img class="card-img-top img-fluid"
-                                         src="{{ MEDIA_URL }}noimage.png"
+                                         src="{{ MEDIA_URL }}noimage.webp"
                                          alt="{{ product.name }}">
                                 </a>
                             {% endif %}
@@ -88,11 +84,11 @@
                                     </div>
                                 </div>
                             </div>
-                        </div> <!-- .card -->
-                    </div> <!-- .col -->
+                        </div>
+                    </div>
                 {% endfor %}
-            </div> <!-- .row -->
-        </div> <!-- .product-container -->
-    </div> <!-- .row -->
-</div> <!-- .container-fluid -->
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
