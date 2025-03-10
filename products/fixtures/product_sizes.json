@@ -118,5 +118,45 @@
             "product_id": 18,
             "size_id": 6
         }
+    },
+    {
+        "model": "products.product_sizes",
+        "pk": 16,
+        "fields": {
+            "product_id": 8,
+            "size_id": 6
+        }
+    },
+    {
+        "model": "products.product_sizes",
+        "pk": 17,
+        "fields": {
+            "product_id": 9,
+            "size_id": 6
+        }
+    },
+    {
+        "model": "products.product_sizes",
+        "pk": 18,
+        "fields": {
+            "product_id": 10,
+            "size_id": 6
+        }
+    },
+    {
+        "model": "products.product_sizes",
+        "pk": 19,
+        "fields": {
+            "product_id": 11,
+            "size_id": 6
+        }
+    },
+    {
+        "model": "products.product_sizes",
+        "pk": 20,
+        "fields": {
+            "product_id": 12,
+            "size_id": 6
+        }
     }
 ]

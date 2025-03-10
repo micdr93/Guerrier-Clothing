@@ -3,8 +3,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
-from allauth.account.views import LogoutView
 from products.sitemaps import StaticViewSitemap, ProductSitemap, CategorySitemap
+from products import views as product_views
 
 sitemaps = {
     'static': StaticViewSitemap,
@@ -25,6 +25,9 @@ urlpatterns = [
     path('reviews/', include(('reviews.urls', 'reviews'), namespace='reviews')),
     path('recommendations/', include(('recommendations.urls', 'recommendations'), namespace='recommendations')),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='sitemap'),
+    path('homeware/mugs/', product_views.mugs_view, name='homeware_mugs'),
+    path('homeware/coasters/', product_views.coasters_view, name='homeware_coasters'),
+    path('homeware/skateboard-decks/', product_views.skateboard_decks_view, name='homeware_skateboard_decks'),
 ]
 
 if settings.DEBUG:

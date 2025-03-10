@@ -38,7 +38,7 @@
         "model": "products.size",
         "pk": 6,
         "fields": {
-            "name": "One Size"
+            "name": "OS"
         }
     }
 ]
