@@ -26,7 +26,7 @@ def index(request):
 def instant_logout(request):
     logout(request)
     messages.success(request, "You have been successfully logged out.")
-    return redirect('index')
+    return redirect('home:index')
 
 def shirts_view(request):
     products = Product.objects.filter(category__name__iexact='shirts')
@@ -87,7 +87,7 @@ def contact(request):
     return render(request, "home/contact.html", context)
 
 def all_products(request):
-    return redirect('products')
+    return redirect('products:products')
 
 def mugs_view(request):
     products = Product.objects.filter(category__id=3)

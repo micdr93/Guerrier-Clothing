@@ -17,7 +17,7 @@ class CategorySitemap(Sitemap):
     priority = 0.6
 
     def items(self):
-        return Category.objects.all()
+        return Category.objects.all().order_by('name')
 
     def location(self, obj):
         return reverse('products:products') + f'?category={obj.name}'
@@ -27,7 +27,7 @@ class StaticViewSitemap(Sitemap):
     changefreq = 'daily'
 
     def items(self):
-        return ['index', 'products:products']
+        return ['home:index','products:products']
 
     def location(self, item):
         return reverse(item)
