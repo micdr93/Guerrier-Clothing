@@ -26,7 +26,7 @@ def bag_contents(request):
         except Product.DoesNotExist:
             continue
 
-    # Calculate delivery fee using settings.FREE_DELIVERY_THRESHOLD and settings.STANDARD_DELIVERY_PERCENTAGE
+    
     if total < settings.FREE_DELIVERY_THRESHOLD:
         delivery = total * (
             Decimal(settings.STANDARD_DELIVERY_PERCENTAGE) / Decimal(100)
