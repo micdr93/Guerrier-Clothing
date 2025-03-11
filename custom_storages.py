@@ -1,7 +1,10 @@
 from django.conf import settings
-from django.views.static import serve
+from storages.backends.s3boto3 import S3Boto3Storage
 
 
-def serve_media_in_production(request, path, document_root=None):
-    """Custom view to serve media files in production"""
-    return serve(request, path, document_root=settings.MEDIA_ROOT)
+class StaticStorage(S3Boto3Storage):
+    location = settings.STATICFILES_LOCATION
+
+
+class MediaStorage(S3Boto3Storage):
+    location = settings.MEDIAFILES_LOCATION
