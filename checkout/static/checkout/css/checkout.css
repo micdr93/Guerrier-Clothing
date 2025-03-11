@@ -3,8 +3,8 @@
   box-sizing: border-box;
   height: 40px;
   padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid transparent;
+  border-radius: 0px;
   background-color: white;
   box-shadow: 0 1px 3px 0 #e6ebf1;
   -webkit-transition: box-shadow 150ms ease;
@@ -17,40 +17,40 @@
   box-shadow: 0 1px 3px 0 #cfd7df;
 }
 
-.StripeElement--invalid {
-  border-color: #fa755a;
-}
-
 .StripeElement--webkit-autofill {
   background-color: #fefde5 !important;
 }
 
+.stripe-style-input::placeholder {
+    color: #aab7c4;
+}
+
+.fieldset-label {
+    position: relative;
+    right: .5rem;
+}
+
+#payment-form .form-control,
 #card-element {
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  padding: 12px;
-  background-color: #fff;
+    color: #000;
+    border: 1px solid #000;
 }
 
-#card-errors {
-  color: #dc3545;
-  font-size: 0.875em;
-  margin-top: 0.5rem;
+#loading-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(23, 162, 184, .85);
+    z-index: 9999;
 }
 
-#submit-button {
-  margin-top: 1rem;
-}
-
-.order-summary {
-  background-color: #f8f9fa;
-  padding: 1rem;
-  border-radius: 0.25rem;
-  margin-bottom: 1rem;
-}
-
-.checkout-img {
-  max-height: 100px;
-  object-fit: cover;
-  border-radius: 4px;
+.loading-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    height: 100%;
 }
