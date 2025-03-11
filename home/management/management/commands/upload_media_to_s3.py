@@ -8,17 +8,14 @@ class Command(BaseCommand):
     help = "Uploads all local media files to S3."
 
     def handle(self, *args, **options):
-        # Ensure MEDIA_ROOT is defined in your settings
         local_media_path = Path(settings.MEDIA_ROOT)
         if not local_media_path.exists():
             self.stdout.write(self.style.ERROR("MEDIA_ROOT does not exist."))
             return
 
-        # S3 configuration from settings
         bucket_name = settings.AWS_STORAGE_BUCKET_NAME
-        s3_media_prefix = "media/"  # Make sure this matches your MEDIA_URL configuration
+        s3_media_prefix = "media/"
 
-        # Initialize boto3 client
         s3_client = boto3.client(
             's3',
             aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
@@ -26,7 +23,6 @@ class Command(BaseCommand):
             region_name=settings.AWS_S3_REGION_NAME
         )
 
-        # Iterate over all files in MEDIA_ROOT
         for root, dirs, files in os.walk(local_media_path):
             for filename in files:
                 local_file = Path(root) / filename
