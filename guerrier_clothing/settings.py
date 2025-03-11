@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import dj_database_url
+from django.core.exceptions import ImproperlyConfigured
 
 if os.path.exists("env.py"):
     import env
@@ -130,18 +131,28 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+STATICFILES_LOCATION = "static"
+MEDIAFILES_LOCATION = "media"
+
+from storages.backends.s3boto3 import S3Boto3Storage
+
+class StaticStorage(S3Boto3Storage):
+    location = STATICFILES_LOCATION
+
+class MediaStorage(S3Boto3Storage):
+    location = MEDIAFILES_LOCATION
+
 if "USE_AWS" in os.environ:
     AWS_STORAGE_BUCKET_NAME = "guerrier"
     AWS_S3_REGION_NAME = "eu-north-1"
     AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
     AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
     AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-    STATICFILES_STORAGE = "custom_storages.StaticStorage"
-    STATICFILES_LOCATION = "static"
-    DEFAULT_FILE_STORAGE = "custom_storages.MediaStorage"
-    MEDIAFILES_LOCATION = "media"
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/"
+    STATICFILES_STORAGE = "guerrier_clothing.settings.StaticStorage"
+    DEFAULT_FILE_STORAGE = "guerrier_clothing.settings.MediaStorage"
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+
 
 STRIPE_CURRENCY = "eur"
 STRIPE_PUBLIC_KEY = os.environ.get("STRIPE_PUBLIC_KEY", "")
@@ -156,11 +167,3 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASS")
 DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_HOST_USER")
 
-from django.conf import settings
-from storages.backends.s3boto3 import S3Boto3Storage
-
-class StaticStorage(S3Boto3Storage):
-    location = settings.STATICFILES_LOCATION
-
-class MediaStorage(S3Boto3Storage):
-    location = settings.MEDIAFILES_LOCATION
