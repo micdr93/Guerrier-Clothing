@@ -2,32 +2,35 @@ from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from .models import Product, Category
 
+
 class ProductSitemap(Sitemap):
-    changefreq = 'weekly'
+    changefreq = "weekly"
     priority = 0.8
 
     def items(self):
         return Product.active_products()
 
     def location(self, obj):
-        return reverse('products:product_detail', args=[obj.id])
+        return reverse("products:product_detail", args=[obj.id])
+
 
 class CategorySitemap(Sitemap):
-    changefreq = 'weekly'
+    changefreq = "weekly"
     priority = 0.6
 
     def items(self):
-        return Category.objects.all().order_by('name')
+        return Category.objects.all().order_by("name")
 
     def location(self, obj):
-        return reverse('products:products') + f'?category={obj.name}'
+        return reverse("products:products") + f"?category={obj.name}"
+
 
 class StaticViewSitemap(Sitemap):
     priority = 0.5
-    changefreq = 'daily'
+    changefreq = "daily"
 
     def items(self):
-        return ['home:index','products:products']
+        return ["home:index", "products:products"]
 
     def location(self, item):
         return reverse(item)

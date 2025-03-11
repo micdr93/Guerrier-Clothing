@@ -8,20 +8,28 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0007_delete_review'),
+        ("products", "0007_delete_review"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('reviews', '0002_migrate_old_reviews'),
+        ("reviews", "0002_migrate_old_reviews"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='review',
-            name='product',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='reviews', to='products.product'),
+            model_name="review",
+            name="product",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="reviews",
+                to="products.product",
+            ),
         ),
         migrations.AlterField(
-            model_name='review',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='product_reviews', to=settings.AUTH_USER_MODEL),
+            model_name="review",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="product_reviews",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

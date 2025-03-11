@@ -8,6 +8,7 @@ from products.models import Product
 from profiles.models import UserProfile
 from .utils import send_confirmation_email, convert_country
 
+
 @require_POST
 @csrf_exempt
 def webhook(request):
@@ -23,21 +24,23 @@ def webhook(request):
     # Get the webhook data and verify its signature
     payload = request.body
     print(f"Payload length: {len(payload)}")
-    
-    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
+
+    sig_header = request.META.get("HTTP_STRIPE_SIGNATURE")
     print(f"Signature header present: {sig_header is not None}")
-    print(f"Signature header first 10 chars: {sig_header[:10] if sig_header else 'None'}")
-    
+    print(
+        f"Signature header first 10 chars: {sig_header[:10] if sig_header else 'None'}"
+    )
+
     # Debug for request headers
-    stripe_headers = [k for k in request.META.keys() if k.startswith('HTTP_') and 'STRIPE' in k]
+    stripe_headers = [
+        k for k in request.META.keys() if k.startswith("HTTP_") and "STRIPE" in k
+    ]
     print(f"Stripe-related headers: {stripe_headers}")
-    
+
     event = None
 
     try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, wh_secret
-        )
+        event = stripe.Webhook.construct_event(payload, sig_header, wh_secret)
         print("✅ Webhook signature verification successful")
     except ValueError as e:
         print(f"❌ Invalid payload: {str(e)}")
@@ -48,19 +51,22 @@ def webhook(request):
     except Exception as e:
         print(f"❌ Unexpected error: {str(e)}")
         return HttpResponse(content=str(e), status=400)
-    
+
+
 class StripeWH_Handler:
     def __init__(self, request):
         self.request = request
 
     def handle_event(self, event):
-        return HttpResponse(content=f'Unhandled webhook received: {event["type"]}', status=200)
+        return HttpResponse(
+            content=f'Unhandled webhook received: {event["type"]}', status=200
+        )
 
     def handle_payment_intent_succeeded(self, event):
         intent = event.data.object
         pid = intent.id
-        bag = intent.metadata.get('bag', {})
-        save_info = intent.metadata.get('save_info')
+        bag = intent.metadata.get("bag", {})
+        save_info = intent.metadata.get("save_info")
         stripe_charge = stripe.Charge.retrieve(intent.latest_charge)
         billing_details = stripe_charge.billing_details
         shipping_details = intent.shipping
@@ -70,8 +76,8 @@ class StripeWH_Handler:
                 shipping_details.address[field] = None
         country_code = convert_country(shipping_details.address.country)
         profile = None
-        username = intent.metadata.get('username')
-        if username != 'AnonymousUser':
+        username = intent.metadata.get("username")
+        if username != "AnonymousUser":
             profile = UserProfile.objects.get(user__username=username)
             if save_info:
                 profile.default_phone_number = shipping_details.phone
@@ -107,7 +113,10 @@ class StripeWH_Handler:
                 time.sleep(1)
         if order_exists:
             send_confirmation_email(order)
-            return HttpResponse(content=f'Webhook received: {event["type"]} | SUCCESS: Verified order already in database', status=200)
+            return HttpResponse(
+                content=f'Webhook received: {event["type"]} | SUCCESS: Verified order already in database',
+                status=200,
+            )
         else:
             order = None
             try:
@@ -128,18 +137,31 @@ class StripeWH_Handler:
                 for item_id, item_data in json.loads(bag).items():
                     product = Product.objects.get(id=item_id)
                     if isinstance(item_data, int):
-                        order_line_item = OrderLineItem(order=order, product=product, quantity=item_data)
+                        order_line_item = OrderLineItem(
+                            order=order, product=product, quantity=item_data
+                        )
                         order_line_item.save()
                     else:
-                        for size, quantity in item_data['items_by_size'].items():
-                            order_line_item = OrderLineItem(order=order, product=product, quantity=quantity, product_size=size)
+                        for size, quantity in item_data["items_by_size"].items():
+                            order_line_item = OrderLineItem(
+                                order=order,
+                                product=product,
+                                quantity=quantity,
+                                product_size=size,
+                            )
                             order_line_item.save()
             except Exception as e:
                 if order:
                     order.delete()
-                return HttpResponse(content=f'Webhook received: {event["type"]} | ERROR: {e}', status=500)
+                return HttpResponse(
+                    content=f'Webhook received: {event["type"]} | ERROR: {e}',
+                    status=500,
+                )
             send_confirmation_email(order)
-            return HttpResponse(content=f'Webhook received: {event["type"]} | SUCCESS: Created order in webhook', status=200)
+            return HttpResponse(
+                content=f'Webhook received: {event["type"]} | SUCCESS: Created order in webhook',
+                status=200,
+            )
 
     def handle_payment_intent_payment_failed(self, event):
         return HttpResponse(content=f'Webhook received: {event["type"]}', status=200)

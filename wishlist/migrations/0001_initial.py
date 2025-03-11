@@ -10,18 +10,34 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('products', '0004_size_reviews_product_sizes_reviews_reviews_per_user'),
+        ("products", "0004_size_reviews_product_sizes_reviews_reviews_per_user"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Wishlist',
+            name="Wishlist",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_added', models.DateField(auto_now_add=True)),
-                ('products', models.ManyToManyField(blank=True, to='products.product')),
-                ('user', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("date_added", models.DateField(auto_now_add=True)),
+                ("products", models.ManyToManyField(blank=True, to="products.product")),
+                (
+                    "user",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

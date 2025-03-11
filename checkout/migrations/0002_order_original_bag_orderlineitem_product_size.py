@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('checkout', '0001_initial'),
+        ("checkout", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='order',
-            name='original_bag',
-            field=models.TextField(default=''),
+            model_name="order",
+            name="original_bag",
+            field=models.TextField(default=""),
         ),
         migrations.AddField(
-            model_name='orderlineitem',
-            name='product_size',
+            model_name="orderlineitem",
+            name="product_size",
             field=models.CharField(blank=True, max_length=2, null=True),
         ),
     ]

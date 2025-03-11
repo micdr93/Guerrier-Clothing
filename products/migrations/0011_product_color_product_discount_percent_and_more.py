@@ -6,48 +6,65 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0010_product_updated'),
+        ("products", "0010_product_updated"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='product',
-            name='color',
-            field=models.CharField(blank=True, choices=[('black', 'Black'), ('white', 'White'), ('red', 'Red'), ('blue', 'Blue'), ('green', 'Green'), ('yellow', 'Yellow'), ('gray', 'Gray')], max_length=20, null=True),
+            model_name="product",
+            name="color",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    ("black", "Black"),
+                    ("white", "White"),
+                    ("red", "Red"),
+                    ("blue", "Blue"),
+                    ("green", "Green"),
+                    ("yellow", "Yellow"),
+                    ("gray", "Gray"),
+                ],
+                max_length=20,
+                null=True,
+            ),
         ),
         migrations.AddField(
-            model_name='product',
-            name='discount_percent',
+            model_name="product",
+            name="discount_percent",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='product',
-            name='featured',
+            model_name="product",
+            name="featured",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='product',
-            name='gender',
-            field=models.CharField(choices=[('M', 'Men'), ('W', 'Women'), ('U', 'Unisex')], default='U', max_length=1),
+            model_name="product",
+            name="gender",
+            field=models.CharField(
+                choices=[("M", "Men"), ("W", "Women"), ("U", "Unisex")],
+                default="U",
+                max_length=1,
+            ),
         ),
         migrations.AddField(
-            model_name='product',
-            name='in_stock',
+            model_name="product",
+            name="in_stock",
             field=models.BooleanField(default=True),
         ),
         migrations.AddField(
-            model_name='product',
-            name='is_new',
+            model_name="product",
+            name="is_new",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='product',
-            name='on_sale',
+            model_name="product",
+            name="on_sale",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='product',
-            name='stock_qty',
+            model_name="product",
+            name="stock_qty",
             field=models.IntegerField(default=0),
         ),
     ]

@@ -8,13 +8,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0008_remove_product_image_url_alter_product_image'),
+        ("products", "0008_remove_product_image_url_alter_product_image"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='product',
-            name='price',
-            field=models.DecimalField(decimal_places=2, max_digits=10, validators=[django.core.validators.MinValueValidator(Decimal('0.01'), 'Price must be greater than zero'), django.core.validators.MaxValueValidator(Decimal('99999.99'), 'Price is too high')]),
+            model_name="product",
+            name="price",
+            field=models.DecimalField(
+                decimal_places=2,
+                max_digits=10,
+                validators=[
+                    django.core.validators.MinValueValidator(
+                        Decimal("0.01"), "Price must be greater than zero"
+                    ),
+                    django.core.validators.MaxValueValidator(
+                        Decimal("99999.99"), "Price is too high"
+                    ),
+                ],
+            ),
         ),
     ]

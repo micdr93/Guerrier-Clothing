@@ -8,27 +8,37 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('products', '0014_alter_product_image'),
-        ('recommendations', '0001_initial'),
+        ("products", "0014_alter_product_image"),
+        ("recommendations", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveConstraint(
-            model_name='suggesteditem',
-            name='unique_product_suggestion',
+            model_name="suggesteditem",
+            name="unique_product_suggestion",
         ),
         migrations.RemoveField(
-            model_name='suggesteditem',
-            name='suggested_product',
+            model_name="suggesteditem",
+            name="suggested_product",
         ),
         migrations.AlterField(
-            model_name='suggesteditem',
-            name='product',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='suggested_items', to='products.product'),
+            model_name="suggesteditem",
+            name="product",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="suggested_items",
+                to="products.product",
+            ),
         ),
         migrations.AlterField(
-            model_name='suggesteditem',
-            name='weight',
-            field=models.FloatField(default=1.0, validators=[django.core.validators.MinValueValidator(0.0), django.core.validators.MaxValueValidator(10.0)]),
+            model_name="suggesteditem",
+            name="weight",
+            field=models.FloatField(
+                default=1.0,
+                validators=[
+                    django.core.validators.MinValueValidator(0.0),
+                    django.core.validators.MaxValueValidator(10.0),
+                ],
+            ),
         ),
     ]

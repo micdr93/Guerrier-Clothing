@@ -8,20 +8,22 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('products', '0004_size_reviews_product_sizes_reviews_reviews_per_user'),
+        ("products", "0004_size_reviews_product_sizes_reviews_reviews_per_user"),
     ]
 
     operations = [
         migrations.RenameModel(
-            old_name='Reviews',
-            new_name='Review',
+            old_name="Reviews",
+            new_name="Review",
         ),
         migrations.RemoveConstraint(
-            model_name='review',
-            name='reviews_per_user',
+            model_name="review",
+            name="reviews_per_user",
         ),
         migrations.AddConstraint(
-            model_name='review',
-            constraint=models.UniqueConstraint(fields=('user', 'product'), name='unique_review_per_user'),
+            model_name="review",
+            constraint=models.UniqueConstraint(
+                fields=("user", "product"), name="unique_review_per_user"
+            ),
         ),
     ]

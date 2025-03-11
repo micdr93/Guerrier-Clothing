@@ -1,9 +1,10 @@
 from django.core.mail import send_mail
 from django.conf import settings
 
+
 def send_confirmation_email(order):
     cust_email = order.email
-    subject = f'Guerrier Clothing - Order Confirmation {order.order_number}'
+    subject = f"Guerrier Clothing - Order Confirmation {order.order_number}"
     text_message = f"""
 Hello {order.full_name}!
 
@@ -34,11 +35,12 @@ Guerrier Clothing Team
         [cust_email],
     )
 
+
 def convert_country(country_value):
     COUNTRY_MAP = {
-        'Ireland': 'IE',
-        'United States': 'US',
-        'United Kingdom': 'GB',
+        "Ireland": "IE",
+        "United States": "US",
+        "United Kingdom": "GB",
     }
     if len(country_value) == 2:
         return country_value.upper()

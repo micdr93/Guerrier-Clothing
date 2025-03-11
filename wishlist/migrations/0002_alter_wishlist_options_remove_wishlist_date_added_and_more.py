@@ -10,67 +10,103 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('products', '0007_delete_review'),
-        ('wishlist', '0001_initial'),
+        ("products", "0007_delete_review"),
+        ("wishlist", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='wishlist',
-            options={'verbose_name_plural': 'Wishlists'},
+            name="wishlist",
+            options={"verbose_name_plural": "Wishlists"},
         ),
         migrations.RemoveField(
-            model_name='wishlist',
-            name='date_added',
+            model_name="wishlist",
+            name="date_added",
         ),
         migrations.RemoveField(
-            model_name='wishlist',
-            name='products',
+            model_name="wishlist",
+            name="products",
         ),
         migrations.AddField(
-            model_name='wishlist',
-            name='created_on',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="wishlist",
+            name="created_on",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='wishlist',
-            name='is_public',
+            model_name="wishlist",
+            name="is_public",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='wishlist',
-            name='name',
-            field=models.CharField(default='My Wishlist', max_length=100),
+            model_name="wishlist",
+            name="name",
+            field=models.CharField(default="My Wishlist", max_length=100),
         ),
         migrations.AddField(
-            model_name='wishlist',
-            name='updated_on',
+            model_name="wishlist",
+            name="updated_on",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='wishlist',
-            name='user',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='wishlists', to=settings.AUTH_USER_MODEL),
+            model_name="wishlist",
+            name="user",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="wishlists",
+                to=settings.AUTH_USER_MODEL,
+            ),
             preserve_default=False,
         ),
         migrations.CreateModel(
-            name='WishlistItem',
+            name="WishlistItem",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('added_on', models.DateTimeField(auto_now_add=True)),
-                ('notes', models.TextField(blank=True, null=True)),
-                ('priority', models.IntegerField(choices=[(1, 'Low'), (2, 'Medium'), (3, 'High')], default=2)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='in_wishlists', to='products.product')),
-                ('wishlist', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='items', to='wishlist.wishlist')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("added_on", models.DateTimeField(auto_now_add=True)),
+                ("notes", models.TextField(blank=True, null=True)),
+                (
+                    "priority",
+                    models.IntegerField(
+                        choices=[(1, "Low"), (2, "Medium"), (3, "High")], default=2
+                    ),
+                ),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="in_wishlists",
+                        to="products.product",
+                    ),
+                ),
+                (
+                    "wishlist",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="items",
+                        to="wishlist.wishlist",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Wishlist Items',
-                'ordering': ['-priority', '-added_on'],
+                "verbose_name_plural": "Wishlist Items",
+                "ordering": ["-priority", "-added_on"],
             },
         ),
         migrations.AddConstraint(
-            model_name='wishlistitem',
-            constraint=models.UniqueConstraint(fields=('wishlist', 'product'), name='unique_product_per_wishlist'),
+            model_name="wishlistitem",
+            constraint=models.UniqueConstraint(
+                fields=("wishlist", "product"), name="unique_product_per_wishlist"
+            ),
         ),
     ]

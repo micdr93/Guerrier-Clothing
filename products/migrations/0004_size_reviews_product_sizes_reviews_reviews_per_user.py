@@ -9,39 +9,82 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('products', '0003_alter_product_description'),
+        ("products", "0003_alter_product_description"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Size',
+            name="Size",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(choices=[('S', 'Small'), ('M', 'Medium'), ('L', 'Large'), ('XL', 'Extra Large'), ('XXL', '2X Large')], max_length=3, unique=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "name",
+                    models.CharField(
+                        choices=[
+                            ("S", "Small"),
+                            ("M", "Medium"),
+                            ("L", "Large"),
+                            ("XL", "Extra Large"),
+                            ("XXL", "2X Large"),
+                        ],
+                        max_length=3,
+                        unique=True,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Reviews',
+            name="Reviews",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(blank=True, max_length=100)),
-                ('review', models.TextField(blank=True, max_length=1500)),
-                ('created_on', models.DateTimeField(auto_now_add=True)),
-                ('updated_on', models.DateTimeField(auto_now=True)),
-                ('product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.product')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(blank=True, max_length=100)),
+                ("review", models.TextField(blank=True, max_length=1500)),
+                ("created_on", models.DateTimeField(auto_now_add=True)),
+                ("updated_on", models.DateTimeField(auto_now=True)),
+                (
+                    "product",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="products.product",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Reviews',
+                "verbose_name_plural": "Reviews",
             },
         ),
         migrations.AddField(
-            model_name='product',
-            name='sizes',
-            field=models.ManyToManyField(blank=True, to='products.size'),
+            model_name="product",
+            name="sizes",
+            field=models.ManyToManyField(blank=True, to="products.size"),
         ),
         migrations.AddConstraint(
-            model_name='reviews',
-            constraint=models.UniqueConstraint(fields=('user', 'product'), name='reviews_per_user'),
+            model_name="reviews",
+            constraint=models.UniqueConstraint(
+                fields=("user", "product"), name="reviews_per_user"
+            ),
         ),
     ]
