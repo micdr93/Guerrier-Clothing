@@ -108,7 +108,7 @@ class Product(models.Model):
         self.is_active = True
         self.deleted_at = None
         self.save()
-
+        
     def get_available_sizes(self):
         return list(self.sizes.all())
 
