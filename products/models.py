@@ -4,7 +4,6 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from decimal import Decimal
 
-
 class Category(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
@@ -18,7 +17,6 @@ class Category(models.Model):
 
     def get_friendly_name(self):
         return self.friendly_name
-
 
 class Size(models.Model):
     SIZE_CHOICES = [
@@ -34,9 +32,7 @@ class Size(models.Model):
     def __str__(self):
         return self.get_name_display()
 
-
 class Product(models.Model):
-    # Removed redundant "updated" field; use created_at and updated_at below.
     category = models.ForeignKey(
         Category,
         null=True,
@@ -69,7 +65,8 @@ class Product(models.Model):
             MaxValueValidator(5, "Rating cannot exceed 5"),
         ],
     )
-    image = models.ImageField(null=True, blank=True, upload_to="product_images/")
+
+    image = models.ImageField(null=True, blank=True, upload_to="images/product_images/")
 
     color = models.CharField(max_length=20, blank=True, null=True)
     gender = models.CharField(max_length=1, default="U")
@@ -88,7 +85,6 @@ class Product(models.Model):
 
     def update_rating(self):
         from django.db.models import Avg
-
         reviews = self.reviews.all()
         if reviews.exists():
             self.rating = round(reviews.aggregate(Avg("rating"))["rating__avg"], 1)
