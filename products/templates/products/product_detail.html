@@ -34,72 +34,15 @@
                     <small class="text-muted">No Rating</small>
                 {% endif %}
                 
+                <button class="wishlist-btn">
+                    {% if is_in_wishlist %}
+                        <i class="fa-solid fa-heart text-black"></i>
+                    {% else %}
+                        <i class="fa-regular fa-heart"></i>
+                    {% endif %}
+                </button>
+
                 <p class="mt-3">{{ product.description }}</p>
-                
-                <h3 class="mt-4">Reviews</h3>
-                {% if product.reviews.exists %}
-                    {% for review in product.reviews.all %}
-                        <div class="review my-3 p-3 border">
-                            <h4>{{ review.title }}</h4>
-                            <p>{{ review.review }}</p>
-                            <p>Rating: {{ review.rating }} / 5</p>
-                            <small>By {{ review.user.username }} on {{ review.created_on|date:"M d, Y" }}</small>
-                            {% if review.user == request.user or request.user.is_superuser %}
-                                <a href="{% url 'reviews:delete_review' review.id %}" class="btn btn-black btn-sm">Delete Review</a>
-                                <a href="{% url 'reviews:edit_review' review.id %}" class="btn btn-black btn-sm">Edit Review</a>
-                            {% endif %}
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <p>No reviews yet. Be the first to leave one!</p>
-                {% endif %}
-
-                {% if user.is_authenticated %}
-                    <a href="{% url 'reviews:add_review' product.id %}" class="btn btn-secondary mb-3">Leave a Review</a>
-                {% else %}
-                    <p>You must be logged in to leave a review.</p>
-                {% endif %}
-
-                <form class="form" action="{% url 'bag:add_to_bag' product.id %}" method="POST">
-                    {% csrf_token %}
-                    <div class="form-row">
-                        <div class="col-12">
-                            <p class="mt-3"><strong>Size:</strong></p>
-                            {% if product.category.name|lower == 'mugs' or product.category.name|lower == 'coasters' or product.category.name|lower == 'skateboard_decks' or product.category.name|lower == 'hats' %}
-                                <p>One Size</p>
-                                <input type="hidden" name="product_size" value="one-size">
-                            {% else %}
-                                <div class="form-group w-50">
-                                    <select class="form-control" name="product_size" id="id_product_size" required>
-                                        <option value="" disabled selected>Select Size</option>
-                                        <option value="xs">XS</option>
-                                        <option value="s">S</option>
-                                        <option value="m">M</option>
-                                        <option value="l">L</option>
-                                        <option value="xl">XL</option>
-                                    </select>
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="col-12">
-                            <p class="mt-3"><strong>Quantity:</strong></p>
-                            <div class="form-group w-50">
-                                <div class="input-group">
-                                    <input class="form-control qty_input" type="number" name="quantity" value="1" min="1" max="99" id="id_qty_{{ product.id }}">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <input type="submit" class="btn btn-black rounded-0 text-uppercase mt-5" value="Add to Bag">
-                            <a href="{% url 'products:products' %}" class="btn btn-outline-black rounded-0 mt-5">
-                                <span class="icon">
-                                    <i class="fas fa-chevron-left"></i>
-                                </span>
-                                <span>Keep Shopping</span>
-                            </a>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
