@@ -128,33 +128,195 @@ I created detailed wireframes for both desktop and mobile versions of all main p
 
 All wireframes were created using Balsamiq to establish a consistent user interface across the site while ensuring responsive design for different devices.
 
-### Database Schema
+# Guerrier Clothing: Database Schema
 
-The project uses a relational database model with the following main models:
+## Overview
 
-- **User**: Extended Django User model with additional profile information
-- **Product**: Contains all product information including category, price, and images
-- **Category**: Classification system for products
-- **Order**: Contains customer and shipping information
-- **OrderLineItem**: Individual items within orders
-- **Wishlist**: User-saved favorite products
-- **Review**: User feedback on products
+The Guerrier Clothing e-commerce platform utilizes a robust relational database architecture to manage products, user accounts, shopping interactions, and business operations. Our database design prioritizes data integrity, scalability, and performance to deliver a seamless shopping experience for our B2C customers.
+
+## Core Models
+
+### User Authentication & Profiles
+
+#### User (Django's built-in User model)
+- **id**: Primary key for user identification
+- **username**: Unique username for login
+- **email**: User's email address
+- **password**: Encrypted password
+- **first_name, last_name**: Personal information
+- **is_active, is_staff, is_superuser**: Permission flags
+- **date_joined, last_login**: Account timestamps
+
+#### UserProfile
+- **id**: Primary key
+- **user**: One-to-One relationship with User model
+- **full_name**: User's complete name
+- **default_phone_number**: Contact information
+- **default_street_address1, default_street_address2**: Shipping address
+- **default_town_or_city**: City information
+- **default_county**: County/state information
+- **default_postcode**: Postal code
+- **default_country**: Country (using django-countries)
+
+### Product Management
+
+#### Category
+- **id**: Primary key
+- **name**: Category identifier (e.g., "t-shirts", "hoodies")
+- **friendly_name**: Human-readable name for display
+- **description**: Detailed category description
+
+#### Size
+- **id**: Primary key
+- **name**: Size identifier (e.g., "S", "M", "L", "XL")
+
+#### Product
+- **id**: Primary key
+- **category**: Foreign key to Category
+- **name**: Product name
+- **description**: Detailed product description
+- **price**: Retail price
+- **discount_percent**: Applied discount (if any)
+- **image**: Product image file
+- **sku**: Stock Keeping Unit identifier
+- **stock_qty**: Available inventory quantity
+- **gender**: Target gender demographic
+- **color**: Product color
+- **sizes**: Many-to-Many relationship with Size model
+- **rating**: Average product rating from reviews
+- **featured, is_new, on_sale**: Product highlight flags
+- **in_stock, is_active**: Availability indicators
+- **created_at, updated_at, deleted_at**: Timestamp tracking
+
+### Order Processing
+
+#### Order
+- **id**: Primary key
+- **user_profile**: Foreign key to UserProfile (optional for guest checkout)
+- **order_number**: Unique identifier for the order
+- **full_name**: Customer name
+- **email**: Contact email
+- **phone_number**: Contact phone
+- **country, county, postcode**: Shipping address details
+- **town_or_city**: City for shipping
+- **street_address1, street_address2**: Street address
+- **date**: Order timestamp
+- **delivery_cost**: Shipping cost
+- **order_total**: Subtotal of all items
+- **grand_total**: Final total including delivery
+- **original_bag**: JSON snapshot of the cart
+- **stripe_pid**: Payment processor identifier
+
+#### OrderLineItem
+- **id**: Primary key
+- **order**: Foreign key to Order
+- **product**: Foreign key to Product
+- **product_size**: Selected size (if applicable)
+- **quantity**: Number of items
+- **lineitem_total**: Price × quantity
+
+### Customer Engagement
+
+#### Wishlist
+- **id**: Primary key
+- **user**: Foreign key to User
+- **name**: Wishlist name
+- **created_on, updated_on**: Timestamps
+- **is_public**: Privacy setting
+
+#### WishlistItem
+- **id**: Primary key
+- **wishlist**: Foreign key to Wishlist
+- **product**: Foreign key to Product
+- **added_on**: Timestamp
+- **notes**: Customer notes
+- **priority**: Customer-defined priority level
+
+#### Review
+- **id**: Primary key
+- **product**: Foreign key to Product
+- **user**: Foreign key to User
+- **title**: Review title
+- **review**: Review content
+- **rating**: Numerical rating (1-5)
+- **created_on, updated_on**: Timestamps
+- **verified_purchase**: Purchase verification flag
+- **helpful_votes**: Community endorsement counter
+
+#### SuggestedItem (Recommendations)
+- **id**: Primary key
+- **product**: Foreign key to Product
+- **suggestion_type**: Type of recommendation
+- **weight**: Priority weighting
+- **is_active**: Activation flag
+- **created_on, updated_on**: Timestamps
+
+### Marketing & Communication
+
+#### NewsletterSubscription
+- **id**: Primary key
+- **email**: Subscriber email
+- **date_added**: Subscription timestamp
+
+#### Contact
+- **id**: Primary key
+- **name**: Contact name
+- **email**: Contact email
+- **subject**: Message subject
+- **message**: Message content
+- **date_submitted**: Submission timestamp
+
+## Relationships
+
+The database implements various relationship types to maintain data integrity:
+
+1. **One-to-One**: 
+   - User ↔ UserProfile
+
+2. **One-to-Many**:
+   - Category → Products
+   - User → Orders
+   - User → Wishlists
+   - User → Reviews
+   - Order → OrderLineItems
+   - Wishlist → WishlistItems
+   - Product → OrderLineItems
+   - Product → WishlistItems
+   - Product → Reviews
+   - Product → SuggestedItems
+
+3. **Many-to-Many**:
+   - Products ↔ Sizes
+
+## Database Optimization
+
+- **Indexing**: Strategic indexes on frequently queried fields like `user`, `product`, and `order`
+- **Cascade Delete**: Configured to maintain referential integrity when parent records are deleted
+- **Null/Blank Constraints**: Applied appropriately to enforce data quality
+
+## Data Security Considerations
+
+- Personal information stored only when necessary for business operations
+- Payment information handled securely through Stripe, not stored in database
+- GDPR-compliant data handling with ability to delete user data on request
 
 ![Database Schema](documentation/readme_images/erd1.png)
 
-## Features
+# Features
+Guerrier's e-commerce platform combines aesthetic appeal with robust functionality to deliver a premium shopping experience aligned with our brand values. This section details the current features and planned enhancements.
 
-### Existing Features
+## Current Features
 
-#### Navigation
-- Responsive navigation bar that adapts to different screen sizes
-- Dropdown menu for product categories
-- Search functionality for finding specific products
-- Cart icon for the user's shopping cart
-- Heart icon for the user's wishlist
-- Person icon for user profil, login or sign up
+#### Responsive Design System
+The entire platform is built on a mobile-first approach, ensuring seamless experiences across all devices:
+- Mobile optimization with touch-friendly elements
+- Tablet-specific layouts maximizing screen real estate
+- Desktop experience with enhanced visual presentations
+- Consistent brand experience regardless of device
+
 
 ![Navigation Bar](documentation/readme_images/navbar.png)
+[*Add screenshot: Navigation menu across different screen sizes*]
 
 ### Home Page
 - Call to action to encourage users to browse products instantly
@@ -243,15 +405,63 @@ The color palette was chosen to reflect the brand's bold and urban aesthetic whi
 
 - All images and products on the site were created by myself, using Adobe Photoshop.
 
-## Business Model
+# Business Model
 
-Guerrier operates as a B2C (Business to Consumer) e-commerce platform, selling premium streetwear directly to customers. The business focuses on quality over quantity, with limited edition drops to create exclusivity.
+Guerrier Clothing operates on a Business-to-Consumer (B2C) e-commerce model, selling premium streetwear directly to our target audience without intermediaries. Our business strategy focuses on building brand loyalty through quality products, compelling storytelling, and an exceptional online shopping experience.
 
-### Marketing Strategy
+## Value Proposition
 
-- The footer incorperates links to our newsletter signup and a link to our FaceBook marketing page.
-- Email Marketing with a newsletter subscription option for new product launches and promotions
+Guerrier offers a unique value proposition in the crowded streetwear market:
 
+- **Warrior-Inspired Design Philosophy**: Each piece tells a story of strength and resilience, connecting with customers on an emotional level beyond typical streetwear aesthetics.
+- **Premium Quality Materials**: Our products use high-quality fabrics and construction techniques that justify the price point and ensure durability.
+- **Limited Edition Releases**: We create scarcity through limited production runs, enhancing desirability and exclusivity.
+- **Urban Dublin Heritage**: Drawing inspiration from Dublin's vibrant street culture gives our brand authentic roots and a distinct perspective.
+- **Community Connection**: We're building more than a clothing brand—we're creating a community of like-minded individuals who identify with the warrior mentality.
+
+## Target Market Analysis
+
+Our primary demographic consists of fashion-conscious individuals aged 18-35, but can be further segmented into:
+
+| Segment | Characteristics | Purchasing Behavior | Marketing Approach |
+|---------|----------------|---------------------|-------------------|
+| Urban Trendsetters (22-28) | Early adopters, social media savvy, value uniqueness | Higher purchase frequency, willing to pay premium for exclusive items | Instagram showcases, influencer collaborations, limited drops |
+| Lifestyle Enthusiasts (25-35) | Career-focused, value quality and versatility | Fewer but larger purchases, brand loyal | Quality-focused content, loyalty rewards, styling suggestions |
+| Streetwear Collectors (18-30) | Highly knowledgeable about streetwear culture, see clothing as investment | Highly selective, focused on limited editions | Behind-the-scenes content, early access, collector's editions |
+| Fitness Community (20-35) | Fitness-focused, appreciate performance and aesthetics | Value durability and comfort alongside style | Performance aspects, athlete ambassadors, active lifestyle content |
+
+## Revenue Model
+
+Our pricing strategy balances premium positioning with competitive market rates, as evidenced by our current product catalog:
+
+- **Product Pricing Structure**: 
+  - T-shirts: €50 (Premium streetwear basics with urban designs)
+  - Headwear: €25 (Beanies and caps)
+  - Skate Decks: €40 (Urban lifestyle accessories)
+  - Mugs: €20 (Branded home goods)
+  - Coasters & Small Items: €15 (Entry-level branded merchandise)
+
+
+# Marketing Strategy
+
+Guerrier's marketing strategy is designed to establish our brand as a premium streetwear label that resonates with our target audience's values of strength, resilience, and urban authenticity. Our approach combines digital engagement, content marketing, community building, and strategic partnerships to create a cohesive brand experience.
+
+## Brand Positioning
+
+Guerrier is positioned as a premium streetwear brand with an authentic warrior ethos, appealing to urban fashion enthusiasts who value quality, distinctive design, and meaningful brand stories. Our positioning statement:
+
+> "For the urban fashion enthusiast who seeks clothing that represents inner strength, Guerrier offers premium streetwear that combines bold aesthetics with quality craftsmanship, inspired by the warrior spirit. Unlike mainstream streetwear brands, Guerrier embodies resilience and authenticity through limited-edition pieces that tell a story."
+
+### Social Media Strategy
+
+#### Facebook Marketing Page Strategy
+
+Our Facebook page ([Guerrier Clothing](https://www.facebook.com/people/Guerrier/61572317841699/)) serves as a central hub for community engagement and brand awareness:
+
+
+### Email Marketing & Newsletter
+
+Our newsletter is a cornerstone of our direct customer communication strategy, accessible through sign-up forms in our website footer and pop-ups on the home page for visitors.
 
 ### SEO
 
