@@ -5,19 +5,49 @@ from django.views.decorators.csrf import csrf_exempt
 from products.models import Product
 from recommendations.utils import get_recommended_items
 
-
 def bag_home(request):
-    # Get the bag items stored in the session
     bag = request.session.get("bag", {})
-    bag_product_ids = [int(id) for id in bag.keys() if id.isdigit()]
-    user_products = Product.objects.filter(id__in=bag_product_ids)
-    recommended_items = get_recommended_items(user_products)
+    bag_items = []
+    cart_total = 0
+
+    for product_id_str, item_data in bag.items():
+        try:
+            product = Product.objects.get(pk=int(product_id_str))
+            
+            if isinstance(item_data, dict):
+                for size, quantity in item_data.items():
+                    subtotal = product.price * quantity
+                    bag_items.append({
+                        'product': product,
+                        'quantity': quantity,
+                        'size': size if size != 'DEFAULT' else None,
+                        'subtotal': subtotal
+                    })
+                    cart_total += subtotal
+            else:
+                quantity = item_data
+                subtotal = product.price * quantity
+                bag_items.append({
+                    'product': product,
+                    'quantity': quantity,
+                    'size': None,
+                    'subtotal': subtotal
+                })
+                cart_total += subtotal
+
+        except Product.DoesNotExist:
+            continue
+
+    recommended_items = get_recommended_items(
+        Product.objects.filter(id__in=[int(id) for id in bag.keys() if id.isdigit()])
+    )
 
     context = {
+        "cart": bag_items,
+        "cart_total": cart_total,
         "recommended_items": recommended_items,
     }
     return render(request, "bag/bag_home.html", context)
-
 
 def view_bag(request):
     return render(request, "bag/bag_home.html")

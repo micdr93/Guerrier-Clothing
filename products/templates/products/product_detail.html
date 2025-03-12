@@ -57,17 +57,14 @@
                                 <div class="d-flex align-items-center product-quantity-container">
                                     <button type="button" class="btn btn-black rounded-0 decrement-qty p-1 px-3" 
                                             data-item_id="{{ product.id }}" data-delta="-1">-</button>
-                                    
-                                    <input class="form-control qty_input text-center mx-2" type="number" 
-                                           name="quantity" value="1" min="1" max="99" 
-                                           data-item_id="{{ product.id }}" style="width: 60px;">
+                                            <input type="number" name="quantity" value="1" min="1" max="99"/>
                                     
                                     <button type="button" class="btn btn-black rounded-0 increment-qty p-1 px-3" 
                                             data-item_id="{{ product.id }}" data-delta="1">+</button>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-12 mt-2">
                             <a href="{% url 'products:products' %}" class="btn btn-outline-black rounded-0 mt-5">
                                 <span class="icon">

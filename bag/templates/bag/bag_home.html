@@ -29,6 +29,9 @@
                                                  style="width: 50px; height: auto; margin-right: 10px;">
                                         {% endif %}
                                         <span>{{ item.product.name }}</span>
+                                        {% if item.size %}
+                                            <small class="text-muted ml-2">({{ item.size }})</small>
+                                        {% endif %}
                                     </div>
                                 </td>
                                 <td class="text-center">
@@ -40,7 +43,8 @@
                                             
                                             <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" 
                                                    class="form-control form-control-sm qty_input text-center mx-2" 
-                                                   data-item-id="{{ item.product.id }}" style="width: 50px;">
+                                                   data-item-id="{{ item.product.id }}" style="width: 50px;"
+                                                   {% if item.size %}data-size="{{ item.size }}"{% endif %}>
                                             
                                             <button type="button" class="btn btn-black rounded-0 increment-qty p-1 px-2" 
                                                     data-item-id="{{ item.product.id }}">+</button>
@@ -57,6 +61,9 @@
                                 <td class="text-end">
                                     <form action="{% url 'bag:remove_from_bag' item.product.id %}" method="POST" class="remove-item-form">
                                         {% csrf_token %}
+                                        {% if item.size %}
+                                            <input type="hidden" name="size" value="{{ item.size }}">
+                                        {% endif %}
                                         <button type="submit" class="btn btn-sm btn-outline-black" aria-label="Remove item">
                                             <i class="fas fa-trash"></i>
                                         </button>
