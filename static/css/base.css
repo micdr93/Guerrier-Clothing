@@ -180,19 +180,85 @@ button:hover,
 .dropdown-menu .dropdown-item {
     color: #000 !important;
     text-decoration: none !important;
-  }
-  .dropdown-menu .dropdown-item:hover {
+}
+.dropdown-menu .dropdown-item:hover {
     background-color: #f8f9fa; /* or any hover color you prefer */
     color: #000 !important;
     text-decoration: none !important;
-  }
-  
-  /* Ensure top-level nav links are black with no underline */
-  .navbar-nav .nav-link {
+}
+
+/* Ensure top-level nav links are black with no underline */
+.navbar-nav .nav-link {
     color: #000 !important;
     text-decoration: none !important;
-  }
-  .navbar-nav .nav-link:hover {
+}
+.navbar-nav .nav-link:hover {
     color: #333 !important; /* or another hover color */
     text-decoration: none !important;
-  }
+}
+
+.btn-black {
+    background: black;
+    color: white;
+}
+
+.btn-outline-black {
+    background: white;
+    color: black;
+    border: 1px solid black;
+}
+
+.btn-outline-black:hover,
+.btn-outline-black:active,
+.btn-outline-black:focus {
+    background: black;
+    color: white;
+}
+
+/* Wishlist Button Styling - UPDATED */
+.wishlist-toggle,
+.card .wishlist-toggle,
+.product-container .wishlist-toggle {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    padding: 0;
+    cursor: pointer;
+    font-size: 1.5rem; 
+    color: #ccc;
+    transition: all 0.2s ease;
+}
+
+.wishlist-toggle:hover {
+    color: #999;
+}
+
+.wishlist-toggle.in-wishlist i {
+    color: #000;
+}
+
+.wishlist-toggle:focus {
+    outline: none;
+}
+
+/* Ensure no extra box around wishlist buttons */
+.wishlist-toggle * {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+Copy.wishlist-toggle {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    padding: 0;
+}
+
+/* Additional specificity if needed */
+.card .wishlist-toggle,
+.product-container .wishlist-toggle {
+    border: none !important;
+    background: transparent !important;
+}

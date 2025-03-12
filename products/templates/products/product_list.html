@@ -1,108 +1,65 @@
 {% extends "base.html" %}
 {% load static %}
-{% load crispy_forms_tags %}
-
 {% block content %}
 <div class="container my-4">
-  <div class="row">
-    <div class="col-12 text-center">
-      <h2>Guerrier Streetwear</h2>
-    </div>
-  </div>
-  <div class="row mb-4">
-    <div class="col-12">
-      <div class="card border-light shadow-sm">
-        <div class="card-body">
-          <form method="GET" action="{% url 'products:products' %}" id="filter-form" class="row g-3 align-items-end">
-            <div class="col-12 col-md-3">
-              <label for="category-filter" class="form-label">Category</label>
-              <select name="category" id="category-filter" class="form-select">
-                <option value="">All Categories</option>
-                {% for category in categories %}
-                  <option value="{{ category.name }}" {% if current_categories == category.friendly_name or current_categories == category.name %}selected{% endif %}>
-                    {{ category.friendly_name|default:category.name }}
-                  </option>
-                {% endfor %}
-              </select>
-            </div>
-            <div class="col-12 col-md-3">
-              <label for="sort-filter" class="form-label">Sort By</label>
-              <select name="sort" id="sort-filter" class="form-select">
-                <option value="">Default</option>
-                <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (High to Low)</option>
-                <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (Low to High)</option>
-                <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
-                <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
-              </select>
-            </div>
-            <div class="col-6 col-md-2">
-              <label for="price-min" class="form-label">Min Price</label>
-              <input type="number" step="0.01" name="price_min" id="price-min" class="form-control" value="{{ current_price_min }}">
-            </div>
-            <div class="col-6 col-md-2">
-              <label for="price-max" class="form-label">Max Price</label>
-              <input type="number" step="0.01" name="price_max" id="price-max" class="form-control" value="{{ current_price_max }}">
-            </div>
-            <div class="col-12 text-end">
-              <button type="submit" class="btn btn-dark text-white">Filter</button>
-              <a href="{% url 'products:products' %}" class="btn btn-outline-dark">Clear</a>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </div>
+  {% if category %}
+    <h2>{{ category.friendly_name|default:category.name }}</h2>
+  {% else %}
+    <h2>All Products</h2>
+  {% endif %}
   <div class="row">
     {% for product in products %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
-      <div class="card h-100 border-0">
-        {% if product.image %}
-          <a href="{% url 'products:product_detail' product.id %}">
-            <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-          </a>
-        {% else %}
-          <a href="{% url 'products:product_detail' product.id %}">
-            <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="{{ product.name }}">
-          </a>
-        {% endif %}
-        <div class="card-body pb-0">
-          <p class="mb-0">{{ product.name }}</p>
-          {% if product.category %}
-          <p class="small text-muted mt-1">
-            {% if product.category.name|lower == 'shirts' %}
-              <a href="/shirts/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
-            {% elif product.category.name|lower == 'hats' %}
-              <a href="/hats/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
-            {% elif product.category.name|lower == 'mugs' %}
-              <a href="/homeware/mugs/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
-            {% elif product.category.name|lower == 'coasters' %}
-              <a href="/homeware/coasters/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
-            {% elif product.category.name|lower == 'skateboard decks' %}
-              <a href="/skateboard-decks/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
-            {% else %}
-              <a href="{% url 'products:products' %}?category={{ product.category.name }}"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+      <div class="col-6 col-md-4 col-lg-3 mb-4">
+        <div class="card h-100 border-0">
+          {% if product.image %}
+            <a href="{% url 'products:product_detail' product.id %}">
+              <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+            </a>
+          {% else %}
+            <a href="{% url 'products:product_detail' product.id %}">
+              <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+            </a>
+          {% endif %}
+          <div class="card-body pb-0">
+            <p class="mb-0">{{ product.name }}</p>
+            {% if product.category %}
+            <p class="small text-muted mt-1">
+              {% if product.category.name|lower == 'shirts' %}
+                <a href="/shirts/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% elif product.category.name|lower == 'hats' %}
+                <a href="/hats/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% elif product.category.name|lower == 'mugs' %}
+                <a href="/homeware/mugs/"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% elif product.category.name|lower == 'coasters' %}
+                <a href="{% url 'home:coasters_view' %}"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+                {% if product.category.name|lower == 'skateboard decks' %}
+                <a href="{% url 'home:skateboard_decks_view' %}">
+                  <i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}
+                </a>
+              {% endif %}
+                <a href="{% url 'products:products' %}?category={{ product.category.name }}"><i class="fas fa-tag mr-1"></i>{{ product.category.friendly_name }}</a>
+              {% endif %}
+            </p>
             {% endif %}
-          </p>
-          {% endif %}
-        </div>
-        <div class="card-footer bg-white pt-0 border-0 text-left">
-          <p class="lead mb-0 font-weight-bold">€{{ product.price }}</p>
-          {% if product.rating %}
-          <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
-          {% endif %}
-          {% if user.is_staff %}
-          <div class="mt-2">
-            <a href="{% url 'products:edit_product' product.id %}" class="btn btn-sm btn-black">Edit</a>
-            <a href="{% url 'products:delete_product' product.id %}" class="btn btn-sm btn-bla">Delete</a>
           </div>
-          {% endif %}
+          <div class="card-footer bg-white pt-0 border-0 text-left">
+            <p class="lead mb-0 font-weight-bold">€{{ product.price }}</p>
+            {% if product.rating %}
+              <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
+            {% endif %}
+            {% if user.is_staff %}
+              <div class="mt-2">
+                <a href="{% url 'products:edit_product' product.id %}" class="btn btn-sm btn-black">Edit</a>
+                <a href="{% url 'products:delete_product' product.id %}" class="btn btn-sm btn-">Delete</a>
+              </div>
+            {% endif %}
+          </div>
         </div>
       </div>
-    </div>
     {% empty %}
-    <div class="col-12 text-center">
-      <p>No products found.</p>
-    </div>
+      <div class="col-12 text-center">
+        <p>No products found.</p>
+      </div>
     {% endfor %}
   </div>
 </div>
