@@ -1,3 +1,4 @@
+
 from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
@@ -5,262 +6,134 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 import logging
-
-logger = logging.getLogger(__name__)
-import logging
-
-logger = logging.getLogger(__name__)
-
 from products.models import Product
-from recommendations.utils import get_recommended_items
 
 
-def bag_home(request):
+logger = logging.getLogger(__name__)
+
+def view_bag(request):
     bag = request.session.get("bag", {})
     bag_items = []
-    total = 0
+    total = Decimal(0)
     product_count = 0
 
     for item_id, item_data in bag.items():
-        try:
-            product = get_object_or_404(Product, pk=item_id)
-
-            # Check if item_data is a dictionary (for products with sizes) or an integer
-            if isinstance(item_data, int):
-                quantity = item_data
-                total_price = product.price * quantity
-                total += total_price
+        product = get_object_or_404(Product, pk=item_id)
+        if isinstance(item_data, int):
+            subtotal = product.price * item_data
+            total += total + subtotal
+            product_count += item_data
+            bag_items.append({"product": product, "quantity": item_data, "subtotal": subtotal})
+        else:
+            for size, quantity in item_data.items():
+                subtotal = product.price * quantity
+                total += subtotal
                 product_count += quantity
-                bag_items.append(
-                    {
-                        "product": product,
-                        "quantity": quantity,
-                        "subtotal": total_price,
-                    }
-                )
-            else:
-                # Handle products with sizes
-                for size, quantity in item_data.items():
-                    if size != "DEFAULT":
-                        total_price = product.price * quantity
-                        total += total_price
-                        product_count += quantity
-                        bag_items.append(
-                            {
-                                "product": product,
-                                "quantity": quantity,
-                                "size": size,
-                                "subtotal": total_price,
-                            }
-                        )
-        except Exception as e:
-            logger.error(f"Error processing item {item_id}: {e}")
-            continue
+                bag_items.append({
+                    "product": product,
+                    "quantity": quantity,
+                    "size": size,
+                    "subtotal": subtotal
+                })
 
-    # Calculate delivery cost
-    if total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
-        free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
-    else:
-        delivery = Decimal(0)
-        free_delivery_delta = Decimal(0)
-
-    # Calculate grand total
-    grand_total = total + delivery
-
-    recommended_items = get_recommended_items(
-        Product.objects.filter(id__in=[int(id) for id in bag.keys() if id.isdigit()])
-    )
+    delivery = Decimal(0) if total >= settings.FREE_DELIVERY_THRESHOLD else settings.STANDARD_DELIVERY
+    grand_total = delivery + total
 
     context = {
-        "cart": bag_items,
-        "cart_total": total,
+        "bag_items": bag_items,
+        "total": total,
         "product_count": product_count,
         "delivery": delivery,
-        "free_delivery_delta": free_delivery_delta,
-        "free_delivery_threshold": settings.FREE_DELIVERY_THRESHOLD,
         "grand_total": grand_total,
-        "recommended_items": recommended_items,
     }
+
     return render(request, "bag/bag_home.html", context)
 
 
-def view_bag(request):
-    return render(request, "bag/bag_home.html")
-
-
 def add_to_bag(request, product_id):
-    """Add a specified product to the shopping bag"""
-
     product = get_object_or_404(Product, pk=product_id)
     quantity = int(request.POST.get("quantity", 1))
-    redirect_url = request.POST.get("redirect_url", reverse("products:products"))
-    size = None
-
-    if "product_size" in request.POST:
-        size = request.POST.get("product_size")
-
+    size = request.POST.get("product_size")
+    redirect_url = request.POST.get('redirect_url', '/')
     bag = request.session.get("bag", {})
     product_id_str = str(product_id)
 
     if size:
         if product_id_str in bag:
-            if isinstance(bag[product_id_str], dict):
-                if size in bag[product_id_str]:
-                    bag[product_id_str][size] += quantity
-                else:
-                    bag[product_id_str][size] = quantity
-            else:
-                # Convert to dict for sizes
-                current_quantity = bag[product_id_str]
-                bag[product_id_str] = {"DEFAULT": current_quantity, size: quantity}
+            bag[product_id_str][size] = bag[product_id_str].get(size, 0) + quantity
         else:
             bag[product_id_str] = {size: quantity}
     else:
-        if product_id_str in bag:
-            if isinstance(bag[product_id_str], dict):
-                if "DEFAULT" in bag[product_id_str]:
-                    bag[product_id_str]["DEFAULT"] += quantity
-                else:
-                    bag[product_id_str]["DEFAULT"] = quantity
-            else:
-                bag[product_id_str] = bag[product_id_str] + quantity
-        else:
-            bag[product_id_str] = quantity
-    # Debug
-    logger.debug(f"Updated bag: {bag}")
+        bag[product_id_str] = bag.get(product_id_str, 0) + quantity
 
-    # Debug
-    logger.debug(f"Updated bag: {bag}")
-
-    # If AJAX request
-    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-        return JsonResponse(
-            {
-                "success": True,
-                "product_name": product.name,
-            }
-        )
+    request.session["bag"] = bag
+    request.session.modified = True
 
     messages.success(request, f"Added {product.name} to your bag")
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse({"success": True, "product_name": product.name})
+
     return redirect(redirect_url)
 
 
-@csrf_exempt
 def remove_from_bag(request, product_id):
-    """
-    Remove the item from the shopping bag.
-    
-    Args:
-        request: The HTTP request object.
-        product_id: The ID of the product to remove.
-    
-    Returns:
-        JsonResponse or HttpResponseRedirect: A JSON response for AJAX requests or a redirect response for regular requests.
-    """
-    """Remove the item from the shopping bag"""
-    try:
-        product = get_object_or_404(Product, pk=product_id)
-        bag = request.session.get("bag", {})
-        product_id_str = str(product_id)
-        size = None
+    product = get_object_or_404(Product, pk=product_id)
+    size = request.POST.get('product_size')
+    bag = request.session.get("bag", {})
+    product_id_str = str(product_id)
 
-        if "size" in request.POST:
-            size = request.POST.get("size")
-
-        if size:
-            if product_id_str in bag and isinstance(bag[product_id_str], dict):
-                if size in bag[product_id_str]:
-                    del bag[product_id_str][size]
-                    if not bag[product_id_str]:
-                        del bag[product_id_str]
-                    messages.success(
-                        request, f"Removed size {size} {product.name} from your bag"
-                    )
-            else:
-                messages.error(request, f"Error removing item: size {size} not found")
-        else:
-            if product_id_str in bag:
+    if size:
+        if product_id_str in bag and size in bag[product_id_str]:
+            del bag[product_id_str][size]
+            if not bag[product_id_str]:
                 del bag[product_id_str]
-                messages.success(request, f"Removed {product.name} from your bag")
-            else:
-                messages.error(request, f"Error removing item: product not in bag")
-        # Debug
-        logger.debug(f"Updated bag after removal: {bag}")
+            messages.success(request, f"Removed size {size} {product.name} from your bag")
+    else:
+        if product_id_str in bag:
+            del bag[product_id_str]
+            messages.success(request, f"Removed {product.name} from your bag")
 
-        # Debug
-        logger.debug(f"Updated bag after removal: {bag}")
+    request.session["bag"] = bag
+    request.session.modified = True
 
-        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-            return JsonResponse({"success": True})
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse({"success": True})
 
-        return redirect(reverse("bag:view_bag"))
-
-    except Exception as e:
-        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-            return JsonResponse({"error": str(e)}, status=500)
-
-        messages.error(request, f"Error removing item: {e}")
-        return redirect(reverse("bag:view_bag"))
+    return redirect(reverse('view_bag'))
 
 
 @csrf_exempt
 def update_bag(request, product_id):
-    """Update the quantity of the specified product to the specified amount"""
-    try:
-        product = get_object_or_404(Product, pk=product_id)
-        quantity = int(request.POST.get("quantity", 1))
-        size = None
-        if "size" in request.POST:
-            size = request.POST.get("size")
+    product = get_object_or_404(Product, pk=product_id)
+    quantity = int(request.POST.get("quantity", 1))
+    size = request.POST.get("size")
+    bag = request.session.get("bag", {})
+    product_id_str = str(product_id)
 
-        bag = request.session.get("bag", {})
-        product_id_str = str(product_id)
-
-        if quantity > 0:
-            if size:
-                if product_id_str in bag:
-                    if isinstance(bag[product_id_str], dict):
-                        bag[product_id_str][size] = quantity
-                    else:
-                        # Convert to dict for sizes
-                        bag[product_id_str] = {size: quantity}
-                else:
-                    bag[product_id_str] = {size: quantity}
+    if quantity > 0:
+        if size:
+            if product_id_str in bag:
+                bag[product_id_str][size] = quantity
             else:
-                if product_id_str in bag and isinstance(bag[product_id_str], dict):
-                    if "DEFAULT" in bag[product_id_str]:
-                        bag[product_id_str]["DEFAULT"] = quantity
-                    else:
-                        # Just update the first size we find if DEFAULT not present
-                        first_size = next(iter(bag[product_id_str]))
-                        bag[product_id_str][first_size] = quantity
-                else:
-                    bag[product_id_str] = quantity
-
-            messages.success(request, f"Updated {product.name} quantity to {quantity}")
+                bag[product_id_str] = {size: quantity}
         else:
-            if size:
-                if product_id_str in bag and isinstance(bag[product_id_str], dict):
-                    if size in bag[product_id_str]:
-                        del bag[product_id_str][size]
-                        if not bag[product_id_str]:
-                            del bag[product_id_str]
-            else:
-                if product_id_str in bag:
+            bag[product_id_str] = quantity
+        messages.success(request, f"Updated {product.name} quantity to {quantity}")
+    else:
+        if size:
+            if product_id_str in bag and size in bag[product_id_str]:
+                del bag[product_id_str][size]
+                if not bag[product_id_str]:
                     del bag[product_id_str]
+        else:
+            bag.pop(product_id_str, None)
+        messages.success(request, f"Removed {product.name} from your bag")
 
-            messages.success(request, f"Removed {product.name} from your bag")
-        # Debug
-        logger.debug(f"Updated bag after quantity update: {bag}")
+    request.session["bag"] = bag
+    request.session.modified = True
 
-        # Debug
-        logger.debug(f"Updated bag after quantity update: {bag}")
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return JsonResponse({"success": True})
 
-        if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-            return JsonResponse({"success": True})
-
-        return redirect(reverse("bag:view_bag"))
-    except Exception as e:
-        messages.error(request, f"Error updating bag: {e}")
-        return redirect(reverse("bag:view_bag"))
+    return redirect(reverse('bag:view_bag'))
