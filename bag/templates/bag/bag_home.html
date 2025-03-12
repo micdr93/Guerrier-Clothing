@@ -2,178 +2,102 @@
 {% load static %}
 
 {% block content %}
-<div class="container">
-  <div class="row">
-    <div class="col-12">
-      <hr>
-      <h2 class="mb-4">Shopping Bag</h2>
-      <hr>
-    </div>
-  </div>
+<div class="container my-5">
+    <h1 class="mb-4">Your Bag</h1>
 
-  {% if cart %}
-  <div class="row">
-    <div class="col-12">
-      <div class="table-responsive">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Product Info</th>
-              <th>Price</th>
-              <th>Qty</th>
-              <th>Subtotal</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in cart %}
-            <tr>
-              <td>
-                <div class="d-flex">
-                  <img class="mr-3" src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="max-width: 100px; height: auto;">
-                  <div>
-                    <h5>{{ item.product.name }}</h5>
-                    {% if item.size %}
-                    <p class="text-muted">Size: {{ item.size|upper }}</p>
-                    {% endif %}
-                  </div>
-                </div>
-              </td>
-              <td>€{{ item.product.price }}</td>
-              <td>
-                <form class="update-form" method="POST" action="{% url 'bag:update_bag' item.product.id %}">
-                  {% csrf_token %}
-                  <div class="d-flex align-items-center">
-                    <button type="button" class="btn btn-sm btn-outline-dark rounded-0 decrement-qty" data-item_id="{{ item.product.id }}">-</button>
-                    <input class="form-control form-control-sm mx-2 text-center" style="width: 60px;" type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" data-item_id="{{ item.product.id }}">
-                    <button type="button" class="btn btn-sm btn-outline-dark rounded-0 increment-qty" data-item_id="{{ item.product.id }}">+</button>
-                  </div>
-                  {% if item.size %}
-                  <input type="hidden" name="size" value="{{ item.size }}">
-                  {% endif %}
-                  <div class="mt-2">
-                    <button type="submit" class="btn btn-sm btn-dark rounded-0 mr-2">Update</button>
-                    <a class="btn btn-sm btn-outline-dark rounded-0 remove-item" data-product_id="{{ item.product.id }}" {% if item.size %}data-size="{{ item.size }}"{% endif %}>Remove</a>
-                  </div>
-                </form>
-              </td>
-              <td>
-                <!-- Display individual item total -->
-                €{{ item.total_price }}
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- Order Summary and Action Buttons in a single row -->
-  <div class="row mb-5">
-    <div class="col-12">
-      <div class="text-right">
-        <!-- Order Summary -->
-        <div class="order-summary mb-3">
-          <p class="mb-1"><strong>Bag Total: €{{ cart_total }}</strong></p>
-          
-          {% if free_delivery_delta > 0 %}
-          <p class="mb-1">Delivery: €{{ delivery|floatformat:2 }}</p>
-          <p class="mb-2 text-danger">
-            You could get free delivery by spending just <strong>€{{ free_delivery_delta|floatformat:2 }}</strong> more!
-          </p>
-          {% else %}
-          <p class="mb-1">Delivery: FREE</p>
-          {% endif %}
-          
-          <p class="mb-0"><strong>Grand Total: €{{ grand_total|floatformat:2 }}</strong></p>
-        </div>
-        
-        <!-- Action Buttons -->
-        <div class="action-buttons">
-          <a href="{% url 'products:products' %}" class="btn btn-outline-dark rounded-0 mr-2">
-            <i class="fas fa-chevron-left mr-1"></i> Keep Shopping
-          </a>
-          <a href="{% url 'checkout:checkout' %}" class="btn btn-dark rounded-0">
-            Secure Checkout <i class="fas fa-lock ml-1"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-  {% else %}
-  <div class="row">
-    <div class="col text-center">
-      <p class="lead">Your bag is empty</p>
-      <a href="{% url 'products:products' %}" class="btn btn-outline-dark rounded-0">
-        <i class="fas fa-chevron-left mr-1"></i> Continue Shopping
-      </a>
-    </div>
-  </div>
-  {% endif %}
+    <!-- If there are bag items, display them -->
+    {% if cart %}
+        <div class="row">
+            <div class="col-12 col-md-8">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col" class="text-center">Quantity</th>
+                            <th scope="col" class="text-end">Price</th>
+                            <th scope="col" class="text-end">Subtotal</th>
+                            <th scope="col"></th> <!-- Remove button column -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in cart %}
+                            <tr class="cart-item" data-product-id="{{ item.product.id }}">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        {% if item.product.image %}
+                                            <img src="{{ item.product.image.url }}"
+                                                 alt="{{ item.product.name }}"
+                                                 style="width: 50px; height: auto; margin-right: 10px;">
+                                        {% endif %}
+                                        <span>{{ item.product.name }}</span>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <form action="{% url 'bag:update_bag' item.product.id %}" method="POST" class="update-form">
+                                        {% csrf_token %}
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <button type="button" class="btn btn-black rounded-0 decrement-qty p-1 px-2" 
+                                                    data-item_id="{{ item.product.id }}">-</button>
+                                            
+                                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" 
+                                                   class="form-control form-control-sm qty_input text-center mx-2" 
+                                                   data-item_id="{{ item.product.id }}" style="width: 50px;">
+                                            
+                                            <button type="button" class="btn btn-black rounded-0 increment-qty p-1 px-2" 
+                                                    data-item_id="{{ item.product.id }}">+</button>
+                                        </div>
+                                        <button type="submit" class="btn btn-sm btn-black rounded-0 mt-2 update-qty">Update</button>
+                                    </form>
+                                </td>
+                                <td class="text-end">
+                                    €{{ item.product.price }}
+                                </td>
+                                <td class="text-end">
+                                    €{{ item.subtotal|floatformat:2 }}
+                                </td>
+                                <td class="text-end">
+                                    <!-- Remove button -->
+                                    <form action="{% url 'bag:remove_from_bag' item.product.id %}" method="POST" class="remove-item-form">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-outline-black" aria-label="Remove item">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div> <!-- col-md-8 -->
+        </div> <!-- row -->
+    {% else %}
+        <p>Your bag is currently empty.</p>
+    {% endif %}
 </div>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12 col-md-6 text-center text-md-start">
+            <h3>Total: €{{ cart_total|floatformat:2 }}</h3>
+        </div>
+        <div class="col-12 col-md-6 text-center text-md-end">
+            <a href="{% url 'checkout:checkout' %}" class="btn btn-sm btn-black">Proceed to Checkout</a>
+        </div>
+    </div>
+</div>
+
+<!-- No inline script here - all JavaScript moved to script.js -->
 {% endblock %}
 
 {% block postloadjs %}
 {{ block.super }}
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    // Increment quantity
-    document.querySelectorAll('.increment-qty').forEach(button => {
-      button.addEventListener('click', function(e) {
-        e.preventDefault();
-        const itemId = this.dataset.item_id;
-        const qtyInput = document.querySelector(`input[name="quantity"][data-item_id="${itemId}"]`);
-        const currentValue = parseInt(qtyInput.value);
-        qtyInput.value = currentValue + 1;
-      });
-    });
-    
-    // Decrement quantity
-    document.querySelectorAll('.decrement-qty').forEach(button => {
-      button.addEventListener('click', function(e) {
-        e.preventDefault();
-        const itemId = this.dataset.item_id;
-        const qtyInput = document.querySelector(`input[name="quantity"][data-item_id="${itemId}"]`);
-        const currentValue = parseInt(qtyInput.value);
-        if (currentValue > 1) {
-          qtyInput.value = currentValue - 1;
-        }
-      });
-    });
-    
-    // Remove item and reload on click
-    document.querySelectorAll('.remove-item').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
-        const itemId = this.dataset.product_id;
-        const size = this.dataset.size || '';
-        const url = `/bag/remove/${itemId}/`;
-        
-        const data = {
-          'csrfmiddlewaretoken': csrfToken,
-        };
-        
-        if (size) {
-          data.size = size;
-        }
-        
-        fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'X-CSRFToken': csrfToken
-          },
-          body: new URLSearchParams(data)
-        })
-        .then(response => {
-          location.reload();
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      });
-    });
-  });
+// This will ensure the event handlers don't duplicate
+document.addEventListener('DOMContentLoaded', function() {
+  // Force reinitialize quantity controls to ensure they work correctly
+  if (typeof reinitializeQuantityControls === 'function') {
+    reinitializeQuantityControls();
+  }
+});
 </script>
 {% endblock %}

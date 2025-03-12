@@ -35,9 +35,7 @@
                 {% else %}
                     <small class="text-muted">No Rating</small>
                 {% endif %}
-
                 <p class="mt-3">{{ product.description }}</p>
-
                 <!-- Add to bag form -->
                 <form class="form" action="{% url 'bag:add_to_bag' product.id %}" method="POST">
                     {% csrf_token %}
@@ -62,7 +60,7 @@
                             <div class="form-group w-50">
                                 <div class="input-group">
                                     <div class="input-group-prepend">
-                                        <button class="decrement-qty btn btn-black rounded-0" 
+                                        <button class="decrement-qty btn btn-black rounded-0" type="button" 
                                             data-item_id="{{ product.id }}">
                                             <span class="icon">
                                                 <i class="fas fa-minus"></i>
@@ -73,7 +71,7 @@
                                         name="quantity" value="1" min="1" max="99" 
                                         data-item_id="{{ product.id }}">
                                     <div class="input-group-append">
-                                        <button class="increment-qty btn btn-black rounded-0"
+                                        <button class="increment-qty btn btn-black rounded-0" type="button"
                                             data-item_id="{{ product.id }}">
                                             <span class="icon">
                                                 <i class="fas fa-plus"></i>
@@ -83,7 +81,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <!-- Action buttons -->
                         <div class="col-12 mt-2">
                             <a href="{% url 'products:products' %}" class="btn btn-outline-black rounded-0 mt-5">
@@ -159,28 +156,10 @@
     {% endif %}
 </div>
 {% endblock %}
-
 {% block postloadjs %}
 {{ block.super }}
 <script>
-    // Handle quantity input
-    $('.increment-qty').click(function(e) {
-        e.preventDefault();
-        var itemId = $(this).data('item_id');
-        var currentValue = parseInt($('.qty_input[data-item_id="' + itemId + '"]').val());
-        $('.qty_input[data-item_id="' + itemId + '"]').val(currentValue + 1);
-    });
-
-    $('.decrement-qty').click(function(e) {
-        e.preventDefault();
-        var itemId = $(this).data('item_id');
-        var currentValue = parseInt($('.qty_input[data-item_id="' + itemId + '"]').val());
-        if (currentValue > 1) {
-            $('.qty_input[data-item_id="' + itemId + '"]').val(currentValue - 1);
-        }
-    });
-    
-    // AJAX wishlist toggle
+    // AJAX wishlist toggle - Keep only this part, remove the quantity handlers
     $('.wishlist-toggle').click(function(e) {
         e.preventDefault();
         var productId = $(this).data('product-id');
@@ -203,6 +182,13 @@
             }
         })
         .catch(error => console.error("Error:", error));
+    });
+    
+    // Force reinitialize quantity controls to ensure they work correctly
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof reinitializeQuantityControls === 'function') {
+        reinitializeQuantityControls();
+      }
     });
 </script>
 {% endblock %}

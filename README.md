@@ -560,6 +560,64 @@ You can fork this repository by using the following steps:
 3. Once clicked, you should now have a copy of the original repository in your own GitHub account!
 
 
+## Local Development Setup
+
+### Requirements
+- Python 3.8+
+- Git
+- PostgreSQL (recommended)
+
+### Steps
+1. Clone the repository:
+```bash
+git clone https://github.com/micdr93/Guerrier-Clothing.git
+```
+
+2. Navigate to the project directory:
+```bash
+cd Guerrier-Clothing
+```
+
+3. Create and activate a virtual environment:
+```bash
+python -m venv .venv
+source .venv/bin/activate # On Windows use `.venv\Scriptsctivate`
+```
+
+4. Install dependencies:
+```bash
+pip install -r requirements.txt
+```
+
+5. Configure environment variables by creating a `.env` file:
+```bash
+SECRET_KEY='your-secret-key'
+DEBUG=True
+DATABASE_URL='your-database-url'
+STRIPE_PUBLIC_KEY='your-stripe-public-key'
+STRIPE_SECRET_KEY='your-stripe-secret-key'
+```
+
+6. Set up the database:
+```bash
+python manage.py migrate
+```
+
+7. Load initial data (optional):
+```bash
+python manage.py loaddata fixtures.json
+```
+
+8. Run the development server:
+```bash
+python manage.py runserver
+```
+
+9. Access the site locally at `http://localhost:8000`.
+
+---
+
+
 # Acknowledgements 
 
 * I would like to thank my Mentor, Daniel Hmailton for his help and guidance so far on all projects

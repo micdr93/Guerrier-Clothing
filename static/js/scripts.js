@@ -1,3 +1,8 @@
+// Replace your entire script.js file with this code
+
+// Global flag to prevent multiple initializations
+let quantityHandlersInitialized = false;
+
 document.addEventListener('DOMContentLoaded', () => {
   // Mobile search functionality
   const searchToggler = document.getElementById('search-toggler');
@@ -9,8 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   }
 
-  // Quantity input handling for product detail page
-  initQuantityInputs();
+  // Only initialize quantity inputs once
+  if (!quantityHandlersInitialized) {
+    initQuantityInputs();
+    quantityHandlersInitialized = true;
+  }
   
   // AJAX add to bag functionality
   initAddToBagAjax();
@@ -21,51 +29,65 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Handle quantity input functionality
 function initQuantityInputs() {
-  // Handle quantity increments and decrements
+  console.log("Initializing quantity inputs - removing old handlers first");
+  
+  // First, remove ALL existing handlers by cloning and replacing elements
   document.querySelectorAll('.increment-qty, .decrement-qty').forEach(button => {
-      button.addEventListener('click', function(e) {
-          e.preventDefault();
-          const itemId = this.dataset.item_id;
-          const input = document.querySelector(`.qty_input[data-item_id="${itemId}"]`);
-          const currentValue = parseInt(input.value);
-          
-          if (this.classList.contains('increment-qty') && currentValue < 99) {
-              input.value = currentValue + 1;
-          } else if (this.classList.contains('decrement-qty') && currentValue > 1) {
-              input.value = currentValue - 1;
-          }
-          
-          // Update any enabled/disabled states
-          handleEnableDisable(itemId);
-      });
+    const newButton = button.cloneNode(true);
+    if (button.parentNode) {
+      button.parentNode.replaceChild(newButton, button);
+    }
   });
   
-  // Initialize all quantity inputs
   document.querySelectorAll('.qty_input').forEach(input => {
-      input.addEventListener('change', function() {
-          const itemId = this.dataset.item_id;
-          handleEnableDisable(itemId);
-      });
+    const newInput = input.cloneNode(true);
+    if (input.parentNode) {
+      input.parentNode.replaceChild(newInput, input);
+    }
+  });
+  
+  // Now add fresh handlers with stopPropagation to prevent bubbling
+  document.querySelectorAll('.increment-qty').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation(); // Prevent event bubbling
       
-      // Set initial state
-      const itemId = input.dataset.item_id;
-      handleEnableDisable(itemId);
+      const itemId = this.dataset.item_id;
+      // Use closest to find the input in the same form/container only
+      const input = this.closest('.d-flex, .input-group').querySelector('.qty_input');
+      
+      if (input) {
+        const currentValue = parseInt(input.value);
+        if (currentValue < 99) {
+          input.value = currentValue + 1;
+          console.log(`Incremented to ${input.value}`);
+        }
+      }
+    });
+  });
+  
+  document.querySelectorAll('.decrement-qty').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation(); // Prevent event bubbling
+      
+      const itemId = this.dataset.item_id;
+      // Use closest to find the input in the same form/container only
+      const input = this.closest('.d-flex, .input-group').querySelector('.qty_input');
+      
+      if (input) {
+        const currentValue = parseInt(input.value);
+        if (currentValue > 1) {
+          input.value = currentValue - 1;
+          console.log(`Decremented to ${input.value}`);
+        }
+      }
+    });
   });
 }
 
 function handleEnableDisable(itemId) {
-  const input = document.querySelector(`.qty_input[data-item_id="${itemId}"]`);
-  if (!input) return;
-  
-  const currentValue = parseInt(input.value);
-  const minusDisabled = currentValue < 2;
-  const plusDisabled = currentValue > 98;
-  
-  const minusButton = document.querySelector(`.decrement-qty[data-item_id="${itemId}"]`);
-  const plusButton = document.querySelector(`.increment-qty[data-item_id="${itemId}"]`);
-  
-  if (minusButton) minusButton.disabled = minusDisabled;
-  if (plusButton) plusButton.disabled = plusDisabled;
+  // Intentionally left blank - we'll handle enabling/disabling in the click handlers directly
 }
 
 // AJAX add to bag functionality
@@ -218,4 +240,12 @@ function showMessage(type, message) {
 function getCSRFToken() {
   const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]');
   return csrfToken ? csrfToken.value : '';
+}
+
+// Call this if you need to reinitialize (e.g. after AJAX content loads)
+function reinitializeQuantityControls() {
+  // Force reinitialization
+  quantityHandlersInitialized = false;
+  initQuantityInputs();
+  quantityHandlersInitialized = true;
 }

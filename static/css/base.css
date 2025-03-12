@@ -116,6 +116,47 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0.1);
 }
 
+/* Quantity Input Styling */
+.qty_input {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
+    text-align: center;
+    width: 50px;
+    padding: 5px;
+    border: 1px solid #ddd;
+}
+
+.qty_input::-webkit-inner-spin-button,
+.qty_input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.qty_input:focus {
+    outline: none;
+    border-color: #000;
+}
+
+/* Quantity Button Styling */
+.decrement-qty,
+.increment-qty {
+    background: black;
+    color: white;
+    border: none;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.decrement-qty:hover,
+.increment-qty:hover {
+    background: #333;
+}
+
 /* Global Button Styles */
 button,
 .btn {
@@ -215,16 +256,18 @@ button:hover,
     color: white;
 }
 
-/* Wishlist Button Styling - UPDATED */
-.wishlist-toggle,
-.card .wishlist-toggle,
-.product-container .wishlist-toggle {
+/* Wishlist Button Styling */
+.wishlist-toggle {
     background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     outline: none !important;
     padding: 0;
     cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
     font-size: 1.5rem; 
     color: #ccc;
     transition: all 0.2s ease;
@@ -235,7 +278,7 @@ button:hover,
 }
 
 .wishlist-toggle.in-wishlist i {
-    color: #000;
+    color: black !important;
 }
 
 .wishlist-toggle:focus {
@@ -246,19 +289,4 @@ button:hover,
 .wishlist-toggle * {
     border: none !important;
     box-shadow: none !important;
-}
-
-Copy.wishlist-toggle {
-    background: transparent !important;
-    border: none !important;
-    box-shadow: none !important;
-    outline: none !important;
-    padding: 0;
-}
-
-/* Additional specificity if needed */
-.card .wishlist-toggle,
-.product-container .wishlist-toggle {
-    border: none !important;
-    background: transparent !important;
 }
