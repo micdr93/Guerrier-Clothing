@@ -1,42 +1,61 @@
+from decimal import Decimal
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
+
 from products.models import Product
 from recommendations.utils import get_recommended_items
 
 def bag_home(request):
     bag = request.session.get("bag", {})
     bag_items = []
-    cart_total = 0
+    total = 0
+    product_count = 0
 
-    for product_id_str, item_data in bag.items():
+    for item_id, item_data in bag.items():
         try:
-            product = Product.objects.get(pk=int(product_id_str))
+            product = get_object_or_404(Product, pk=item_id)
             
-            if isinstance(item_data, dict):
-                for size, quantity in item_data.items():
-                    subtotal = product.price * quantity
-                    bag_items.append({
-                        'product': product,
-                        'quantity': quantity,
-                        'size': size if size != 'DEFAULT' else None,
-                        'subtotal': subtotal
-                    })
-                    cart_total += subtotal
-            else:
+            # Check if item_data is a dictionary (for products with sizes) or an integer
+            if isinstance(item_data, int):
                 quantity = item_data
-                subtotal = product.price * quantity
+                total_price = product.price * quantity
+                total += total_price
+                product_count += quantity
                 bag_items.append({
-                    'product': product,
-                    'quantity': quantity,
-                    'size': None,
-                    'subtotal': subtotal
+                    "product": product,
+                    "quantity": quantity,
+                    "subtotal": total_price,
                 })
-                cart_total += subtotal
-
-        except Product.DoesNotExist:
+            else:
+                # Handle products with sizes
+                for size, quantity in item_data.items():
+                    if size != 'DEFAULT':
+                        total_price = product.price * quantity
+                        total += total_price
+                        product_count += quantity
+                        bag_items.append({
+                            "product": product,
+                            "quantity": quantity,
+                            "size": size,
+                            "subtotal": total_price,
+                        })
+        except Exception as e:
+            print(f"Error processing item {item_id}: {e}")
             continue
+
+    # Calculate delivery cost
+    if total < settings.FREE_DELIVERY_THRESHOLD:
+        delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
+        free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
+    else:
+        delivery = Decimal(0)
+        free_delivery_delta = Decimal(0)
+
+    # Calculate grand total
+    grand_total = total + delivery
 
     recommended_items = get_recommended_items(
         Product.objects.filter(id__in=[int(id) for id in bag.keys() if id.isdigit()])
@@ -44,14 +63,18 @@ def bag_home(request):
 
     context = {
         "cart": bag_items,
-        "cart_total": cart_total,
+        "cart_total": total,
+        "product_count": product_count,
+        "delivery": delivery,
+        "free_delivery_delta": free_delivery_delta,
+        "free_delivery_threshold": settings.FREE_DELIVERY_THRESHOLD,
+        "grand_total": grand_total,
         "recommended_items": recommended_items,
     }
     return render(request, "bag/bag_home.html", context)
 
 def view_bag(request):
     return render(request, "bag/bag_home.html")
-
 
 def add_to_bag(request, product_id):
     """Add a specified product to the shopping bag"""
@@ -107,7 +130,6 @@ def add_to_bag(request, product_id):
     messages.success(request, f'Added {product.name} to your bag')
     return redirect(redirect_url)
 
-
 @csrf_exempt
 def remove_from_bag(request, product_id):
     """Remove the item from the shopping bag"""
@@ -152,7 +174,6 @@ def remove_from_bag(request, product_id):
 
         messages.error(request, f"Error removing item: {e}")
         return redirect(reverse("bag:view_bag"))
-
 
 @csrf_exempt
 def update_bag(request, product_id):
