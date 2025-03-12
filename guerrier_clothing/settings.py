@@ -29,7 +29,6 @@ INSTALLED_APPS = [
     "allauth.account",
     "home",
     "products",
-    "django_summernote",
     "bag",
     "checkout.apps.CheckoutConfig",
     "profiles",
