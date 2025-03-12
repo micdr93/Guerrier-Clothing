@@ -4,6 +4,12 @@ from django.contrib import messages
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+import logging
+
+logger = logging.getLogger(__name__)
+import logging
+
+logger = logging.getLogger(__name__)
 
 from products.models import Product
 from recommendations.utils import get_recommended_items
@@ -48,7 +54,7 @@ def bag_home(request):
                             }
                         )
         except Exception as e:
-            print(f"Error processing item {item_id}: {e}")
+            logger.error(f"Error processing item {item_id}: {e}")
             continue
 
     # Calculate delivery cost
@@ -121,11 +127,11 @@ def add_to_bag(request, product_id):
                 bag[product_id_str] = bag[product_id_str] + quantity
         else:
             bag[product_id_str] = quantity
-
-    request.session["bag"] = bag
+    # Debug
+    logger.debug(f"Updated bag: {bag}")
 
     # Debug
-    print(f"Updated bag: {bag}")
+    logger.debug(f"Updated bag: {bag}")
 
     # If AJAX request
     if request.headers.get("X-Requested-With") == "XMLHttpRequest":
@@ -142,6 +148,16 @@ def add_to_bag(request, product_id):
 
 @csrf_exempt
 def remove_from_bag(request, product_id):
+    """
+    Remove the item from the shopping bag.
+    
+    Args:
+        request: The HTTP request object.
+        product_id: The ID of the product to remove.
+    
+    Returns:
+        JsonResponse or HttpResponseRedirect: A JSON response for AJAX requests or a redirect response for regular requests.
+    """
     """Remove the item from the shopping bag"""
     try:
         product = get_object_or_404(Product, pk=product_id)
@@ -169,11 +185,11 @@ def remove_from_bag(request, product_id):
                 messages.success(request, f"Removed {product.name} from your bag")
             else:
                 messages.error(request, f"Error removing item: product not in bag")
-
-        request.session["bag"] = bag
+        # Debug
+        logger.debug(f"Updated bag after removal: {bag}")
 
         # Debug
-        print(f"Updated bag after removal: {bag}")
+        logger.debug(f"Updated bag after removal: {bag}")
 
         if request.headers.get("X-Requested-With") == "XMLHttpRequest":
             return JsonResponse({"success": True})
@@ -235,11 +251,11 @@ def update_bag(request, product_id):
                     del bag[product_id_str]
 
             messages.success(request, f"Removed {product.name} from your bag")
-
-        request.session["bag"] = bag
+        # Debug
+        logger.debug(f"Updated bag after quantity update: {bag}")
 
         # Debug
-        print(f"Updated bag after quantity update: {bag}")
+        logger.debug(f"Updated bag after quantity update: {bag}")
 
         if request.headers.get("X-Requested-With") == "XMLHttpRequest":
             return JsonResponse({"success": True})
