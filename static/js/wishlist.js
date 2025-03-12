@@ -1,6 +1,44 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
-    // Wishlist Toggle Functionality
+    function setupQuantityButtons() {
+        const decrementBtns = document.querySelectorAll('.decrement-qty');
+        const incrementBtns = document.querySelectorAll('.increment-qty');
+        const quantityInputs = document.querySelectorAll('.qty_input');
+
+        decrementBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.nextElementSibling;
+                let currentValue = parseInt(input.value);
+                if (currentValue > 1) {
+                    input.value = currentValue - 1;
+                    input.dispatchEvent(new Event('change'));
+                }
+            });
+        });
+
+        incrementBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const input = this.previousElementSibling;
+                let currentValue = parseInt(input.value);
+                input.value = currentValue + 1;
+                input.dispatchEvent(new Event('change'));
+            });
+        });
+
+        // Ensure manual input is valid
+        quantityInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                // Ensure the value is a positive integer
+                let value = parseInt(this.value);
+                if (isNaN(value) || value < 1) {
+                    this.value = 1;
+                }
+                // Round to nearest integer
+                this.value = Math.round(value);
+            });
+        });
+    }
+
+    // Other existing functionality from previous script
     function setupWishlistToggles() {
         document.querySelectorAll(".wishlist-toggle").forEach(button => {
             button.addEventListener("click", function (event) {
@@ -18,7 +56,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     },
                     body: JSON.stringify({})
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        // Fallback to standard link if AJAX fails
+                        window.location.href = actionUrl;
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
                         if (data.in_wishlist) {
@@ -78,51 +123,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 3000);
     }
 
-    // Quantity Adjustment for Cart
-    function setupQuantityAdjustment() {
-        const quantityInputs = document.querySelectorAll('.qty_input');
-        const updateCartBtn = document.querySelector('.update-cart');
-        
-        if (quantityInputs.length && updateCartBtn) {
-            quantityInputs.forEach(input => {
-                input.addEventListener('change', function() {
-                    updateCartBtn.disabled = false;
-                });
-            });
-        }
-    }
-
-    // Increment/Decrement Quantity Buttons
-    function setupQuantityButtons() {
-        const decrementBtns = document.querySelectorAll('.decrement-qty');
-        const incrementBtns = document.querySelectorAll('.increment-qty');
-
-        decrementBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const input = this.nextElementSibling;
-                let currentValue = parseInt(input.value);
-                if (currentValue > 1) {
-                    input.value = currentValue - 1;
-                    input.dispatchEvent(new Event('change'));
-                }
-            });
-        });
-
-        incrementBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const input = this.previousElementSibling;
-                let currentValue = parseInt(input.value);
-                input.value = currentValue + 1;
-                input.dispatchEvent(new Event('change'));
-            });
-        });
-    }
-
     // Initialize all functionality
     function initializeScripts() {
-        setupWishlistToggles();
-        setupQuantityAdjustment();
         setupQuantityButtons();
+        setupWishlistToggles();
     }
 
     // Run initialization
