@@ -107,7 +107,9 @@ else:
     }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
+    },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
@@ -135,11 +137,14 @@ MEDIAFILES_LOCATION = "media"
 
 from storages.backends.s3boto3 import S3Boto3Storage
 
+
 class StaticStorage(S3Boto3Storage):
     location = STATICFILES_LOCATION
 
+
 class MediaStorage(S3Boto3Storage):
     location = MEDIAFILES_LOCATION
+
 
 if "USE_AWS" in os.environ:
     AWS_STORAGE_BUCKET_NAME = "guerrier"
@@ -165,4 +170,4 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASS")
 DEFAULT_FROM_EMAIL = os.environ.get("EMAIL_HOST_USER")
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

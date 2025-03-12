@@ -20,12 +20,16 @@ def calculate_average_rating(product):
 def all_products(request, category=None):
     query_category = request.GET.get("category", category)
     if query_category:
-        query_category_normalized = query_category.lower().replace("-", " ").replace("_", " ").strip()
+        query_category_normalized = (
+            query_category.lower().replace("-", " ").replace("_", " ").strip()
+        )
         try:
             category_obj = Category.objects.get(name__iexact=query_category_normalized)
             products = Product.active_products().filter(category=category_obj)
         except Category.DoesNotExist:
-            products = Product.active_products().filter(category__name__icontains=query_category)
+            products = Product.active_products().filter(
+                category__name__icontains=query_category
+            )
     else:
         products = Product.active_products()
 
@@ -37,7 +41,9 @@ def all_products(request, category=None):
 
     if query:
         products = products.filter(
-            Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query)
+            Q(name__icontains=query)
+            | Q(description__icontains=query)
+            | Q(category__name__icontains=query)
         ).distinct()
 
     if price_min:
@@ -50,11 +56,17 @@ def all_products(request, category=None):
         parts = sort_param.split("_")
         sort_field, direction = parts[0], parts[1] if len(parts) > 1 else "asc"
         if sort_field in ["price", "name", "rating", "category"]:
-            products = products.order_by(f"{'' if direction == 'asc' else '-'}{sort_field}")
+            products = products.order_by(
+                f"{'' if direction == 'asc' else '-'}{sort_field}"
+            )
     else:
         products = products.order_by("-featured", "-created_at")
 
-    wishlist = Wishlist.objects.filter(user=request.user).first() if request.user.is_authenticated else None
+    wishlist = (
+        Wishlist.objects.filter(user=request.user).first()
+        if request.user.is_authenticated
+        else None
+    )
 
     context = {
         "products": products,
@@ -73,19 +85,24 @@ def all_products(request, category=None):
 
 
 def product_detail(request, product_id):
-    product = get_object_or_404(Product.objects.select_related("category"), pk=product_id)
+    product = get_object_or_404(
+        Product.objects.select_related("category"), pk=product_id
+    )
 
     if "review_added" in request.GET or "review_deleted" in request.GET:
         product.update_rating()
         product.refresh_from_db()
 
     reviews = Review.objects.filter(product=product).order_by("-created_on")
-    related_products = list(Product.objects.filter(category=product.category).exclude(pk=product_id))
+    related_products = list(
+        Product.objects.filter(category=product.category).exclude(pk=product_id)
+    )
     related_products = random.sample(related_products, min(len(related_products), 4))
 
-    is_in_wishlist = request.user.is_authenticated and Wishlist.objects.filter(
-        user=request.user, items__product=product
-    ).exists()
+    is_in_wishlist = (
+        request.user.is_authenticated
+        and Wishlist.objects.filter(user=request.user, items__product=product).exists()
+    )
 
     context = {
         "product": product,
@@ -127,7 +144,9 @@ def edit_product(request, product_id):
         return redirect(reverse("products:product_detail", args=[product.id]))
 
     messages.info(request, f"You are editing {product.name}")
-    return render(request, "products/edit_product.html", {"form": form, "product": product})
+    return render(
+        request, "products/edit_product.html", {"form": form, "product": product}
+    )
 
 
 @login_required
@@ -145,9 +164,15 @@ def delete_product(request, product_id):
 def search_results(request):
     query = request.GET.get("q", "").strip()
     products = Product.objects.filter(
-        Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query)
+        Q(name__icontains=query)
+        | Q(description__icontains=query)
+        | Q(category__name__icontains=query)
     ).distinct()
-    return render(request, "products/search_results.html", {"products": products, "search_term": query})
+    return render(
+        request,
+        "products/search_results.html",
+        {"products": products, "search_term": query},
+    )
 
 
 class DeleteReview(LoginRequiredMixin, DeleteView):
@@ -160,7 +185,9 @@ class DeleteReview(LoginRequiredMixin, DeleteView):
         return self.request.user == review.user or self.request.user.is_superuser
 
     def get_success_url(self):
-        return reverse("products:product_detail", kwargs={"product_id": self.object.product_id})
+        return reverse(
+            "products:product_detail", kwargs={"product_id": self.object.product_id}
+        )
 
 
 class UpdateReview(LoginRequiredMixin, UpdateView):
@@ -171,10 +198,15 @@ class UpdateReview(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         form.save()
         messages.success(self.request, "Your review has been updated!")
-        return redirect(reverse("products:product_detail", kwargs={"product_id": self.object.product_id}))
+        return redirect(
+            reverse(
+                "products:product_detail", kwargs={"product_id": self.object.product_id}
+            )
+        )
 
 
 # ✅ Category Views for Individual Product Categories
+
 
 def mugs_view(request):
     products = Product.objects.filter(category__name__iexact="mugs")

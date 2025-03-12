@@ -4,6 +4,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from decimal import Decimal
 
+
 class Category(models.Model):
     class Meta:
         verbose_name_plural = "Categories"
@@ -18,6 +19,7 @@ class Category(models.Model):
     def get_friendly_name(self):
         return self.friendly_name
 
+
 class Size(models.Model):
     SIZE_CHOICES = [
         ("S", "Small"),
@@ -31,6 +33,7 @@ class Size(models.Model):
 
     def __str__(self):
         return self.get_name_display()
+
 
 class Product(models.Model):
     category = models.ForeignKey(
@@ -85,6 +88,7 @@ class Product(models.Model):
 
     def update_rating(self):
         from django.db.models import Avg
+
         reviews = self.reviews.all()
         if reviews.exists():
             self.rating = round(reviews.aggregate(Avg("rating"))["rating__avg"], 1)
@@ -104,7 +108,7 @@ class Product(models.Model):
         self.is_active = True
         self.deleted_at = None
         self.save()
-        
+
     def get_available_sizes(self):
         return list(self.sizes.all())
 

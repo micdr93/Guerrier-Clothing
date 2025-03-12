@@ -13,30 +13,34 @@ def bag_contents(request):
     for item_id, item_data in bag.items():
         try:
             product = get_object_or_404(Product, pk=item_id)
-            
+
             # Check if item_data is a dictionary (for products with sizes) or an integer
             if isinstance(item_data, int):
                 quantity = item_data
                 total_price = product.price * quantity
                 total += total_price
                 product_count += quantity
-                bag_items.append({
-                    "product": product,
-                    "quantity": quantity,
-                    "total_price": total_price,  # Make sure this is properly calculated
-                })
+                bag_items.append(
+                    {
+                        "product": product,
+                        "quantity": quantity,
+                        "total_price": total_price,  # Make sure this is properly calculated
+                    }
+                )
             else:
                 # Handle products with sizes
                 for size, quantity in item_data.items():
                     total_price = product.price * quantity
                     total += total_price
                     product_count += quantity
-                    bag_items.append({
-                        "product": product,
-                        "quantity": quantity,
-                        "size": size,
-                        "total_price": total_price,  # Make sure this is properly calculated
-                    })
+                    bag_items.append(
+                        {
+                            "product": product,
+                            "quantity": quantity,
+                            "size": size,
+                            "total_price": total_price,  # Make sure this is properly calculated
+                        }
+                    )
         except Exception as e:
             print(f"Error processing item {item_id}: {e}")
             continue
@@ -61,11 +65,11 @@ def bag_contents(request):
         "free_delivery_threshold": settings.FREE_DELIVERY_THRESHOLD,
         "grand_total": grand_total,
     }
-    
+
     # Debug logging to verify calculations
     print(f"Cart items: {len(bag_items)}")
     print(f"Total: {total}")
     print(f"Delivery: {delivery}")
     print(f"Grand Total: {grand_total}")
-    
+
     return context

@@ -4,6 +4,7 @@ import boto3
 from pathlib import Path
 from django.conf import settings
 
+
 class Command(BaseCommand):
     help = "Uploads all local media files to S3."
 
@@ -17,28 +18,32 @@ class Command(BaseCommand):
         s3_media_prefix = "media/"
 
         s3_client = boto3.client(
-            's3',
+            "s3",
             aws_access_key_id=os.environ.get("AWS_ACCESS_KEY_ID"),
             aws_secret_access_key=os.environ.get("AWS_SECRET_ACCESS_KEY"),
-            region_name=settings.AWS_S3_REGION_NAME
+            region_name=settings.AWS_S3_REGION_NAME,
         )
 
         for root, dirs, files in os.walk(local_media_path):
             for filename in files:
                 local_file = Path(root) / filename
                 relative_path = local_file.relative_to(local_media_path)
-                s3_key = os.path.join(s3_media_prefix, str(relative_path)).replace("\\", "/")
+                s3_key = os.path.join(s3_media_prefix, str(relative_path)).replace(
+                    "\\", "/"
+                )
                 try:
                     s3_client.upload_file(
                         Filename=str(local_file),
                         Bucket=bucket_name,
                         Key=s3_key,
-                        ExtraArgs={'ACL': 'public-read'}
+                        ExtraArgs={"ACL": "public-read"},
                     )
-                    self.stdout.write(self.style.SUCCESS(
-                        f"Uploaded {local_file} to s3://{bucket_name}/{s3_key}"
-                    ))
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            f"Uploaded {local_file} to s3://{bucket_name}/{s3_key}"
+                        )
+                    )
                 except Exception as e:
-                    self.stdout.write(self.style.ERROR(
-                        f"Error uploading {local_file}: {e}"
-                    ))
+                    self.stdout.write(
+                        self.style.ERROR(f"Error uploading {local_file}: {e}")
+                    )

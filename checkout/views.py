@@ -15,6 +15,7 @@ from .forms import OrderForm
 from .models import Order, OrderLineItem
 from .utils import send_confirmation_email
 
+
 def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
@@ -52,7 +53,7 @@ def checkout(request):
                         order_line_item.save()
                     else:
                         for size, quantity in item_data.items():
-                            if size != 'DEFAULT':
+                            if size != "DEFAULT":
                                 order_line_item = OrderLineItem(
                                     order=order,
                                     product=product,
@@ -100,23 +101,27 @@ def checkout(request):
         for item_id, item_data in bag.items():
             try:
                 product = Product.objects.get(id=item_id)
-                
+
                 if isinstance(item_data, int):
-                    bag_items.append({
-                        'product': product,
-                        'quantity': item_data,
-                        'size': None,
-                        'price': product.price,
-                    })
+                    bag_items.append(
+                        {
+                            "product": product,
+                            "quantity": item_data,
+                            "size": None,
+                            "price": product.price,
+                        }
+                    )
                 else:
                     for size, quantity in item_data.items():
-                        if size != 'DEFAULT':
-                            bag_items.append({
-                                'product': product,
-                                'quantity': quantity,
-                                'size': size,
-                                'price': product.price,
-                            })
+                        if size != "DEFAULT":
+                            bag_items.append(
+                                {
+                                    "product": product,
+                                    "quantity": quantity,
+                                    "size": size,
+                                    "price": product.price,
+                                }
+                            )
             except Product.DoesNotExist:
                 continue
 
@@ -162,6 +167,7 @@ def checkout(request):
 
         return render(request, template, context)
 
+
 @require_POST
 @csrf_exempt
 def cache_checkout_data(request):
@@ -189,6 +195,7 @@ def cache_checkout_data(request):
     except Exception as e:
         print(f"STRIPE ERROR: {str(e)}")
         return HttpResponse(content=str(e), status=400)
+
 
 def checkout_success(request, order_number):
     save_info = request.session.get("save_info")
@@ -238,6 +245,7 @@ def checkout_success(request, order_number):
     }
 
     return render(request, template, context)
+
 
 def order_detail(request, order_number):
     order = get_object_or_404(Order, order_number=order_number)
