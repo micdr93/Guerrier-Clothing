@@ -5,7 +5,6 @@
 <div class="container my-5">
     <h1 class="mb-4">Your Bag</h1>
 
-    <!-- If there are bag items, display them -->
     {% if cart %}
         <div class="row">
             <div class="col-12 col-md-8">
@@ -16,7 +15,7 @@
                             <th scope="col" class="text-center">Quantity</th>
                             <th scope="col" class="text-end">Price</th>
                             <th scope="col" class="text-end">Subtotal</th>
-                            <th scope="col"></th> <!-- Remove button column -->
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,14 +36,14 @@
                                         {% csrf_token %}
                                         <div class="d-flex align-items-center justify-content-center">
                                             <button type="button" class="btn btn-black rounded-0 decrement-qty p-1 px-2" 
-                                                    data-item_id="{{ item.product.id }}">-</button>
+                                                    data-item-id="{{ item.product.id }}">-</button>
                                             
                                             <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" 
                                                    class="form-control form-control-sm qty_input text-center mx-2" 
-                                                   data-item_id="{{ item.product.id }}" style="width: 50px;">
+                                                   data-item-id="{{ item.product.id }}" style="width: 50px;">
                                             
                                             <button type="button" class="btn btn-black rounded-0 increment-qty p-1 px-2" 
-                                                    data-item_id="{{ item.product.id }}">+</button>
+                                                    data-item-id="{{ item.product.id }}">+</button>
                                         </div>
                                         <button type="submit" class="btn btn-sm btn-black rounded-0 mt-2 update-qty">Update</button>
                                     </form>
@@ -56,7 +55,6 @@
                                     €{{ item.subtotal|floatformat:2 }}
                                 </td>
                                 <td class="text-end">
-                                    <!-- Remove button -->
                                     <form action="{% url 'bag:remove_from_bag' item.product.id %}" method="POST" class="remove-item-form">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-sm btn-outline-black" aria-label="Remove item">
@@ -68,8 +66,8 @@
                         {% endfor %}
                     </tbody>
                 </table>
-            </div> <!-- col-md-8 -->
-        </div> <!-- row -->
+            </div>
+        </div>
     {% else %}
         <p>Your bag is currently empty.</p>
     {% endif %}
@@ -85,19 +83,4 @@
         </div>
     </div>
 </div>
-
-<!-- No inline script here - all JavaScript moved to script.js -->
-{% endblock %}
-
-{% block postloadjs %}
-{{ block.super }}
-<script>
-// This will ensure the event handlers don't duplicate
-document.addEventListener('DOMContentLoaded', function() {
-  // Force reinitialize quantity controls to ensure they work correctly
-  if (typeof reinitializeQuantityControls === 'function') {
-    reinitializeQuantityControls();
-  }
-});
-</script>
 {% endblock %}
