@@ -125,7 +125,7 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Checkout Success</summary>
 
-![Checkout Success HTML Validation](documentation/validation/html/checkout-success.png)
+![Checkout Success HTML Validation](documentation/validation/html_checkout_success.png)
 </details>
 
 <details>
