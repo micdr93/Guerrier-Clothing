@@ -173,19 +173,13 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>base.css</summary>
 
-![Base CSS Validation](documentation/validation/css/base.png)
+![Base CSS Validation](documentation/validation/css_base.png)
 </details>
 
 <details>
 <summary>checkout.css</summary>
 
-![Checkout CSS Validation](documentation/validation/css/checkout.png)
-</details>
-
-<details>
-<summary>profile.css</summary>
-
-![Profile CSS Validation](documentation/validation/css/profile.png)
+![Checkout CSS Validation](documentation/validation/css_checkout.png)
 </details>
 
 [Back to Top](#table-of-contents)
@@ -195,51 +189,13 @@ It is important to test on different browsers to ensure that the site is functio
 [JShint Validator](https://jshint.com) has been used to validate all JS files.
 
 <details>
-<summary>base.html (postloadjs)</summary>
+<summary>scripts.js</summary>
 
-![Base Postload JS Validation](documentation/validation/js/base-postload.png)
+![Scripts Validation](documentation/validation/js_scripts.png)
 </details>
+<summary>stripe_elements.js</summary>
 
-<details>
-<summary>countryfield.js</summary>
-
-![Countryfield JS Validation](documentation/validation/js/countryfield.png)
-</details>
-
-<details>
-<summary>add_product.html (postloadjs)</summary>
-
-![Add Product JS Validation](documentation/validation/js/add-product.png)
-</details>
-
-<details>
-<summary>edit_product.html (postloadjs)</summary>
-
-![Edit Product JS Validation](documentation/validation/js/edit-product.png)
-</details>
-
-<details>
-<summary>products.html (postloadjs)</summary>
-
-![Products JS Validation](documentation/validation/js/products.png)
-</details>
-
-<details>
-<summary>bag.html (postloadjs)</summary>
-
-![Bag JS Validation](documentation/validation/js/bag.png)
-</details>
-
-<details>
-<summary>quantity_input_script.html (script)</summary>
-
-![Quantity Input JS Validation](documentation/validation/js/quantity-input.png)
-</details>
-
-<details>
-<summary>stripe_element.js</summary>
-
-![Stripe Element JS Validation](documentation/validation/js/stripe-element.png)
+![Stripe Element JS Validation](documentation/validation/js_stripe_element.png)
 </details>
 
 [Back to Top](#table-of-contents)
