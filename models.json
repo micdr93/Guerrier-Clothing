@@ -1,5 +1,3 @@
-✅ Checkout signals loaded successfully
-🔄 Checkout app initialized - Stripe key will be set in views
 [
 {
   "model": "admin.logentry",
