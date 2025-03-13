@@ -14,7 +14,10 @@ from reviews.forms import ReviewForm
 
 def calculate_average_rating(product):
     reviews = Review.objects.filter(product=product)
-    return reviews.aggregate(Avg("rating"))["rating__avg"] if reviews.exists() else 0
+    return (
+        reviews.aggregate(Avg("rating"))["rating__avg"]
+        if reviews.exists() else 0
+    )
 
 
 def all_products(request, category=None):
@@ -24,7 +27,9 @@ def all_products(request, category=None):
             query_category.lower().replace("-", " ").replace("_", " ").strip()
         )
         try:
-            category_obj = Category.objects.get(name__iexact=query_category_normalized)
+            category_obj = Category.objects.get(
+                name__iexact=query_category_normalized
+            )
             products = Product.active_products().filter(category=category_obj)
         except Category.DoesNotExist:
             products = Product.active_products().filter(
@@ -36,7 +41,8 @@ def all_products(request, category=None):
     categories = Category.objects.all()
     price_range = products.aggregate(Min("price"), Max("price"))
     query = request.GET.get("q", "").strip()
-    price_min, price_max = request.GET.get("price_min"), request.GET.get("price_max")
+    price_min = request.GET.get("price_min")
+    price_max = request.GET.get("price_max")
     filter_applied = bool(query or price_min or price_max)
 
     if query:
@@ -95,13 +101,18 @@ def product_detail(request, product_id):
 
     reviews = Review.objects.filter(product=product).order_by("-created_on")
     related_products = list(
-        Product.objects.filter(category=product.category).exclude(pk=product_id)
+        Product.objects.filter(category=product.category)
+        .exclude(pk=product_id)
     )
-    related_products = random.sample(related_products, min(len(related_products), 4))
+    related_products = random.sample(
+        related_products, min(len(related_products), 4)
+    )
 
     is_in_wishlist = (
         request.user.is_authenticated
-        and Wishlist.objects.filter(user=request.user, items__product=product).exists()
+        and Wishlist.objects.filter(
+            user=request.user, items__product=product
+        ).exists()
     )
 
     context = {
@@ -123,9 +134,13 @@ def add_product(request):
     if form.is_valid():
         product = form.save()
         messages.success(request, "Successfully added product!")
-        return redirect(reverse("products:product_detail", args=[product.id]))
+        return redirect(
+            reverse("products:product_detail", args=[product.id])
+        )
 
-    messages.error(request, "Failed to add product. Please ensure the form is valid.")
+    messages.error(
+        request, "Failed to add product. Please ensure the form is valid."
+    )
     return render(request, "products/add_product.html", {"form": form})
 
 
@@ -136,16 +151,22 @@ def edit_product(request, product_id):
         return redirect(reverse("home"))
 
     product = get_object_or_404(Product, pk=product_id)
-    form = ProductForm(request.POST or None, request.FILES or None, instance=product)
+    form = ProductForm(
+        request.POST or None, request.FILES or None, instance=product
+    )
 
     if form.is_valid():
         form.save()
         messages.success(request, "Successfully updated product!")
-        return redirect(reverse("products:product_detail", args=[product.id]))
+        return redirect(
+            reverse("products:product_detail", args=[product.id])
+        )
 
     messages.info(request, f"You are editing {product.name}")
     return render(
-        request, "products/edit_product.html", {"form": form, "product": product}
+        request,
+        "products/edit_product.html",
+        {"form": form, "product": product}
     )
 
 
@@ -182,11 +203,14 @@ class DeleteReview(LoginRequiredMixin, DeleteView):
 
     def test_func(self):
         review = self.get_object()
-        return self.request.user == review.user or self.request.user.is_superuser
+        return (
+            self.request.user == review.user or self.request.user.is_superuser
+        )
 
     def get_success_url(self):
         return reverse(
-            "products:product_detail", kwargs={"product_id": self.object.product_id}
+            "products:product_detail",
+            kwargs={"product_id": self.object.product_id}
         )
 
 
@@ -200,7 +224,8 @@ class UpdateReview(LoginRequiredMixin, UpdateView):
         messages.success(self.request, "Your review has been updated!")
         return redirect(
             reverse(
-                "products:product_detail", kwargs={"product_id": self.object.product_id}
+                "products:product_detail",
+                kwargs={"product_id": self.object.product_id}
             )
         )
 
@@ -215,12 +240,18 @@ def mugs_view(request):
 
 def coasters_view(request):
     products = Product.objects.filter(category__name__iexact="coasters")
-    return render(request, "products/coasters.html", {"products": products})
+    return render(
+        request, "products/coasters.html", {"products": products}
+    )
 
 
 def skateboard_decks_view(request):
-    products = Product.objects.filter(category__name__iexact="skateboard decks")
-    return render(request, "products/skateboard_decks.html", {"products": products})
+    products = Product.objects.filter(
+        category__name__iexact="skateboard decks"
+    )
+    return render(
+        request, "products/skateboard_decks.html", {"products": products}
+    )
 
 
 def shirts_view(request):

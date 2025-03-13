@@ -2,7 +2,8 @@ from django import forms
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .widgets import CustomClearableFileInput
 from .models import Product, Category
-from reviews.models import Review  # Only needed if you do something with reviews here
+# Only needed if you do something with reviews here
+from reviews.models import Review
 
 
 class ProductForm(forms.ModelForm):
@@ -10,7 +11,6 @@ class ProductForm(forms.ModelForm):
     A form for creating/updating Product instances, including a custom
     clearable file widget for the optional image field.
     """
-
     # Custom field for image with specialized widget
     image = forms.ImageField(
         label="Image",
@@ -18,7 +18,6 @@ class ProductForm(forms.ModelForm):
         widget=CustomClearableFileInput,
         help_text="Upload a product image (optional)",
     )
-
     # Additional validation for price
     price = forms.DecimalField(
         label="Price",
@@ -35,7 +34,6 @@ class ProductForm(forms.ModelForm):
             "invalid": "Enter a valid price",
         },
     )
-
     # Additional validation for name
     name = forms.CharField(
         label="Product Name",
@@ -46,7 +44,6 @@ class ProductForm(forms.ModelForm):
             "max_length": "Product name cannot exceed 254 characters",
         },
     )
-
     # Optional rating field validation
     rating = forms.IntegerField(
         label="Rating",
@@ -76,17 +73,18 @@ class ProductForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-
         # Populate category choices with friendly names
         categories = Category.objects.all()
-        friendly_names = [(c.id, c.get_friendly_name() or c.name) for c in categories]
+        friendly_names = [
+            (c.id, c.get_friendly_name() or c.name) for c in categories
+        ]
         self.fields["category"].choices = friendly_names
-
         # Add bootstrap-like styling to all fields
         for field_name, field in self.fields.items():
             if hasattr(field.widget, "attrs"):
-                field.widget.attrs["class"] = "border-black rounded-0 form-control"
-
+                field.widget.attrs["class"] = (
+                    "border-black rounded-0 form-control"
+                )
         # Make certain fields more user-friendly
         self.fields["description"].widget.attrs["rows"] = 3
         self.fields["sizes"].widget.attrs["class"] += " select2"
@@ -98,13 +96,10 @@ class ProductForm(forms.ModelForm):
         cleaned_data = super().clean()
         name = cleaned_data.get("name")
         price = cleaned_data.get("price")
-
         # Prevent obviously problematic product entries
         if name and price:
             if len(name) < 3:
                 self.add_error("name", "Product name is too short")
-
             if price <= 0:
                 self.add_error("price", "Price must be greater than zero")
-
         return cleaned_data
