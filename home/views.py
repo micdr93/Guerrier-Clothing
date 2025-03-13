@@ -18,8 +18,10 @@ def index(request):
                 messages.success(
                     request, "Thank you for subscribing to our newsletter!"
                 )
-            except:
-                messages.error(request, "You're already subscribed to our newsletter.")
+            except Exception:
+                messages.error(
+                    request, "You're already subscribed to our newsletter."
+                )
     context = {
         "banner_image": "/media/banners/backgroundimg.png",
         "newsletter_form": newsletter_form,
@@ -49,7 +51,9 @@ def hats_view(request):
     if request.user.is_authenticated:
         wishlist = Wishlist.objects.filter(user=request.user).first()
         if wishlist:
-            wishlist_item_ids = set(wishlist.items.values_list("product_id", flat=True))
+            wishlist_item_ids = set(
+                wishlist.items.values_list("product_id", flat=True)
+            )
     context = {
         "products": products,
         "wishlist": wishlist,
@@ -65,7 +69,9 @@ def products_view(request):
     if request.user.is_authenticated:
         wishlist = Wishlist.objects.filter(user=request.user).first()
         if wishlist:
-            wishlist_item_ids = set(wishlist.items.values_list("product_id", flat=True))
+            wishlist_item_ids = set(
+                wishlist.items.values_list("product_id", flat=True)
+            )
     context = {
         "products": products,
         "wishlist": wishlist,
@@ -89,12 +95,13 @@ def contact(request):
             form.save()
             messages.success(
                 request,
-                "Thank you, your email has been sent. We will contact you shortly.",
+                "Thank you, we received your email. We will contact you ASAP.",
             )
             return redirect("home:contact")
         else:
             messages.error(
-                request, "Form submission failed. Please check the form and try again."
+                request,
+                "Form submission failed. Please check the form and try again."
             )
     else:
         form = ContactForm()
@@ -118,4 +125,7 @@ def coasters_view(request):
 
 def skateboard_decks_view(request):
     products = Product.objects.filter(category__id=5)
-    return render(request, "home/skateboard_decks.html", {"products": products})
+    return render(
+        request, "home/skateboard_decks.html", {"products": products}
+    )
+    

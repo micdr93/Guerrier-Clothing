@@ -9,6 +9,7 @@ from products.models import Product
 
 logger = logging.getLogger(__name__)
 
+
 def view_bag(request):
     bag = request.session.get("bag", {})
     cart = []
@@ -40,7 +41,7 @@ def view_bag(request):
 
     # Determine delivery and free delivery delta
     if cart_total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = settings.STANDARD_DELIVERY  # Ensure this is defined in your settings (e.g., Decimal('5.00'))
+        delivery = settings.STANDARD_DELIVERY
         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - cart_total
     else:
         delivery = Decimal('0.00')
@@ -68,10 +69,8 @@ def add_to_bag(request, product_id):
     product_id_str = str(product_id)
 
     if size:
-        if product_id_str in bag:
-            bag[product_id_str][size] = bag[product_id_str].get(size, 0) + quantity
-        else:
-            bag[product_id_str] = {size: quantity}
+        bag.setdefault(product_id_str, {}).setdefault(size, 0)
+        bag[product_id_str][size] += quantity
     else:
         bag[product_id_str] = bag.get(product_id_str, 0) + quantity
 
@@ -97,7 +96,8 @@ def remove_from_bag(request, product_id):
             del bag[product_id_str][size]
             if not bag[product_id_str]:
                 del bag[product_id_str]
-            messages.success(request, f"Removed size {size} {product.name} from your bag")
+            messages.success
+            (request, f"Removed size {size} {product.name} from your bag")
     else:
         if product_id_str in bag:
             del bag[product_id_str]
@@ -128,7 +128,8 @@ def update_bag(request, product_id):
                 bag[product_id_str] = {size: quantity}
         else:
             bag[product_id_str] = quantity
-        messages.success(request, f"Updated {product.name} quantity to {quantity}")
+        messages.success
+        (request, f"Updated {product.name} quantity to {quantity}")
     else:
         if size:
             if product_id_str in bag and size in bag[product_id_str]:

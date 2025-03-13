@@ -10,7 +10,9 @@ class ContactForm(forms.ModelForm):
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "email": forms.EmailInput(attrs={"class": "form-control"}),
             "subject": forms.TextInput(attrs={"class": "form-control"}),
-            "message": forms.Textarea(attrs={"class": "form-control", "rows": 5}),
+            "message": forms.Textarea(
+                attrs={"class": "form-control", "rows": 5}
+            ),
         }
 
 
@@ -38,3 +40,4 @@ class NewsletterForm(forms.ModelForm):
                 }
             )
         }
+        

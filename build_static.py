@@ -1,6 +1,29 @@
 import os
 import shutil
-import pathlib
+from pathlib import Path
+
+
+def ensure_directories(directories):
+    for directory in directories:
+        os.makedirs(directory, exist_ok=True)
+
+
+def create_files(files_to_create):
+    for path, content in files_to_create.items():
+        if not os.path.exists(path):
+            with open(path, "w") as f:
+                f.write(content)
+
+
+def copy_images(image_sources, images, dest_dir):
+    for source_dir in image_sources:
+        if os.path.exists(source_dir):
+            for img in images:
+                source_path = os.path.join(source_dir, img)
+                dest_path = os.path.join(dest_dir, img)
+        if os.path.exists(source_path):
+            and not os.path.exists(dest_path):
+            shutil.copy(source_path, dest_path)
 
 
 def ensure_static_files():
@@ -11,9 +34,7 @@ def ensure_static_files():
         "static/images",
         "static/images/favicon",
     ]
-
-    for directory in directories:
-        os.makedirs(directory, exist_ok=True)
+    ensure_directories(directories)
 
     files_to_create = {
         "static/css/base.css": "/* Base styling */",
@@ -25,22 +46,14 @@ def ensure_static_files():
   "display": "standalone"
 }""",
     }
+    create_files(files_to_create)
 
-    for path, content in files_to_create.items():
-        if not os.path.exists(path):
-            with open(path, "w") as f:
-                f.write(content)
-
-    # Copy carousel images if they exist
-    image_sources = ["media/images", "staticfiles/images", "media", "staticfiles"]
-
-    for source_dir in image_sources:
-        if os.path.exists(source_dir):
-            for img in ["carousel1.webp", "carousel2.webp", "carousel3.webp"]:
-                source_path = os.path.join(source_dir, img)
-                dest_path = os.path.join("static/images", img)
-                if os.path.exists(source_path) and not os.path.exists(dest_path):
-                    shutil.copy(source_path, dest_path)
+    image_sources = [
+    "media/images", "staticfiles/images",
+    "media", "staticfiles"
+    ]
+    images = ["carousel1.webp", "carousel2.webp", "carousel3.webp"]
+    copy_images(image_sources, images, "static/images")
 
 
 if __name__ == "__main__":

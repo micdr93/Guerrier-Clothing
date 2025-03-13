@@ -14,7 +14,6 @@ def bag_contents(request):
         try:
             product = get_object_or_404(Product, pk=item_id)
 
-            # Check if item_data is a dictionary (for products with sizes) or an integer
             if isinstance(item_data, int):
                 quantity = item_data
                 total_price = product.price * quantity
@@ -24,7 +23,7 @@ def bag_contents(request):
                     {
                         "product": product,
                         "quantity": quantity,
-                        "total_price": total_price,  # Make sure this is properly calculated
+                        "total_price": total_price,
                     }
                 )
             else:
@@ -38,7 +37,7 @@ def bag_contents(request):
                             "product": product,
                             "quantity": quantity,
                             "size": size,
-                            "total_price": total_price,  # Make sure this is properly calculated
+                            "total_price": total_price,
                         }
                     )
         except Exception as e:
@@ -57,8 +56,8 @@ def bag_contents(request):
     grand_total = total + delivery
 
     context = {
-        "cart": bag_items,  # Use cart for template consistency
-        "cart_total": total,  # Make sure this is the sum of all items' total prices
+        "cart": bag_items,
+        "cart_total": total,
         "product_count": product_count,
         "delivery": delivery,
         "free_delivery_delta": free_delivery_delta,

@@ -22,6 +22,243 @@ This document provides comprehensive testing documentation for the [Project Name
 
 ## Manual Testing
 
+### Python 
+
+[CI Python Linter](https://pep8ci.herokuapp.com) has been used to validate all Python files.
+
+<details>
+<summary>Bag contexts.py</summary>
+
+![bag contents.py](documentation/validation/python-bag-contexts.png)
+
+</details>
+
+<details>
+<summary>Bag urls.py</summary>
+
+![bag urls](documentation/validation/python-bag-urls.png)
+
+</details>
+
+<details>
+<summary>Bag views.py</summary>
+
+![bag views.py](documentation/validation/python-bag-views.png)
+
+</details>
+
+<details>
+<summary>Guerrier urls.py</summary>
+
+![urls.py](documentation/validation/python-base-urls.png)
+
+</details>
+
+<details>
+<summary>Guerrier views.py</summary>
+
+![profile.css](documentation/validation/python-base-views.png)
+
+</details>
+
+<details>
+<summary>Guerrier settings.py</summary>
+
+![settings.py](documentation/validation/python-base-settings.png)
+
+</details>
+
+<details>
+<summary>Checkout admin.py</summary>
+
+![checkout admin](documentation/validation/python-checkout-admin.png)
+
+</details>
+
+<details>
+<summary>Checkout forms.py</summary>
+
+![checkout admin](documentation/validation/python-checkout-admin.png)
+
+</details>
+
+<details>
+<summary>Checkout models.py</summary>
+
+![checkout models](documentation/validation/python-checkout-models.png)
+
+</details>
+
+<details>
+<summary>Checkout signals.py</summary>
+
+![checkout signals](documentation/validation/python-checkout-signal.png)
+
+</details>
+
+<details>
+<summary>Checkout urls.py</summary>
+
+![checkout urls](documentation/validation/python-checkout-urls.png)
+
+</details>
+
+<details>
+<summary>Checkout views.py</summary>
+
+![checkout views](documentation/validation/python-checkout-views.png)
+
+</details>
+
+<details>
+<summary>Checkout webhook_handler.py</summary>
+
+![webhook handler](documentation/validation/python-checkout-handler.png)
+
+</details>
+
+<details>
+<summary>Checkout webhooks.py</summary>
+
+![webhooks](documentation/validation/python-checkout-webhook.png)
+
+</details>
+
+<details>
+<summary>Home urls.py</summary>
+
+![home urls](documentation/validation/python-home-urls.png)
+
+</details>
+
+<details>
+<summary>Home views.py</summary>
+
+![home views.py](documentation/validation/python-home-views.png)
+
+</details>
+
+<details>
+<summary>Home forms.py</summary>
+
+![home forms](documentation/validation/python-home-forms.png)
+
+</details>
+
+<details>
+<summary>Home models.py</summary>
+
+![home models](documentation/validation/python-home-models.png)
+
+</details>
+
+<details>
+<summary>Home admin.py</summary>
+
+![home admin](documentation/validation/python-home-admin.png)
+
+</details>
+
+<details>
+<summary>Products admin.py</summary>
+
+![product admin](documentation/validation/python-product-admin.png)
+
+</details>
+
+<details>
+<summary>Products forms.py</summary>
+
+![product forms](documentation/validation/python-product-forms.png)
+
+</details>
+
+<details>
+<summary>Products models.py</summary>
+
+![product models](documentation/validation/python-product-models.png)
+
+</details>
+
+<details>
+<summary>Products urls.py</summary>
+
+![product urls](documentation/validation/python-product-urls.png)
+
+</details>
+
+<details>
+<summary>Products views.py</summary>
+
+![product views](documentation/validation/python-product-views.png)
+
+</details>
+
+<details>
+<summary>Products widgets.py</summary>
+
+![product widgets](documentation/validation/python-products-widgets.png)
+
+</details>
+
+<details>
+<summary>Profiles forms.py</summary>
+
+![profiles forms](documentation/validation/python-profile-forms.png)
+
+</details>
+
+<details>
+<summary>Profiles models.py</summary>
+
+![product models](documentation/validation/python-profiles-model.png)
+
+</details>
+
+<details>
+<summary>Profiles urls.py</summary>
+
+![profiles urls](documentation/validation/python-profiles-urls.png)
+
+</details>
+
+<details>
+<summary>Profiles views.py</summary>
+
+![profiles views](documentation/validation/python-profiles-views.png)
+
+</details>
+
+<details>
+<summary>Wishlist admin.py</summary>
+
+![wishlist admin](documentation/validation/python-wishlist-admin.png)
+
+</details>
+
+<details>
+<summary>Wishlist models.py</summary>
+
+![wishlist models](documentation/validation/python-wishlist-model.png)
+
+</details>
+
+<details>
+<summary>Wishlist urls.py</summary>
+
+![wishlist urls](documentation/validation/python-wishlist-urls.png)
+
+</details>
+
+<details>
+<summary>Wishlist views.py</summary>
+
+![wishlist views](documentation/validation/python-wishlist-views.png)
+
+</details>
+
+<br>
+
 ### User Story Testing
 
 Each user story has been tested to ensure the acceptance criteria are met. Here's a summary of the testing conducted for key user stories:
