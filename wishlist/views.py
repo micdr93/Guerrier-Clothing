@@ -43,9 +43,11 @@ def add_to_wishlist(request, product_id):
         )
         if is_ajax:
             product = get_object_or_404(Product, pk=product_id)
-            wishlist, created = Wishlist.objects.get_or_create(
-                user=request.user
-            )
+            
+            # Get the first wishlist or create one if none exists
+            wishlist = Wishlist.objects.filter(user=request.user).first()
+            if not wishlist:
+                wishlist = Wishlist.objects.create(user=request.user)
             
             # Check if the item already exists before creating it
             wishlist_item, item_created = WishlistItem.objects.get_or_create(

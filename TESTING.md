@@ -77,49 +77,49 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Privacy Policy</summary>
 
-![Privacy Policy HTML Validation](documentation/validation/html/privacy-policy.png)
+![Privacy Policy HTML Validation](documentation/validation/html_privacy_policy.png)
 </details>
 
 <details>
 <summary>Returns</summary>
 
-![Returns HTML Validation](documentation/validation/html/returns.png)
+![Returns HTML Validation](documentation/validation/html_returns.png)
 </details>
 
 <details>
 <summary>Sign Up</summary>
 
-![Sign Up HTML Validation](documentation/validation/html/signup.png)
+![Sign Up HTML Validation](documentation/validation/html_signup.png)
 </details>
 
 <details>
 <summary>Sign In</summary>
 
-![Sign In HTML Validation](documentation/validation/html/signin.png)
+![Sign In HTML Validation](documentation/validation/html_signin.png)
 </details>
 
 <details>
 <summary>Search</summary>
 
-![Search HTML Validation](documentation/validation/html/search.png)
+![Search HTML Validation](documentation/validation/html_search.png)
 </details>
 
 <details>
 <summary>Log Out</summary>
 
-![Log Out HTML Validation](documentation/validation/html/logout.png)
+![Log Out HTML Validation](documentation/validation/html_logout.png)
 </details>
 
 <details>
 <summary>Shopping Bag</summary>
 
-![Shopping Bag HTML Validation](documentation/validation/html/bag.png)
+![Shopping Bag HTML Validation](documentation/validation/html_bag.png)
 </details>
 
 <details>
 <summary>Checkout</summary>
 
-![Checkout HTML Validation](documentation/validation/html/checkout.png)
+![Checkout HTML Validation](documentation/validation/html_checkout.png)
 </details>
 
 <details>
