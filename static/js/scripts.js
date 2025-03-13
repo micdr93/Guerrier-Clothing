@@ -182,35 +182,64 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  function handleWishlistToggle(e) {
+    e.preventDefault();
+    e.stopPropagation(); // Stop event from bubbling up
+    
+    const productId = this.dataset.product_id;
+    const actionUrl = this.dataset.action;
+    
+    // Create FormData instead of JSON
+    const formData = new FormData();
+    
+    fetch(actionUrl, {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": getCSRFToken(),
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: formData  // Send FormData instead of JSON
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.success) {
+        this.classList.toggle('in-wishlist');
+        const icon = this.querySelector('i');
+        if (icon) {
+          icon.classList.toggle('fa-regular');
+          icon.classList.toggle('fa-solid');
+        }
+        
+        // Show user feedback
+        showMessage('success', data.message);
+        
+        // Update the button's data-action attribute to point to the opposite action
+        if (data.in_wishlist) {
+          this.dataset.action = `/wishlist/remove/${productId}/`;
+        } else {
+          this.dataset.action = `/wishlist/add/${productId}/`;
+        }
+      } else {
+        showMessage('error', data.message || 'Error updating wishlist');
+      }
+    })
+    .catch(error => {
+      console.error("Error:", error);
+      showMessage('error', 'Something went wrong with your wishlist. Please try again.');
+    });
+  }
+
   function initWishlistToggle() {
     document.querySelectorAll('.wishlist-toggle').forEach(button => {
-      button.addEventListener('click', function(e) {
-        e.preventDefault();
-        const productId = this.dataset.product_id;
-        const actionUrl = this.dataset.action;
-        
-        fetch(actionUrl, {
-          method: "POST",
-          headers: {
-            "X-CSRFToken": getCSRFToken(),
-            "Content-Type": "application/json",
-            "X-Requested-With": "XMLHttpRequest"
-          },
-          body: JSON.stringify({})
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            this.classList.toggle('in-wishlist');
-            const icon = this.querySelector('i');
-            if (icon) {
-              icon.classList.toggle('fa-regular');
-              icon.classList.toggle('fa-solid');
-            }
-          }
-        })
-        .catch(error => console.error("Error:", error));
-      });
+      // Remove any existing event listeners to prevent duplicates
+      button.removeEventListener('click', handleWishlistToggle);
+      // Add event listener
+      button.addEventListener('click', handleWishlistToggle);
     });
   }
 
