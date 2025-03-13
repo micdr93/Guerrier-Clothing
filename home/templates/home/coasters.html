@@ -8,27 +8,19 @@
             <hr class="w-75 mb-1 mx-auto">
         </div>
     </div>
-
     <div class="row">
         <div class="product-container col-10 offset-1">
             <div class="row">
                 {% for product in products %}
                     <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                         <div class="card h-100 border-0 position-relative">
-                            <button class="wishlist-toggle {% if product.id in wishlist_item_ids %}in-wishlist{% endif %}"
-                                    data-product-id="{{ product.id }}"
-                                    data-action="{% if product.id in wishlist_item_ids %}
-                                        {% url 'wishlist:remove_from_wishlist' product.id %}
-                                    {% else %}
-                                        {% url 'wishlist:add_to_wishlist' product.id %}
-                                    {% endif %}">
+                            <button type="button" class="wishlist-toggle {% if product.id in wishlist_item_ids %}in-wishlist{% endif %}" data-product-id="{{ product.id }}" data-action="{% if product.id in wishlist_item_ids %}{% url 'wishlist:remove_from_wishlist' product.id %}{% else %}{% url 'wishlist:add_to_wishlist' product.id %}{% endif %}">
                                 {% if product.id in wishlist_item_ids %}
                                     <i class="fa-solid fa-heart"></i>
                                 {% else %}
                                     <i class="fa-regular fa-heart"></i>
                                 {% endif %}
                             </button>
-
                             <a href="{% url 'products:product_detail' product.id %}">
                                 {% if product.image %}
                                     <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -36,7 +28,6 @@
                                     <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.webp" alt="{{ product.name }}">
                                 {% endif %}
                             </a>
-
                             <div class="card-body pb-0">
                                 <p class="mb-0">{{ product.name }}</p>
                                 {% if product.category %}
@@ -62,4 +53,7 @@
         </div>
     </div>
 </div>
+{% endblock %}
+{% block postloadjs %}
+<script src="{% static 'js/scripts.js' %}"></script>
 {% endblock %}

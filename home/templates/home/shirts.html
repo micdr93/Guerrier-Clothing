@@ -2,53 +2,47 @@
 {% load static %}
 {% block content %}
 <div class="container-fluid">
-    <div class="row">
-        <div class="col text-center mt-3">
-            <h2 class="logo-font">Shirts</h2>
-            <hr class="w-75 mb-1 mx-auto">
-        </div>
+  <div class="row">
+    <div class="col text-center mt-3">
+      <h2 class="logo-font">Shirts</h2>
+      <hr class="w-75 mb-1 mx-auto">
     </div>
-
-    <div class="row">
-        <div class="product-container col-10 offset-1">
-            <div class="row">
-                {% for product in products %}
-                    <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
-                        <div class="card h-100 border-0">
-                            <button class="wishlist-toggle {% if product.id in wishlist_item_ids %}in-wishlist{% endif %}"
-                                    data-product-id="{{ product.id }}"
-                                    data-action="{% if product.id in wishlist_item_ids %}
-                                        {% url 'wishlist:remove_from_wishlist' product.id %}
-                                    {% else %}
-                                        {% url 'wishlist:add_to_wishlist' product.id %}
-                                    {% endif %}">
-                                {% if product.id in wishlist_item_ids %}
-                                    <i class="fa-solid fa-heart text-black"></i>
-                                {% else %}
-                                    <i class="fa-regular fa-heart"></i>
-                                {% endif %}
-                            </button>
-
-                            <a href="{% url 'products:product_detail' product.id %}">
-                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                            </a>
-
-                            <div class="card-body pb-0">
-                                <p class="mb-0">{{ product.name }}</p>
-                            </div>
-                            <div class="card-footer bg-white pt-0 border-0 text-left">
-                                <p class="mb-0 text-left font-weight-bold">€{{ product.price }}</p>
-                                {% if product.rating %}
-                                    <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
-                                {% else %}
-                                    <small class="text-muted">No Rating</small>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
+  </div>
+  <div class="row">
+    <div class="product-container col-10 offset-1">
+      <div class="row">
+        {% for product in products %}
+          <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
+            <div class="card h-100 border-0">
+              <button type="button" class="wishlist-toggle {% if product.id in wishlist_item_ids %}in-wishlist{% endif %}" data-product-id="{{ product.id }}" data-action="{% if product.id in wishlist_item_ids %}{% url 'wishlist:remove_from_wishlist' product.id %}{% else %}{% url 'wishlist:add_to_wishlist' product.id %}{% endif %}">
+                {% if product.id in wishlist_item_ids %}
+                  <i class="fa-solid fa-heart text-black"></i>
+                {% else %}
+                  <i class="fa-regular fa-heart"></i>
+                {% endif %}
+              </button>
+              <a href="{% url 'products:product_detail' product.id %}">
+                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+              </a>
+              <div class="card-body pb-0">
+                <p class="mb-0">{{ product.name }}</p>
+              </div>
+              <div class="card-footer bg-white pt-0 border-0 text-left">
+                <p class="mb-0 text-left font-weight-bold">€{{ product.price }}</p>
+                {% if product.rating %}
+                  <small class="text-muted"><i class="fas fa-star mr-1"></i>{{ product.rating }} / 5</small>
+                {% else %}
+                  <small class="text-muted">No Rating</small>
+                {% endif %}
+              </div>
             </div>
-        </div>
+          </div>
+        {% endfor %}
+      </div>
     </div>
+  </div>
 </div>
+{% endblock %}
+{% block postloadjs %}
+<script src="{% static 'js/scripts.js' %}"></script>
 {% endblock %}
