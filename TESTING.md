@@ -137,7 +137,7 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Add Product</summary>
 
-![Add Product HTML Validation](documentation/validation/html/add-product.png)
+![Add Product HTML Validation](documentation/validation/html_add_product.png)
 </details>
 
 <details>
