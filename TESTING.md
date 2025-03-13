@@ -143,7 +143,7 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Edit Product</summary>
 
-![Edit Product HTML Validation](documentation/validation/html/edit-product.png)
+![Edit Product HTML Validation](documentation/validation/html_edit_product.png)
 </details>
 
 <details>
