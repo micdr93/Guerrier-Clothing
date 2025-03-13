@@ -42,7 +42,7 @@
                             <div class="col-12">
                                 <p><strong>Size:</strong></p>
                                 <select class="form-control rounded-0 w-50" name="product_size" id="id_product_size">
-                                    <input type="number" name="quantity" value="1" min="1" max="99">↩                              <option value="S">S</option>
+                                    <option value="S">S</option>
                                     <option value="M" selected>M</option>
                                     <option value="L">L</option>
                                     <option value="XL">XL</option>
@@ -57,8 +57,7 @@
                                 <div class="d-flex align-items-center product-quantity-container">
                                     <button type="button" class="btn btn-black rounded-0 decrement-qty p-1 px-3" 
                                             data-item_id="{{ product.id }}" data-delta="-1">-</button>
-                                            <input type="number" name="quantity" value="1" min="1" max="99">
-                                    
+                                    <input type="number" name="quantity" value="1" min="1" max="99">
                                     <button type="button" class="btn btn-black rounded-0 increment-qty p-1 px-3" 
                                             data-item_id="{{ product.id }}" data-delta="1">+</button>
                                 </div>
