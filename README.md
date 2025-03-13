@@ -300,7 +300,7 @@ The database implements various relationship types to maintain data integrity:
 - Payment information handled securely through Stripe, not stored in database
 - GDPR-compliant data handling with ability to delete user data on request
 
-![Database Schema](documentation/readme_images/erd1.png)
+![Database Schema](documentation/readme_images/ERD_Guerrier.png)
 
 # Features
 Guerrier's e-commerce platform combines aesthetic appeal with robust functionality to deliver a premium shopping experience aligned with our brand values. This section details the current features and planned enhancements.
