@@ -149,19 +149,19 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Update Review</summary>
 
-![Update Review HTML Validation](documentation/validation/html/update-review.png)
-</details>
+![Update Review HTML Validation](documentation/validation/html_update_review.png)
+</details> 
 
 <details>
 <summary>Delete Review</summary>
 
-![Delete Review HTML Validation](documentation/validation/html/delete-review.png)
+![Delete Review HTML Validation](documentation/validation/html_delete_review.png)
 </details>
 
 <details>
 <summary>Wishlist</summary>
 
-![Wishlist HTML Validation](documentation/validation/html/wishlist.png)
+![Wishlist HTML Validation](documentation/validation/html_wishlist.png)
 </details>
 
 [Back to Top](#table-of-contents)
