@@ -18,8 +18,6 @@ During the development of this project, various tests were carried out to ensure
 - [User Story Testing](#user-story-testing)
 - [Feature Testing](#feature-testing)
 - [Usability Testing](#usability-testing)
-- [Security Testing](#security-testing)
-- [Accessibility Testing](#accessibility-testing)
 
 ## Browser Compatibility Testing
 
