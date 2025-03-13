@@ -131,7 +131,7 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Profile</summary>
 
-![Profile HTML Validation](documentation/validation/html/profile.png)
+![Profile HTML Validation](documentation/validation/html_profiles.png)
 </details>
 
 <details>
