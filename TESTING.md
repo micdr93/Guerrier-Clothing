@@ -53,19 +53,19 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Home</summary>
 
-![Home Page HTML Validation](documentation/validation/html/home.png)
+![Home Page HTML Validation](documentation/validation/html_home.png)
 </details>
 
 <details>
 <summary>All Products</summary>
 
-![All Products HTML Validation](documentation/validation/html/products.png)
+![All Products HTML Validation](documentation/validation/html_products.png)
 </details>
 
 <details>
 <summary>Product Detail</summary>
 
-![Product Detail HTML Validation](documentation/validation/html/product-detail.png)
+![Product Detail HTML Validation](documentation/validation/html_product-detail.png)
 </details>
 
 <details>
