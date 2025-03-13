@@ -71,7 +71,7 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Contact</summary>
 
-![Contact HTML Validation](documentation/validation/html/contact.png)
+![Contact HTML Validation](documentation/validation/html_contact.png)
 </details>
 
 <details>
