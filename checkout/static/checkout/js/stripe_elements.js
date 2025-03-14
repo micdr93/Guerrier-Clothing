@@ -1,88 +1,119 @@
-window.addEventListener('load', function() {
-    console.log("Stripe elements script loaded");
-    var keyElem = document.getElementById('id_stripe_public_key');
-    var clientSecretElem = document.getElementById('id_client_secret');
-    if (!keyElem) { console.error("Stripe key element not found"); return; }
-    if (!clientSecretElem) { console.error("Client secret element not found"); return; }
-    var stripePublicKey = keyElem.textContent.trim().replace(/"/g, '');
-    var clientSecret = clientSecretElem.textContent.trim().replace(/"/g, '');
-    console.log("Stripe public key:", stripePublicKey);
-    console.log("Client secret:", clientSecret);
-    if (!stripePublicKey || !clientSecret) { console.error('Missing Stripe key or client secret'); return; }
-    var stripe = Stripe(stripePublicKey);
-    var elements = stripe.elements();
-    var card = elements.create('card', {
-      style: {
-        base: {
-          color: '#333',
-          fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-          fontSmoothing: 'antialiased',
-          fontSize: '16px',
-          '::placeholder': { color: '#aab7c4' },
-          iconColor: '#666'
-        },
-        invalid: { color: '#dc3545', iconColor: '#dc3545' }
-      },
-      hidePostalCode: true
-    });
-    card.mount('#card-element');
-    console.log("Card element mounted");
-    card.addEventListener('change', function(e) {
-      var errorDiv = document.getElementById('card-errors');
-      if (e.error) {
-        errorDiv.innerHTML = '<span class="icon" role="alert"><i class="fas fa-times"></i></span><span>' + e.error.message + '</span>';
-      } else {
-        errorDiv.innerHTML = '';
-      }
-    });
-    var form = document.getElementById('payment-form');
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      card.update({ disabled: true });
-      document.getElementById('submit-button').disabled = true;
-      document.getElementById('loading-overlay').style.display = 'block';
-      stripe.confirmCardPayment(clientSecret, {
-        payment_method: {
-          card: card,
-          billing_details: {
-            name: document.getElementById('id_full_name').value,
-            email: document.getElementById('id_email').value,
-            phone: document.getElementById('id_phone_number').value,
-            address: {
-              line1: document.getElementById('id_street_address1').value,
-              line2: document.getElementById('id_street_address2').value,
-              city: document.getElementById('id_town_or_city').value,
-              country: document.getElementById('id_country').value,
-              state: document.getElementById('id_county').value,
-              postal_code: document.getElementById('id_postcode').value
+/*
+    Core logic/payment flow for this comes from here:
+    https://stripe.com/docs/payments/accept-a-payment
+
+    CSS from here: 
+    https://stripe.com/docs/stripe-js
+*/
+
+var stripePublicKey = $('#id_stripe_public_key').text().slice(1, -1);
+var clientSecret = $('#id_client_secret').text().slice(1, -1);
+var stripe = Stripe(stripePublicKey);
+var elements = stripe.elements();
+var style = {
+    base: {
+        color: '#000',
+        fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+        fontSmoothing: 'antialiased',
+        fontSize: '16px',
+        '::placeholder': {
+            color: '#aab7c4'
+        }
+    },
+    invalid: {
+        color: '#dc3545',
+        iconColor: '#dc3545'
+    }
+};
+var card = elements.create('card', {style: style});
+card.mount('#card-element');
+
+// Handle realtime validation errors on the card element
+card.addEventListener('change', function (event) {
+    var errorDiv = document.getElementById('card-errors');
+    if (event.error) {
+        var html = `
+            <span class="icon" role="alert">
+                <i class="fas fa-times"></i>
+            </span>
+            <span>${event.error.message}</span>
+        `;
+        $(errorDiv).html(html);
+    } else {
+        errorDiv.textContent = '';
+    }
+});
+
+// Handle form submit
+var form = document.getElementById('payment-form');
+
+form.addEventListener('submit', function(ev) {
+    ev.preventDefault();
+    card.update({ 'disabled': true});
+    $('#submit-button').attr('disabled', true);
+    $('#payment-form').fadeToggle(100);
+    $('#loading-overlay').fadeToggle(100);
+
+    var saveInfo = Boolean($('#id-save-info').attr('checked'));
+    // From using {% csrf_token %} in the form
+    var csrfToken = $('input[name="csrfmiddlewaretoken"]').val();
+    var postData = {
+        'csrfmiddlewaretoken': csrfToken,
+        'client_secret': clientSecret,
+        'save_info': saveInfo,
+    };
+    var url = '/checkout/cache_checkout_data/';
+
+    $.post(url, postData).done(function () {
+        stripe.confirmCardPayment(clientSecret, {
+            payment_method: {
+                card: card,
+                billing_details: {
+                    name: $.trim(form.full_name.value),
+                    phone: $.trim(form.phone_number.value),
+                    email: $.trim(form.email.value),
+                    address:{
+                        line1: $.trim(form.street_address1.value),
+                        line2: $.trim(form.street_address2.value),
+                        city: $.trim(form.town_or_city.value),
+                        country: $.trim(form.country.value),
+                        state: $.trim(form.county.value),
+                    }
+                }
+            },
+            shipping: {
+                name: $.trim(form.full_name.value),
+                phone: $.trim(form.phone_number.value),
+                address: {
+                    line1: $.trim(form.street_address1.value),
+                    line2: $.trim(form.street_address2.value),
+                    city: $.trim(form.town_or_city.value),
+                    country: $.trim(form.country.value),
+                    postal_code: $.trim(form.postcode.value),
+                    state: $.trim(form.county.value),
+                }
+            },
+        }).then(function(result) {
+            if (result.error) {
+                var errorDiv = document.getElementById('card-errors');
+                var html = `
+                    <span class="icon" role="alert">
+                    <i class="fas fa-times"></i>
+                    </span>
+                    <span>${result.error.message}</span>`;
+                $(errorDiv).html(html);
+                $('#payment-form').fadeToggle(100);
+                $('#loading-overlay').fadeToggle(100);
+                card.update({ 'disabled': false});
+                $('#submit-button').attr('disabled', false);
+            } else {
+                if (result.paymentIntent.status === 'succeeded') {
+                    form.submit();
+                }
             }
-          }
-        },
-        shipping: {
-          name: document.getElementById('id_full_name').value,
-          phone: document.getElementById('id_phone_number').value,
-          address: {
-            line1: document.getElementById('id_street_address1').value,
-            line2: document.getElementById('id_street_address2').value,
-            city: document.getElementById('id_town_or_city').value,
-            country: document.getElementById('id_country').value,
-            state: document.getElementById('id_county').value,
-            postal_code: document.getElementById('id_postcode').value
-          }
-        }
-      }).then(function(result) {
-        if (result.error) {
-          var errorDiv = document.getElementById('card-errors');
-          errorDiv.innerHTML = '<span class="icon" role="alert"><i class="fas fa-times"></i></span><span>' + result.error.message + '</span>';
-          card.update({ disabled: false });
-          document.getElementById('submit-button').disabled = false;
-          document.getElementById('loading-overlay').style.display = 'none';
-        } else {
-          if (result.paymentIntent.status === 'succeeded') {
-            form.submit();
-          }
-        }
-      });
-    });
-  });
-  
+        });
+    }).fail(function () {
+        // just reload the page, the error will be in django messages
+        location.reload();
+    })
+});
