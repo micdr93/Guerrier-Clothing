@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
+{% load review_extra %}
+
 {% block content %}
 <div class="container-fluid">
     <div class="row">
+        <!-- Product Image and Wishlist -->
         <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
             <div class="image-container my-5 position-relative">
                 <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -11,6 +15,7 @@
                 </button>
             </div>
         </div>
+        <!-- Product Details -->
         <div class="col-12 col-md-6 col-lg-4">
             <div class="product-details-container mb-5 mt-md-5">
                 <h1 class="mb-0">{{ product.name }}</h1>
@@ -71,53 +76,61 @@
             </div>
         </div>
     </div>
-    <!-- Reviews and related products sections remain unchanged -->
+    <!-- Reviews Section -->
     <div class="row">
         <div class="col-12 col-lg-8 offset-lg-2">
-            <h2 class="mb-3">Reviews</h2>
-            {% if reviews %}
-                {% for review in reviews %}
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ review.user.username }}</h5>
-                            <h6 class="card-subtitle mb-2 text-muted">Rating: {{ review.rating }}/5</h6>
-                            <p class="card-text">{{ review. }}</p>
-                            <small class="text-muted">{{ review.created_on }}</small>
+            <div class="reviews-section">
+                <div class="reviews-header d-flex justify-content-between align-items-center mb-3">
+                    <h2>Customer Reviews</h2>
+                    <a href="{% url 'reviews:add_review' product.id %}" class="btn leave-review">Leave a Review</a>
+                </div>
+                {% if reviews %}
+                    {% for review in reviews %}
+                        <div class="review-item">
+                            <div class="review-header d-flex justify-content-between align-items-center flex-wrap">
+                                <div class="review-meta">
+                                    <span class="review-author">{{ review.user.username }}</span> &middot;
+                                    <span class="review-date">{{ review.created_on|date:"M d, Y" }}</span>
+                                </div>
+                                <div class="review-rating">
+                                    Rating: {{ review.rating }}/5
+                                </div>
+                            </div>
+                            <p class="review-text">{{ review.review }}</p>
                             {% if review.user == request.user or request.user.is_superuser %}
-                                <div>
-                                    <a href="{% url 'reviews:update_review' review.id %}" class="btn btn-sm btn-outline-secondary">Edit Review</a>
-                                    <a href="{% url 'reviews:delete_review' review.id %}" class="btn btn-sm btn-outline-danger">Delete Review</a>
+                                <div class="review-actions">
+                                    <a href="{% url 'reviews:update_review' review.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                                    <a href="{% url 'reviews:delete_review' review.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
                                 </div>
                             {% endif %}
                         </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <p>No reviews yet. Be the first to review this product!</p>
-            {% endif %}
-            <a href="{% url 'reviews:add_review' product.id %}" class="btn btn-outline-secondary">Leave a Review</a>
-        </div>
-    </div>
-    {% if related_products %}
-    <div class="row mt-5">
-        <div class="col-12 col-lg-8 offset-lg-2">
-            <h2>Related Products</h2>
-            <div class="row">
-                {% for related_product in related_products %}
-                    <div class="col-sm-6 col-md-3 mb-4">
-                        <div class="card h-100">
-                            <a href="{% url 'products:product_detail' related_product.id %}">
-                                <img class="card-img-top" src="{{ related_product.image.url }}" alt="{{ related_product.name }}">
-                            </a>
-                        </div>
-                    </div>
-                {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    <p>No reviews yet. Be the first to review this product!</p>
+                {% endif %}
             </div>
+            <!-- Related Products Section -->
+            {% if related_products %}
+            <div class="related-products mt-5">
+                <h2>Related Products</h2>
+                <div class="row">
+                    {% for related_product in related_products %}
+                        <div class="col-sm-6 col-md-3 mb-4">
+                            <div class="card h-100">
+                                <a href="{% url 'products:product_detail' related_product.id %}">
+                                    <img class="card-img-top" src="{{ related_product.image.url }}" alt="{{ related_product.name }}">
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
-    {% endif %}
 </div>
 {% endblock %}
+
 {% block postloadjs %}
   <script src="{% static 'js/scripts.js' %}"></script>
 {% endblock %}

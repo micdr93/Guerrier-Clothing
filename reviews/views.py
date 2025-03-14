@@ -5,13 +5,10 @@ from .models import Review
 from products.models import Product
 from .forms import ReviewForm
 
-
 @login_required
 def add_review(request, product_id):
     """Add a review for a product"""
     product = get_object_or_404(Product, pk=product_id)
-
-    # Check if user has already reviewed this product
     existing_review = Review.objects.filter(product=product, user=request.user).first()
     if existing_review:
         messages.info(
@@ -28,10 +25,7 @@ def add_review(request, product_id):
             review.user = request.user
             review.save()
             messages.success(request, "Review added successfully!")
-            return redirect(
-                reverse("products:product_detail", args=[product_id])
-                + "?review_added=True"
-            )
+            return redirect(reverse("products:product_detail", args=[product_id]) + "?review_added=True")
     else:
         form = ReviewForm()
 
@@ -39,16 +33,12 @@ def add_review(request, product_id):
         "form": form,
         "product": product,
     }
-
     return render(request, "reviews/add_review.html", context)
-
 
 @login_required
 def update_review(request, review_id):
     """Update a review"""
     review = get_object_or_404(Review, pk=review_id)
-
-    # Ensure only the review author or superuser can edit
     if review.user != request.user and not request.user.is_superuser:
         messages.error(request, "You don't have permission to edit this review.")
         return redirect(reverse("products:product_detail", args=[review.product.id]))
@@ -58,10 +48,7 @@ def update_review(request, review_id):
         if form.is_valid():
             form.save()
             messages.success(request, "Review updated successfully!")
-            return redirect(
-                reverse("products:product_detail", args=[review.product.id])
-                + "?review_added=True"
-            )
+            return redirect(reverse("products:product_detail", args=[review.product.id]) + "?review_added=True")
     else:
         form = ReviewForm(instance=review)
 
@@ -70,9 +57,7 @@ def update_review(request, review_id):
         "review": review,
         "product": review.product,
     }
-
     return render(request, "reviews/edit_review.html", context)
-
 
 @login_required
 def delete_review(request, review_id):
@@ -80,7 +65,6 @@ def delete_review(request, review_id):
     review = get_object_or_404(Review, pk=review_id)
     product_id = review.product.id
 
-    # Ensure only the review author or superuser can delete
     if review.user != request.user and not request.user.is_superuser:
         messages.error(request, "You don't have permission to delete this review.")
         return redirect(reverse("products:product_detail", args=[product_id]))
@@ -88,14 +72,10 @@ def delete_review(request, review_id):
     if request.method == "POST":
         review.delete()
         messages.success(request, "Review deleted successfully!")
-        return redirect(
-            reverse("products:product_detail", args=[product_id])
-            + "?review_deleted=True"
-        )
+        return redirect(reverse("products:product_detail", args=[product_id]) + "?review_deleted=True")
 
     context = {
         "review": review,
         "product": review.product,
     }
-
     return render(request, "reviews/delete_review.html", context)
