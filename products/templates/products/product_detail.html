@@ -10,11 +10,15 @@
         <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
             <div class="image-container my-5 position-relative">
                 <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                <button type="button" class="wishlist-toggle position-absolute {% if is_in_wishlist %}in-wishlist{% endif %}" style="top: 10px; right: 10px;" data-product-id="{{ product.id }}" data-action="{% if is_in_wishlist %}{% url 'wishlist:remove_from_wishlist' product.id %}{% else %}{% url 'wishlist:add_to_wishlist' product.id %}{% endif %}">
+                <button type="button" class="wishlist-toggle position-absolute {% if is_in_wishlist %}in-wishlist{% endif %}"
+                        style="top: 10px; right: 10px;"
+                        data-product-id="{{ product.id }}"
+                        data-action="{% if is_in_wishlist %}{% url 'wishlist:remove_from_wishlist' product.id %}{% else %}{% url 'wishlist:add_to_wishlist' product.id %}{% endif %}">
                     <i class="{% if is_in_wishlist %}fa-solid{% else %}fa-regular{% endif %} fa-heart"></i>
                 </button>
             </div>
         </div>
+
         <!-- Product Details -->
         <div class="col-12 col-md-6 col-lg-4">
             <div class="product-details-container mb-5 mt-md-5">
@@ -54,7 +58,14 @@
                                 <button type="button" class="decrement-qty btn btn-black rounded-0" data-item_id="{{ product.id }}">
                                     <i class="fas fa-minus" aria-hidden="true"></i>
                                 </button>
-                                <input class="form-control qty_input text-center" type="number" name="quantity" value="1" min="1" max="99" data-item_id="{{ product.id }}" id="id_qty_{{ product.id }}">
+                                <input class="form-control qty_input text-center"
+                                       type="number"
+                                       name="quantity"
+                                       value="1"
+                                       min="1"
+                                       max="99"
+                                       data-item_id="{{ product.id }}"
+                                       id="id_qty_{{ product.id }}">
                                 <button type="button" class="increment-qty btn btn-black rounded-0" data-item_id="{{ product.id }}">
                                     <i class="fas fa-plus" aria-hidden="true"></i>
                                 </button>
@@ -76,6 +87,7 @@
             </div>
         </div>
     </div>
+
     <!-- Reviews Section -->
     <div class="row">
         <div class="col-12 col-lg-8 offset-lg-2">
@@ -96,7 +108,10 @@
                                     Rating: {{ review.rating }}/5
                                 </div>
                             </div>
+                            <!-- Add the title here -->
+                            <h5 class="review-title">{{ review.title }}</h5>
                             <p class="review-text">{{ review.review }}</p>
+
                             {% if review.user == request.user or request.user.is_superuser %}
                                 <div class="review-actions">
                                     <a href="{% url 'reviews:update_review' review.id %}" class="btn btn-sm btn-outline-secondary">Edit</a>
@@ -109,6 +124,7 @@
                     <p>No reviews yet. Be the first to review this product!</p>
                 {% endif %}
             </div>
+
             <!-- Related Products Section -->
             {% if related_products %}
             <div class="related-products mt-5">
@@ -132,5 +148,5 @@
 {% endblock %}
 
 {% block postloadjs %}
-  <script src="{% static 'js/scripts.js' %}"></script>
+<script src="{% static 'js/scripts.js' %}"></script>
 {% endblock %}
