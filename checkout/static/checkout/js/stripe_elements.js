@@ -1,70 +1,88 @@
-// Retrieve the Stripe public key and client secret from the JSON script blocks
-const stripePublicKeyElem = document.getElementById('id_stripe_public_key');
-const clientSecretElem = document.getElementById('id_client_secret');
-
-// Remove any surrounding quotes from the text content
-let stripePublicKey = stripePublicKeyElem.textContent.replace(/"/g, '');
-let clientSecret = clientSecretElem.textContent.replace(/"/g, '');
-
-// Initialize Stripe with the public key
-const stripe = Stripe(stripePublicKey);
-const elements = stripe.elements();
-
-// Custom styling for the card element
-const style = {
-  base: {
-    color: '#000',
-    fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-    fontSmoothing: 'antialiased',
-    fontSize: '16px',
-    '::placeholder': {
-      color: '#aab7c4'
-    }
-  },
-  invalid: {
-    color: '#dc3545',
-    iconColor: '#dc3545'
-  }
-};
-
-// Create the card element and mount it in the #card-element div
-const card = elements.create('card', { style: style });
-card.mount('#card-element');
-
-// Handle real-time validation errors on the card element
-card.on('change', function (event) {
-  const errorDiv = document.getElementById('card-errors');
-  if (event.error) {
-    const html = `
-      <span class="icon" role="alert">
-        <i class="fas fa-times"></i>
-      </span>
-      <span>${event.error.message}</span>
-    `;
-    errorDiv.innerHTML = html;
-  } else {
-    errorDiv.textContent = '';
-  }
-});
-
-// Handle form submission
-const form = document.getElementById('payment-form');
-const loadingOverlay = document.getElementById('loading-overlay');
-const submitButton = document.getElementById('submit-button');
-
-form.addEventListener('submit', function(ev) {
-  ev.preventDefault();
+window.addEventListener('load', function() {
+    console.log("Stripe elements script loaded");
+    var keyElem = document.getElementById('id_stripe_public_key');
+    var clientSecretElem = document.getElementById('id_client_secret');
+    if (!keyElem) { console.error("Stripe key element not found"); return; }
+    if (!clientSecretElem) { console.error("Client secret element not found"); return; }
+    var stripePublicKey = keyElem.textContent.trim().replace(/"/g, '');
+    var clientSecret = clientSecretElem.textContent.trim().replace(/"/g, '');
+    console.log("Stripe public key:", stripePublicKey);
+    console.log("Client secret:", clientSecret);
+    if (!stripePublicKey || !clientSecret) { console.error('Missing Stripe key or client secret'); return; }
+    var stripe = Stripe(stripePublicKey);
+    var elements = stripe.elements();
+    var card = elements.create('card', {
+      style: {
+        base: {
+          color: '#333',
+          fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+          fontSmoothing: 'antialiased',
+          fontSize: '16px',
+          '::placeholder': { color: '#aab7c4' },
+          iconColor: '#666'
+        },
+        invalid: { color: '#dc3545', iconColor: '#dc3545' }
+      },
+      hidePostalCode: true
+    });
+    card.mount('#card-element');
+    console.log("Card element mounted");
+    card.addEventListener('change', function(e) {
+      var errorDiv = document.getElementById('card-errors');
+      if (e.error) {
+        errorDiv.innerHTML = '<span class="icon" role="alert"><i class="fas fa-times"></i></span><span>' + e.error.message + '</span>';
+      } else {
+        errorDiv.innerHTML = '';
+      }
+    });
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      card.update({ disabled: true });
+      document.getElementById('submit-button').disabled = true;
+      document.getElementById('loading-overlay').style.display = 'block';
+      stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: card,
+          billing_details: {
+            name: document.getElementById('id_full_name').value,
+            email: document.getElementById('id_email').value,
+            phone: document.getElementById('id_phone_number').value,
+            address: {
+              line1: document.getElementById('id_street_address1').value,
+              line2: document.getElementById('id_street_address2').value,
+              city: document.getElementById('id_town_or_city').value,
+              country: document.getElementById('id_country').value,
+              state: document.getElementById('id_county').value,
+              postal_code: document.getElementById('id_postcode').value
+            }
+          }
+        },
+        shipping: {
+          name: document.getElementById('id_full_name').value,
+          phone: document.getElementById('id_phone_number').value,
+          address: {
+            line1: document.getElementById('id_street_address1').value,
+            line2: document.getElementById('id_street_address2').value,
+            city: document.getElementById('id_town_or_city').value,
+            country: document.getElementById('id_country').value,
+            state: document.getElementById('id_county').value,
+            postal_code: document.getElementById('id_postcode').value
+          }
+        }
+      }).then(function(result) {
+        if (result.error) {
+          var errorDiv = document.getElementById('card-errors');
+          errorDiv.innerHTML = '<span class="icon" role="alert"><i class="fas fa-times"></i></span><span>' + result.error.message + '</span>';
+          card.update({ disabled: false });
+          document.getElementById('submit-button').disabled = false;
+          document.getElementById('loading-overlay').style.display = 'none';
+        } else {
+          if (result.paymentIntent.status === 'succeeded') {
+            form.submit();
+          }
+        }
+      });
+    });
+  });
   
-  // Disable the card element and button to prevent duplicate submissions
-  card.update({ disabled: true });
-  submitButton.disabled = true;
-  
-  // (Optional) Fade out the form and show the loading overlay
-  form.style.opacity = 0.5;
-  loadingOverlay.style.display = 'block';
-  
-  // For test/demo, submit the form after a short delay
-  setTimeout(function() {
-    form.submit();
-  }, 500);
-});
