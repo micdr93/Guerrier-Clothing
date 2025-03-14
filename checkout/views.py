@@ -99,6 +99,7 @@ def checkout(request):
         amount=stripe_total,
         currency=settings.STRIPE_CURRENCY,
     )
+    print('INTENT: ', intent)
 
     # Prepare bag items for display.
     bag_items = []
