@@ -10,65 +10,40 @@ def bag_contents(request):
     product_count = 0
     bag = request.session.get("bag", {})
 
-    for item_id, item_data in bag.items():
+    for item_id, item_quantity in bag.items():
         try:
             product = get_object_or_404(Product, pk=item_id)
-
-            if isinstance(item_data, int):
-                quantity = item_data
-                total_price = product.price * quantity
-                total += total_price
-                product_count += quantity
-                bag_items.append(
-                    {
-                        "product": product,
-                        "quantity": quantity,
-                        "total_price": total_price,
-                    }
-                )
-            else:
-                # Handle products with sizes
-                for size, quantity in item_data.items():
-                    total_price = product.price * quantity
-                    total += total_price
-                    product_count += quantity
-                    bag_items.append(
-                        {
-                            "product": product,
-                            "quantity": quantity,
-                            "size": size,
-                            "total_price": total_price,
-                        }
-                    )
-        except Exception as e:
-            print(f"Error processing item {item_id}: {e}")
+            line_total = item_quantity * product.price
+            total += line_total
+            product_count += item_quantity
+            bag_items.append(
+                {
+                    "product": product,
+                    "quantity": item_quantity,
+                    "line_total": line_total,
+                }
+            )
+        except Product.DoesNotExist:
             continue
 
-    # Calculate delivery cost
+    # Calculate delivery fee using settings.FREE_DELIVERY_THRESHOLD and settings.STANDARD_DELIVERY_PERCENTAGE
     if total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
+        delivery = total * (
+            Decimal(settings.STANDARD_DELIVERY_PERCENTAGE) / Decimal(100)
+        )
         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
     else:
-        delivery = Decimal(0)
-        free_delivery_delta = Decimal(0)
+        delivery = Decimal("0.00")
+        free_delivery_delta = Decimal("0.00")
 
-    # Calculate grand total
     grand_total = total + delivery
 
-    context = {
-        "cart": bag_items,
-        "cart_total": total,
+    return {
+        "bag_items": bag_items,
+        "total": total,
         "product_count": product_count,
         "delivery": delivery,
         "free_delivery_delta": free_delivery_delta,
         "free_delivery_threshold": settings.FREE_DELIVERY_THRESHOLD,
         "grand_total": grand_total,
     }
-
-    # Debug logging to verify calculations
-    print(f"Cart items: {len(bag_items)}")
-    print(f"Total: {total}")
-    print(f"Delivery: {delivery}")
-    print(f"Grand Total: {grand_total}")
-
-    return context

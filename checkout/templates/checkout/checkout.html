@@ -54,14 +54,20 @@
                         </div>
                         <div class="col-7">
                             <p class="my-0"><strong>{{ item.product.name }}</strong></p>
-                            <p class="my-0 small">Size: {% if item.product.has_sizes %}{{ item.size|upper }}{% else %}N/A{% endif %}</p>
+                            <p class="my-0 small">
+                                Size: {% if item.product.has_sizes %}{{ item.size|upper }}{% else %}N/A{% endif %}
+                            </p>
                             <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
                         </div>
                         <div class="col-3 text-right">
                             {% if item.product.on_sale %}
-                                <p class="my-0 small text-muted">€{{ item.price | calc_subtotal:item.quantity }}</p>
+                                <p class="my-0 small text-muted">
+                                    €{{ item.price|calc_subtotal:item.quantity }}
+                                </p>
                             {% else %}
-                                <p class="my-0 small text-muted">€{{ item.product.price | calc_subtotal:item.quantity }}</p>
+                                <p class="my-0 small text-muted">
+                                    €{{ item.product.price|calc_subtotal:item.quantity }}
+                                </p>
                             {% endif %}
                         </div>
                     </div>
@@ -76,16 +82,20 @@
                         <p class="my-0">Grand Total:</p>
                     </div>
                     <div class="col-3">
-                        <p class="my-0">€{{ total | floatformat:2 }}</p>
-                        <p class="my-0">€{{ delivery | floatformat:2 }}</p>
-                        <p class="my-0"><strong>€{{ grand_total | floatformat:2 }}</strong></p>
+                        <p class="my-0">€{{ total|floatformat:2 }}</p>
+                        <p class="my-0">€{{ delivery|floatformat:2 }}</p>
+                        <p class="my-0">
+                            <strong>€{{ grand_total|floatformat:2 }}</strong>
+                        </p>
                     </div>
                 </div>
             </div>
             
             <!-- Checkout Form Section -->
             <div class="col-12 col-lg-6">
-                <p class="text-muted">Please fill out the form below to complete your order</p>
+                <p class="text-muted">
+                    Please fill out the form below to complete your order
+                </p>
                 
                 <form action="{% url 'checkout:checkout' %}" method="POST" id="payment-form">
                     {% csrf_token %}
@@ -93,30 +103,40 @@
                     <!-- Customer Details Section -->
                     <fieldset>
                         <legend>Details</legend>
-                        {{ order_form.full_name | as_crispy_field }}
-                        {{ order_form.email | as_crispy_field }}
+                        {{ order_form.full_name|as_crispy_field }}
+                        {{ order_form.email|as_crispy_field }}
                     </fieldset>
                     
                     <!-- Delivery Information Section -->
                     <fieldset>
                         <legend>Delivery</legend>
-                        {{ order_form.phone_number | as_crispy_field }}
-                        {{ order_form.street_address1 | as_crispy_field }}
-                        {{ order_form.street_address2 | as_crispy_field }}
-                        {{ order_form.town_or_city | as_crispy_field }}
-                        {{ order_form.county | as_crispy_field }}
-                        {{ order_form.postcode | as_crispy_field }}
-                        {{ order_form.country | as_crispy_field }}
+                        {{ order_form.phone_number|as_crispy_field }}
+                        {{ order_form.street_address1|as_crispy_field }}
+                        {{ order_form.street_address2|as_crispy_field }}
+                        {{ order_form.town_or_city|as_crispy_field }}
+                        {{ order_form.county|as_crispy_field }}
+                        {{ order_form.postcode|as_crispy_field }}
+                        {{ order_form.country|as_crispy_field }}
                         
                         <!-- Save Information Option -->
                         <div class="form-check form-check-inline float-right mr-0">
                             {% if user.is_authenticated %}
-                                <label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
-                                <input class="form-check-input ml-2 mr-0" type="checkbox" id="id-save-info" name="save-info" checked>
+                                <label class="form-check-label" for="id-save-info">
+                                    Save this delivery information to my profile
+                                </label>
+                                <input
+                                    class="form-check-input ml-2 mr-0"
+                                    type="checkbox"
+                                    id="id-save-info"
+                                    name="save-info"
+                                    checked
+                                >
                             {% else %}
                                 <label class="form-check-label" for="id-save-info">
-                                    <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or 
-                                    <a class="text-info" href="{% url 'account_login' %}">login</a> to save this information
+                                    <a class="text-info" href="{% url 'account_signup' %}">Create an account</a>
+                                    or 
+                                    <a class="text-info" href="{% url 'account_login' %}">login</a>
+                                    to save this information
                                 </label>
                             {% endif %}
                         </div>
@@ -127,7 +147,7 @@
                         <legend>Payment</legend>
                         <div id="card-element"></div>
                         <div id="card-errors" role="alert"></div>
-                        <input type="hidden" value="{{ client_secret }}" name="client_secret" id="id_client_secret">
+                        <!-- Removed the hidden input for client_secret here -->
                     </fieldset>
                     
                     <!-- Submit Buttons Section -->
@@ -150,7 +170,10 @@
                             <span class="icon">
                                 <i class="fas fa-exclamation-circle"></i>
                             </span>
-                            <span>Your card will be charged <strong>€{{ grand_total|floatformat:2 }}</strong></span>
+                            <span>
+                                Your card will be charged
+                                <strong>€{{ grand_total|floatformat:2 }}</strong>
+                            </span>
                         </p>
                     </div>
                 </form>
