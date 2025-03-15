@@ -190,11 +190,19 @@
         </div>
     </div>
 {% endblock %}
-
 {% block postloadjs %}
     {{ block.super }}
+
+    <!-- jQuery first -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <!-- JSON script tags for Stripe keys -->
     {{ stripe_public_key|json_script:"id_stripe_public_key" }}
     {{ client_secret|json_script:"id_client_secret" }}
+
+    <!-- Stripe.js -->
     <script src="https://js.stripe.com/v3/"></script>
+    
+    <!-- Your custom JS for handling payments -->
     <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
 {% endblock %}
