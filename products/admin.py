@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Product, Category
 
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "sku",
@@ -10,7 +11,7 @@ class ProductAdmin(admin.ModelAdmin):
         "rating",
         "image",
     )
-
+    readonly_fields = ("rating",)  
     ordering = ("sku",)
 
 

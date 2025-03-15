@@ -5,7 +5,6 @@ from .models import Product, Category
 # Only needed if you do something with reviews here
 from reviews.models import Review
 
-
 class ProductForm(forms.ModelForm):
     """
     A form for creating/updating Product instances, including a custom
@@ -44,19 +43,6 @@ class ProductForm(forms.ModelForm):
             "max_length": "Product name cannot exceed 254 characters",
         },
     )
-    # Optional rating field validation
-    rating = forms.IntegerField(
-        label="Rating",
-        required=False,
-        validators=[
-            MinValueValidator(0, "Rating cannot be less than 0"),
-            MaxValueValidator(5, "Rating cannot exceed 5"),
-        ],
-        error_messages={
-            "invalid": "Enter a valid integer rating",
-        },
-        help_text="Optional rating from 0 to 5",
-    )
 
     class Meta:
         model = Product
@@ -67,7 +53,6 @@ class ProductForm(forms.ModelForm):
             "name",
             "description",
             "price",
-            "rating",
             "image",
         ]
 
