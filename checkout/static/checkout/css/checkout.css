@@ -1,40 +1,34 @@
-.StripeElement {
-  box-shadow: none !important;
-  border-radius: 4px !important;
-  padding: 10px 12px !important;
-  border: 1px solid #ced4da !important;
-  background-color: white !important;
-  width: 100% !important;
-  height: 44px !important;
-}
-
-/* Make Card Field match screenshot */
 #card-element {
   border: 1px solid #ced4da;
   border-radius: 4px;
-  padding: 0 !important;
+  padding: 10px;
   background-color: white;
-  height: 38px;
-  display: flex;
-  align-items: center;
+  height: 40px;
+  margin-bottom: 15px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
-/* Ensure iframe is visible and properly sized */
-#card-element iframe {
-  width: 100% !important;
-  min-height: 38px !important;
-  opacity: 1 !important;
-  visibility: visible !important;
+#card-element:focus-within {
+  border-color: #80bdff;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Style the card errors display */
+/* Stripe Element styling */
+.StripeElement {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Error message styling */
 #card-errors {
   color: #dc3545;
   font-size: 14px;
   margin-top: 8px;
+  margin-bottom: 16px;
 }
 
-/* Ensure loading overlay is properly styled */
+/* Loading overlay styling */
 #loading-overlay {
   display: none;
   position: fixed;
@@ -42,34 +36,40 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(23, 23, 23, 0.85);
+  background: rgba(0, 0, 0, 0.75);
   z-index: 9999;
-  display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
 }
 
-#payment-form .form-control,
- #card-element {
-     color: #000;
-     border: 1px solid #000;
- }
- 
- #loading-overlay {
-     display: none;
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     background: rgba(23, 162, 184, .85);
-     z-index: 9999;
- }
- 
- .loading-spinner {
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     margin: 0;
-     height: 100%;
- }
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+/* Payment fieldset styling */
+fieldset legend {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+/* Button styling */
+.submit-button {
+  margin-top: 1.5rem;
+}
+
+/* Payment notice */
+.payment-notice {
+  display: flex;
+  align-items: center;
+  margin-top: 0.5rem;
+  color: #dc3545;
+  font-size: 0.875rem;
+}
+
+.payment-notice .icon {
+  margin-right: 0.5rem;
+}
