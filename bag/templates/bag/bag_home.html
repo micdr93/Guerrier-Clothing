@@ -4,7 +4,6 @@
 {% block content %}
 <div class="container my-5">
     <h1 class="mb-4">Your Bag</h1>
-
     {% if cart %}
         <div class="row">
             <div class="col-12 col-md-8">
@@ -18,8 +17,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for item in cart %}
-                            <tr class="cart-item" data-product-id="{{ item.product.id }}">
+                        {% for key, item in cart.items %}
+                            <tr class="cart-item" data-product-id="{{ key }}">
                                 <td>
                                     <div class="d-flex align-items-center">
                                         {% if item.product.image %}
@@ -31,20 +30,18 @@
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <form action="{% url 'bag:update_bag' item.product.id %}" method="POST" class="update-form">
+                                    <form action="{% url 'bag:adjust_bag' item.product.id %}" method="POST" class="update-form">
                                         {% csrf_token %}
                                         <div class="d-flex align-items-center justify-content-center">
                                             <button type="button" class="btn btn-black rounded-0 decrement-qty p-1 px-2" 
                                                     data-item-id="{{ item.product.id }}">-</button>
-                                            
                                             <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="99" 
                                                    class="form-control form-control-sm qty_input text-center mx-2" 
                                                    data-item-id="{{ item.product.id }}" style="width: 50px;">
-                                            
                                             <button type="button" class="btn btn-black rounded-0 increment-qty p-1 px-2" 
                                                     data-item-id="{{ item.product.id }}">+</button>
                                         </div>
-                                        <button type="submit" class="btn btn-sm btn-black rounded-0 mt-2 update-qty">Update</button>
+                                        <button type="submit" class="btn btn-sm btn-black rounded-0 mt-2">Update</button>
                                     </form>
                                 </td>
                                 <td class="text-end">
@@ -71,7 +68,6 @@
         <p>Your bag is currently empty.</p>
     {% endif %}
 </div>
-
 <div class="container mt-4">
     <div class="row">
         <div class="col-12 col-md-6 text-center text-md-start">
@@ -90,7 +86,6 @@
                 input.value = parseInt(input.value) + 1;
             });
         });
-
         document.querySelectorAll('.decrement-qty').forEach(button => {
             button.addEventListener('click', function() {
                 const input = this.closest('.update-form').querySelector('.qty_input');
