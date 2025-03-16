@@ -56,3 +56,10 @@
   transform: translate(-50%, -50%);
   color: white;
 }
+
+#card-element {
+  background: white !important;
+  min-height: 44px;
+  border: 1px solid #ccc;
+  padding: 10px;
+}
