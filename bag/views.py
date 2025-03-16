@@ -41,8 +41,8 @@ def view_bag(request):
 
     # Determine delivery and free delivery delta
     if cart_total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = settings.STANDARD_DELIVERY
-        free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - cart_total
+       delivery = settings.STANDARD_DELIVERY_PERCENTAGE
+       free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - cart_total
     else:
         delivery = Decimal('0.00')
         free_delivery_delta = Decimal('0.00')
