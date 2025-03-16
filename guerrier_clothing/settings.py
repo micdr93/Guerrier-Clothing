@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     "crispy_bootstrap5",
     "django_countries",
     "storages",
-    # "custom", - Removed as this app doesn't exist
 ]
 
 MIDDLEWARE = [
@@ -90,6 +89,8 @@ AUTHENTICATION_BACKENDS = (
 
 SITE_ID = 1
 
+CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
+CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -100,6 +101,10 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
 WSGI_APPLICATION = 'guerrier_clothing.wsgi.application'
+ROOT_URLCONF = 'guerrier_clothing.urls'
+
+
+
 
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
@@ -112,7 +117,6 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
