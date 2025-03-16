@@ -8,26 +8,47 @@ def bag_contents(request):
     total = 0
     product_count = 0
     bag = request.session.get("bag", {})
-    for item_id, item_quantity in bag.items():
+
+    for item_id, item_data in bag.items():
         try:
             product = get_object_or_404(Product, pk=item_id)
-            line_total = item_quantity * product.price
-            total += line_total
-            product_count += item_quantity
-            bag_items.append({
-                "product": product,
-                "quantity": item_quantity,
-                "line_total": line_total
-            })
-        except Product.DoesNotExist:
+            if isinstance(item_data, int):
+                # When item_data is a simple quantity
+                quantity = item_data
+                line_total = product.price * quantity
+                total += line_total
+                product_count += quantity
+                bag_items.append({
+                    "product": product,
+                    "quantity": quantity,
+                    "line_total": line_total,
+                })
+            else:
+                # When item_data is a dict (i.e., items with sizes)
+                for size, quantity in item_data.items():
+                    line_total = product.price * quantity
+                    total += line_total
+                    product_count += quantity
+                    bag_items.append({
+                        "product": product,
+                        "quantity": quantity,
+                        "size": size,
+                        "line_total": line_total,
+                    })
+        except Exception as e:
+            print(f"Error processing item {item_id}: {e}")
             continue
+
+    # Calculate delivery cost
     if total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = total * (Decimal(settings.STANDARD_DELIVERY_PERCENTAGE) / Decimal(100))
+        delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
     else:
-        delivery = Decimal("0.00")
-        free_delivery_delta = Decimal("0.00")
+        delivery = Decimal(0)
+        free_delivery_delta = Decimal(0)
+
     grand_total = total + delivery
+
     return {
         "bag_items": bag_items,
         "total": total,
