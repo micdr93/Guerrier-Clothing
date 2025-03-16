@@ -508,16 +508,21 @@ The deployed project has been tested on different screen sizes to ensure it is r
 ![Mobile Responsiveness 6](documentation/responsive/mobile_bag.png)
 - Devtool responsive bag view
 
+![Mobile Responsiveness 7](documentation/responsive/mobile_checkout.png)
+- Devtool responsive checkout view
+
+</details
+
+
+<details>
 <summary>Mobile (Manual Testing with Google Pixel 6A with Dark Mode enabled)</summary>
 
 ![Mobile Responsiveness 1](documentation/responsive/forced_dm_home.png)
-- A forced Dark Mode home view  on Google Pixel
+ A forced Dark Mode home view  on Google Pixel
 ![Mobile Responsiveness 2](documentation/responsive/forced_dm_filter.png)
 - A forced Dark Mode filter on Google Pixel
 ![Mobile Responsiveness 3](documentation/responsive/forced_dm_footer.png)
 - A forced Dark Mode footer on Google Pixel
-
-
 </details>
 
 <details>
