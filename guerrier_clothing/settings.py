@@ -111,18 +111,10 @@ else:
     }
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 LANGUAGE_CODE = "en-us"
@@ -147,20 +139,16 @@ MEDIAFILES_LOCATION = "media"
 
 from storages.backends.s3boto3 import S3Boto3Storage
 
-
 class StaticStorage(S3Boto3Storage):
     location = STATICFILES_LOCATION
-
 
 class MediaStorage(S3Boto3Storage):
     location = MEDIAFILES_LOCATION
 
-
-if "USE_AWS" in os.environ:\
-  
+if "USE_AWS" in os.environ:
     AWS_S3_OBJECT_PARAMETERS = {
-        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
-        'CacheControl': 'max-age=94608000',
+        "Expires": "Thu, 31 Dec 2099 20:00:00 GMT",
+        "CacheControl": "max-age=94608000",
     }
     AWS_STORAGE_BUCKET_NAME = "guerrier"
     AWS_S3_REGION_NAME = "eu-north-1"

@@ -1,7 +1,6 @@
 from django.core.mail import send_mail
 from django.conf import settings
 
-
 def send_confirmation_email(order):
     cust_email = order.email
     subject = f"Guerrier Clothing - Order Confirmation {order.order_number}"
@@ -28,13 +27,7 @@ Thank you for your order!
 Sincerely,
 Guerrier Clothing Team
     """
-    send_mail(
-        subject,
-        text_message,
-        settings.DEFAULT_FROM_EMAIL,
-        [cust_email],
-    )
-
+    send_mail(subject, text_message, settings.DEFAULT_FROM_EMAIL, [cust_email])
 
 def convert_country(country_value):
     COUNTRY_MAP = {
