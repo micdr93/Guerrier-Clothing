@@ -493,11 +493,31 @@ I have tested the deployed project using Lighthouse in Chrome developer tools to
 The deployed project has been tested on different screen sizes to ensure it is responsive.
 
 <details>
-<summary>Mobile (DevTools)</summary>
+<summary>Mobile (DevTools - iPohn 14 Pro Max)</summary>
 
-![Mobile Responsiveness 1](documentation/responsive/mobile-1.png)
-![Mobile Responsiveness 2](documentation/responsive/mobile-2.png)
-![Mobile Responsiveness 3](documentation/responsive/mobile-3.png)
+![Mobile Responsiveness 1](documentation/responsive/mobile_home.png)
+- DevTools responsive home view
+![Mobile Responsiveness 2](documentation/responsive/mobile_dropdown.png)
+- DevTools resposnsive dropdown
+![Mobile Responsiveness 3](documentation/responsive/mobile_footer.png)
+- Devtool responsive footer
+![Mobile Responsiveness 4](documentation/responsive/mobile_products.png)
+ Devtool responsive products page
+![Mobile Responsiveness 5](documentation/responsive/mobile_profile.png)
+- Devtool responsive profile view
+![Mobile Responsiveness 6](documentation/responsive/mobile_bag.png)
+- Devtool responsive bag view
+
+<summary>Mobile (Manual Testing with Google Pixel 6A with Dark Mode enabled)</summary>
+
+![Mobile Responsiveness 1](documentation/responsive/forced_dm_home.png)
+- A forced Dark Mode home view  on Google Pixel
+![Mobile Responsiveness 2](documentation/responsive/forced_dm_filter.png)
+- A forced Dark Mode filter on Google Pixel
+![Mobile Responsiveness 3](documentation/responsive/forced_dm_footer.png)
+- A forced Dark Mode footer on Google Pixel
+
+
 </details>
 
 <details>
