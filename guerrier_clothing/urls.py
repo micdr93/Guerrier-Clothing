@@ -18,7 +18,6 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("", include(("home.urls", "home"), namespace="home")),
     path("products/", include(("products.urls", "products"), namespace="products")),
-    path("clothing/", include(("products.urls", "products"), namespace="clothing")),
     path("bag/", include(("bag.urls", "bag"), namespace="bag")),
     path("checkout/", include(("checkout.urls", "checkout"), namespace="checkout")),
     path("profiles/", include(("profiles.urls", "profiles"), namespace="profiles")),
