@@ -14,21 +14,20 @@ def view_bag(request):
 # Function to add items to the bag
 def add_to_bag(request, item_id):
     product = get_object_or_404(Product, pk=item_id)
+    item_id = str(item_id)  # ensure the key is a string
     
     quantity_str = request.POST.get("quantity", "")
     if not quantity_str:
         messages.error(request, 'Quantity must be specified')
         return redirect(request.POST.get("redirect_url", reverse("home")))
-
-    quantity = int(request.POST.get('quantity'))
+    
+    quantity = int(quantity_str)
     redirect_url = request.POST.get('redirect_url')
-    size = None
-    if 'product_size' in request.POST:
-        size = request.POST['product_size']
+    size = request.POST.get('product_size', None)
     bag = request.session.get('bag', {})
 
     if size:
-        if item_id in list(bag.keys()):
+        if item_id in bag:
             if size in bag[item_id]['items_by_size'].keys():
                 bag[item_id]['items_by_size'][size] += quantity
                 messages.success(request, f'Updated size {size.upper()} {product.name} quantity to {bag[item_id]["items_by_size"][size]}')
@@ -39,7 +38,7 @@ def add_to_bag(request, item_id):
             bag[item_id] = {'items_by_size': {size: quantity}}
             messages.success(request, f'Added size {size.upper()} {product.name} to your bag')
     else:
-        if item_id in list(bag.keys()):
+        if item_id in bag:
             bag[item_id] += quantity
             messages.success(request, f'Updated {product.name} quantity to {bag[item_id]}')
         else:
@@ -49,11 +48,10 @@ def add_to_bag(request, item_id):
     request.session['bag'] = bag
     return redirect(redirect_url)
 
-
 # Function to adjust the quantity of items in the bag
 def adjust_bag(request, item_id):
-
     product = get_object_or_404(Product, pk=item_id)
+    item_id = str(item_id)
     quantity = int(request.POST.get('quantity'))
     size = None
     if 'product_size' in request.POST:
@@ -83,9 +81,9 @@ def adjust_bag(request, item_id):
 
 # Function to remove items from the bag
 def remove_from_bag(request, item_id):
-
     try:
         product = get_object_or_404(Product, pk=item_id)
+        item_id = str(item_id)
         size = None
         if 'product_size' in request.POST:
             size = request.POST['product_size']
