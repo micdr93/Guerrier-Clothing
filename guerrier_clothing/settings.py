@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 import dj_database_url
 from decimal import Decimal 
-from django.core.exceptions import ImproperlyConfigured 
+from django.core.exceptions import ImproperlyConfigured
 
 
 try:
