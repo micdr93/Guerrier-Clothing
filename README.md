@@ -521,6 +521,8 @@ Our newsletter is a cornerstone of our direct customer communication strategy, a
 * [Adobe Suite](https://www.adobe.com/) - Used for creating product images.
 * [Mermaid Live Editor](https://mermaid.live/edit) - Used for creating the ERD using Mermaid, a JavaScript based diagramming and charting tool
 
+[Testing](#testing)
+
 
 # Credits
 ## Listed below are sources of information which helped me in the making of this project
