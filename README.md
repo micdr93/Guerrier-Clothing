@@ -474,7 +474,7 @@ Administrators can manage the entire catalog efficiently:
 - Users can either login or sign up
 
 
-![Sign In](documentation/readme_images/sign_in.png.png)
+![Sign In](documentation/readme_images/sign_in.png)
 
 
 
