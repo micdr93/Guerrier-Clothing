@@ -4,12 +4,6 @@ from products.models import Product
 from decimal import Decimal
 from django.conf import settings
 
-from django.shortcuts import render, redirect, reverse, HttpResponse, get_object_or_404
-from django.contrib import messages
-from products.models import Product
-from decimal import Decimal
-from django.conf import settings
-
 def view_bag(request):
     bag = request.session.get("bag", {})
     cart = []
@@ -18,8 +12,9 @@ def view_bag(request):
 
     for item_id, item_data in bag.items():
         product = get_object_or_404(Product, pk=item_id)
-        if "quantity" in item_data:
-            quantity = item_data["quantity"]
+        # Check if item_data is an integer
+        if isinstance(item_data, int):
+            quantity = item_data
             subtotal = product.price * quantity
             cart_total += subtotal 
             product_count += quantity
@@ -28,17 +23,29 @@ def view_bag(request):
                 "quantity": quantity,
                 "subtotal": subtotal
             })
-        elif "items_by_size" in item_data:
-            for size, quantity in item_data["items_by_size"].items():
+        # Otherwise, if it's a dict, process based on its keys.
+        elif isinstance(item_data, dict):
+            if "quantity" in item_data:
+                quantity = item_data["quantity"]
                 subtotal = product.price * quantity
-                cart_total += subtotal
+                cart_total += subtotal 
                 product_count += quantity
                 cart.append({
                     "product": product,
                     "quantity": quantity,
-                    "size": size,
                     "subtotal": subtotal
                 })
+            elif "items_by_size" in item_data:
+                for size, quantity in item_data["items_by_size"].items():
+                    subtotal = product.price * quantity
+                    cart_total += subtotal
+                    product_count += quantity
+                    cart.append({
+                        "product": product,
+                        "quantity": quantity,
+                        "size": size,
+                        "subtotal": subtotal
+                    })
 
     # Determine delivery and free delivery delta
     if cart_total < settings.FREE_DELIVERY_THRESHOLD:

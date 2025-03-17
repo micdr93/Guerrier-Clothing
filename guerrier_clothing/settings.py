@@ -29,13 +29,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True  # or your current DEBUG setting
 
-
-
+if DEBUG:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = 'True'
+
+if DEBUG:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+else:
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 ALLOWED_HOSTS = ["guerrier-184e74af35e6.herokuapp.com", "127.0.0.1", "localhost"]
 CSRF_TRUSTED_ORIGINS = [
