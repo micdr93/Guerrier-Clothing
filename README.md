@@ -340,7 +340,7 @@ The home page serves as a powerful introduction to our brand with:
 - Responsive grid layout that adapts to all screen sizes
 - Product sort options (newest, bestselling, price)
 
-![Home Page Products](documentation/readme_images/admin_view_prodcuts.png)
+![Home Page Products](documentation/readme_images/admin_view_products.png)
 
 ### Products Pages
 The product pages offer robust browsing functionality:
