@@ -452,12 +452,10 @@ The wishlist functionality enables future purchases:
 #### Admin Product Management
 Store administrators have powerful tools:
 - Product dashboard with inventory alerts
-- Bulk edit functionality for multiple products
 - Image management with multiple uploads
-- Variant management (sizes, colors)
-- Draft and scheduled product publishing
 
-![Admin Product Management](documentation/readme_images/placeholder_image.png)
+
+![Admin Product Management](documentation/readme_images/admin_product_update.png)
 
 #### Admin Product Edit
 The product editing interface offers comprehensive control:
@@ -465,14 +463,11 @@ The product editing interface offers comprehensive control:
 - SEO fields for meta descriptions and keywords
 - Related product manual assignment
 
-![Admin Product Edit](documentation/readme_images/admin_product_update.png)
+![Admin Product Edit](documentation/readme_images/admin_edit.png)
 
 #### Admin All Products View
 Administrators can manage the entire catalog efficiently:
 - Sortable and filterable product table
-- Bulk actions for common tasks
-- Inventory level indicators with alerts
-- Performance metrics for each product
 - Quick edit functionality for key fields
 
 ![Admin All Products View](documentation/readme_images/admin_view_products.png)
@@ -631,6 +626,7 @@ Our newsletter is a cornerstone of our direct customer communication strategy, a
 - [Boutique Ado Walkthrough Project](https://learn.codeinstitute.net/courses/course-v1:CodeInstitute+EA101+2021_T1/courseware/eb05f06e62c64ac89823cc956fcd8191/3adff2bf4a78469db72c5330b1afa836/)
 - [I Think Therefore I Blog Walkthrough Project](https://learn.codeinstitute.net/courses/course-v1:CodeInstitute+FSD101_WTS+2023_Q3/courseware/56a2da0940b4411d8a38c2b093a22c60/4565659a34d648b8b8edd063c3182180/)
 - [Performance Footwear](https://github.com/Marchopkins96/Performance-Footwear/tree/main)
+(I used the carousel feature from this repo along with readme and testing files as boileplates)
 
 ### Deployment 
 
