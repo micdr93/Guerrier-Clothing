@@ -18,8 +18,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for key, item in cart.items %}
-                            <tr class="cart-item" data-product-id="{{ key }}">
+                        {% for item in cart %}
+                            <tr class="cart-item" data-product-id="{{ item.product.id }}">
                                 <td>
                                     <div class="d-flex align-items-center">
                                         {% if item.product.image %}

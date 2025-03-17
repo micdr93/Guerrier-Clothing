@@ -40,7 +40,7 @@
               </td>
               <td>€{{ item.product.price }}</td>
               <td>
-                <form class="update-form" method="POST" action="{% url 'bag:update_bag' item.product.id %}">
+                <form class="update-form" method="POST" action="{% url 'bag:adjust_bag' item.product.id %}">
                   {% csrf_token %}
                   <div class="d-flex align-items-center">
                     <button type="button" class="btn btn-sm btn-outline-dark rounded-0 decrement-qty" data-item_id="{{ item.product.id }}">-</button>

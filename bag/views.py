@@ -1,10 +1,66 @@
 from django.shortcuts import render, redirect, reverse, HttpResponse, get_object_or_404
 from django.contrib import messages
 from products.models import Product
+from decimal import Decimal
+from django.conf import settings
+
+from django.shortcuts import render, redirect, reverse, HttpResponse, get_object_or_404
+from django.contrib import messages
+from products.models import Product
+from decimal import Decimal
+from django.conf import settings
 
 def view_bag(request):
-    bag = request.session.get('bag', {})
-    return render(request, 'bag/bag.html', {'cart': bag})
+    bag = request.session.get("bag", {})
+    cart = []
+    cart_total = Decimal('0.00')
+    product_count = 0
+
+    for item_id, item_data in bag.items():
+        product = get_object_or_404(Product, pk=item_id)
+        if "quantity" in item_data:
+            quantity = item_data["quantity"]
+            subtotal = product.price * quantity
+            cart_total += subtotal 
+            product_count += quantity
+            cart.append({
+                "product": product,
+                "quantity": quantity,
+                "subtotal": subtotal
+            })
+        elif "items_by_size" in item_data:
+            for size, quantity in item_data["items_by_size"].items():
+                subtotal = product.price * quantity
+                cart_total += subtotal
+                product_count += quantity
+                cart.append({
+                    "product": product,
+                    "quantity": quantity,
+                    "size": size,
+                    "subtotal": subtotal
+                })
+
+    # Determine delivery and free delivery delta
+    if cart_total < settings.FREE_DELIVERY_THRESHOLD:
+        # Compute delivery as a percentage of cart total
+        delivery = (cart_total * settings.STANDARD_DELIVERY_PERCENTAGE) / Decimal('100')
+        free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - cart_total
+    else:
+        delivery = Decimal('0.00')
+        free_delivery_delta = Decimal('0.00')
+
+    grand_total = cart_total + delivery
+
+    context = {
+        "cart": cart,
+        "cart_total": cart_total,
+        "product_count": product_count,
+        "delivery": delivery,
+        "free_delivery_delta": free_delivery_delta,
+        "grand_total": grand_total,
+    }
+    return render(request, "bag/bag_home.html", context)
+
 
 def add_to_bag(request, product_id):
     product = get_object_or_404(Product, pk=product_id)

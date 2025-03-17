@@ -30,12 +30,12 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-DEBUG = 'DEVELOPMENT' in os.environ
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = 'DEVELOPMENT' in os.environ
+DEBUG = 'True'
 
 ALLOWED_HOSTS = ["guerrier-184e74af35e6.herokuapp.com", "127.0.0.1", "localhost"]
 CSRF_TRUSTED_ORIGINS = [
@@ -114,6 +114,8 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SITE_ID = 1
+
+CRISPY_TEMPLATE_PACK = "bootstrap5"
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
