@@ -1,13 +1,13 @@
 # Guerrier Clothing: A streetwear brand - Wear Your Strength  
 Welcome to **Guerrier**, a bold streetwear brand inspired by the spirit of warriors. Based in the vibrant streets of Dublin, Guerrier draws its name from the French word for *warrior*, representing strength, courage, and resilience.  
 
-Our mission is simple: to create clothing that empowers you to take on life’s challenges with confidence. Designed with a blend of cutting-edge streetwear aesthetics and premium-quality craftsmanship, Guerrier is your go-to armor for standing out and standing strong.  
+Our mission is simple: to create clothing that empowers you to take on life's challenges with confidence. Designed with a blend of cutting-edge streetwear aesthetics and premium-quality craftsmanship, Guerrier is your go-to armor for standing out and standing strong.  
 
 
 * [Link to App](https://guerrier-184e74af35e6.herokuapp.com/) 
   
 
-![Home Screen](documentation/readme_images/homepage.png)
+![Home Screen](documentation/readme_images/home_page.png)
 
 ---
 
@@ -314,82 +314,187 @@ The entire platform is built on a mobile-first approach, ensuring seamless exper
 - Desktop experience with enhanced visual presentations
 - Consistent brand experience regardless of device
 
+#### Navigation Bar
+Our intuitive navigation bar provides quick access to all main sections of the site across all device sizes:
+- Collapsible menu on mobile
+- Full horizontal menu on desktop
+- Quick access to cart, wishlist, and account features
+- Search bar for site-wide product discovery
 
-![Navigation Bar](documentation/readme_images/navbar.png)
-[*Add screenshot: Navigation menu across different screen sizes*]
+![Navigation Bar](documentation/readme_images/nav_bar.png)
 
 ### Home Page
-- Call to action to encourage users to browse products instantly
-- Newsletter signup form
-- Easy to use navigation and clean design
+The home page serves as a powerful introduction to our brand with:
+- Bold hero section with compelling call-to-action
+- Featured product carousel highlighting new arrivals and bestsellers
+- Newsletter signup form with instant validation
+- Category shortcuts for easy browsing
+- Promotional banners for current sales and events
 
-![Home Page](documentation/readme_images/homepage.png)
+![Home Page](documentation/readme_images/home_page.png)
 
+#### Home Page Product Listings
+- Curated selection of featured and new arrivals
+- Visual indicators for sale items and limited editions
+- Quick-add to cart functionality
+- Responsive grid layout that adapts to all screen sizes
+- Product sort options (newest, bestselling, price)
+
+![Home Page Products](documentation/readme_images/admin_view_prodcuts.png)
 
 ### Products Pages
-- Pagination for easy browsing
-- Can click product for more detail
-- Can add to wishlist straight away
+The product pages offer robust browsing functionality:
+- Filterable product listings by category, size, color, and price
+- Pagination for manageable browsing
+- Detailed product cards with key information
+- Quick-add to wishlist functionality
 
-![Products Page](documentation/readme_images/product_pages.png)
+![Products Page](documentation/readme_images/product_listing.png)
 
+#### Product Detail
+
+Each product detail page provides comprehensive information:
+- High-quality product images 
+- Complete product details 
+- Size selection with availability indicators
+- Related products section (see below)
+- Customer reviews and ratings
+- Add to cart with quantity selector
+
+![Product Detail](documentation/readme_images/product_details.png)
+
+#### Related Products
+On product detail pages, customers can discover similar items:
+- Algorithmically generated product suggestions based on category, style, and purchase history
+- Horizontal scrollable carousel for easy browsing
+- Direct add-to-cart and wishlist functionality
+- Clear visual distinction from the main product
+
+![Related Products](documentation/readme_images/related_products.png)
+
+#### Search Results
+When users search for products, they experience:
+- Relevance-based result ordering
+- Highlighted search terms in results
+- Filter and sorting options specific to search results
+- "No results found" page with popular suggestions
+- Search history for logged-in users
+
+![Search Results](documentation/readme_images/s_results.png)
 
 #### Shopping Cart
-- Add, remove and update quantities
-- Price calculation with subtotals
+The shopping cart offers a streamlined experience:
+- Real-time cart updates without page reloads
+- Quantity adjustment with instant price recalculation
+- Product image and details for easy identification
 - "Continue shopping" and "Proceed to checkout" options
+- Estimated shipping and tax calculations
 
 ![Shopping Cart](documentation/readme_images/shopping_cart.png)
 
-
 #### Checkout
-- Secure form for shipping information
-- Order summary
-- Stripe integration for payments
+Our secure checkout process includes:
+- Guest checkout option with account creation prompt
+- Saved delivery information for registered users
+- Order summary with line-item breakdown
+- Stripe integration for secure card payments
 - Order confirmation with email notification
 
 ![Checkout](documentation/readme_images/checkout.png)
 
-
 #### Footer 
-- The footer is present on all pages of the site.
-- It features links to contact, returns, privacy policy and links back to the home page.
-- The footer also incorperates links to our newsletter signup and a link to our FaceBook marketing page.
+The footer provides essential information and navigation:
+- Links to important pages like contact, returns, and privacy policy
+- Newsletter signup form for marketing communications
+- Social media links to our brand channels
+- Copyright and business information
+- Quick links back to main home
+
 ![Footer](documentation/readme_images/footer.png)
 
 #### User Account
-- Registration and login functionality
-- Profile with saved delivery information
-- Order history
-- Personal wishlist management
+Registered users benefit from personalized features:
+- Dashboard with account overview
+- Profile management with saved delivery information
+- Order history with status tracking
+- Wishlist management with sharing options
+- Review management for previously purchased items
 
 ![User Profile](documentation/readme_images/user_profile.png)
 
-#### Recommended Items
-- In a users wishlist, it displays the user's selected wishlist items but also displays a recommended for you area below, showcasing similar products.
+#### Suggested Items
+Our recommendation engine enhances discovery:
+- "Recommended for You" section based on browsing and purchase history
+- Similar style suggestions within the same category
+- "Customers Also Bought" recommendations from purchase patterns
+- Recently viewed items for easy return shopping
+- Personalized deal suggestions based on wishlist items
+
 ![Recommended Items](documentation/readme_images/recommended_items.png)
 
 #### Reviews
-   - Users can leave reviews on products, and can rate them between 1-5.
+The review system builds community trust:
+- Star rating system from 1-5
+- Verified purchase badges for authentic reviews
+- Helpful vote system for community curation
+- Photo upload option for customer product images
+- Admin moderation to ensure quality content
+
 ![Reviews](documentation/readme_images/reviews.png)
 
 #### Wishlist
+The wishlist functionality enables future purchases:
+- Multiple named wishlists for different purposes
+- Public/private sharing options
+- Price drop notifications
+- Easy transfer to shopping cart
+- Stock availability indicators
 
--  Shows the users wishlist. Users need to be logged in to view the wishlist.
 ![Wishlist](documentation/readme_images/wishlist.png)
 
-#### Admin Features
-- Product management (add, edit, delete)
-- Order management and processing
-- User management
-- Content management for homepage
+#### Admin Product Management
+Store administrators have powerful tools:
+- Product dashboard with inventory alerts
+- Bulk edit functionality for multiple products
+- Image management with multiple uploads
+- Variant management (sizes, colors)
+- Draft and scheduled product publishing
+
+![Admin Product Management](documentation/readme_images/placeholder_image.png)
+
+#### Admin Product Edit
+The product editing interface offers comprehensive control:
+- Image uploading
+- SEO fields for meta descriptions and keywords
+- Related product manual assignment
+
+![Admin Product Edit](documentation/readme_images/admin_product_update.png)
+
+#### Admin All Products View
+Administrators can manage the entire catalog efficiently:
+- Sortable and filterable product table
+- Bulk actions for common tasks
+- Inventory level indicators with alerts
+- Performance metrics for each product
+- Quick edit functionality for key fields
+
+![Admin All Products View](documentation/readme_images/admin_view_products.png)
 
 ### Future Features
 
-- Icons that change colour: When interacting with an icon, for example in Wishlist, the heart turns solid to identify an item already in the Wishlist.
-- Improved Django Admin Features: There is scope for improving the Ux/ui with added features such as revenue tracking and sales forecasting.
-- Increased number of products.
-- MailChimp and other integrations
+#### User Experience Enhancements
+- Interactive icons: Color-changing icons for clearer user feedback (e.g., heart turns solid when item is in wishlist) - ADDED
+- Product zoom: Enhanced zoom functionality on product images
+- Size guide: Interactive size guide with measurements
+- Live chat: Customer support through live chat integration
+
+
+#### Technical Integrations
+- MailChimp integration for advanced email marketing
+- Enhanced payment options (Apple Pay, Google Pay, etc.)
+- Social media shopping integration
+- Advanced product recommendation engine
+- Mobile app development for iOS and Android
 
 ## Design
 
@@ -583,7 +688,7 @@ cd Guerrier-Clothing
 3. Create and activate a virtual environment:
 ```bash
 python -m venv .venv
-source .venv/bin/activate # On Windows use `.venv\Scriptsctivate`
+source .venv/bin/activate # On Windows use `.venv\Scriptsctivate`
 ```
 
 4. Install dependencies:
