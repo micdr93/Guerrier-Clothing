@@ -465,7 +465,7 @@ I have tested the deployed project using Lighthouse in Chrome developer tools to
 <details>
 <summary>Shopping Bag</summary>
 
-![Shopping Bag Lighthouse Audit](documentation/lighthouse/shopping-bag.png)
+![Shopping Bag Lighthouse Audit](documentation/lighthouse/bag.png)
 </details>
 
 <details>
