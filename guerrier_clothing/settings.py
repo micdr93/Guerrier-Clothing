@@ -4,45 +4,21 @@ import dj_database_url
 from decimal import Decimal 
 from django.core.exceptions import ImproperlyConfigured
 
-
-try:
-    import env
-except ImportError:
-    pass
-
-import os
-import dj_database_url
-from django.contrib.messages import constants as messages
-from pathlib import Path
-
+# Try to import env.py if it exists
 if os.path.exists('env.py'):
     import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
-
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # or your current DEBUG setting
+DEBUG = True
 
-if DEBUG:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-else:
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-SECRET_KEY = os.environ.get("SECRET_KEY")
-
-if DEBUG:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-else:
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# Determine if we're using AWS
+USE_AWS = os.environ.get('USE_AWS', 'False').lower() in ['true', '1']
 
 ALLOWED_HOSTS = ["guerrier-184e74af35e6.herokuapp.com", "127.0.0.1", "localhost"]
 CSRF_TRUSTED_ORIGINS = [
@@ -87,7 +63,6 @@ MIDDLEWARE = [
     "allauth.account.middleware.AccountMiddleware",
 ]
 
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -115,12 +90,6 @@ TEMPLATES = [
 
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
-# Static & Media Storage
-STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
-
-
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -129,9 +98,7 @@ AUTHENTICATION_BACKENDS = (
 SITE_ID = 1
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
-
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
-CRISPY_TEMPLATE_PACK = 'bootstrap5'
 
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_REQUIRED = True
@@ -143,8 +110,7 @@ LOGIN_REDIRECT_URL = '/'
 WSGI_APPLICATION = 'guerrier_clothing.wsgi.application'
 ROOT_URLCONF = 'guerrier_clothing.urls'
 
-
-
+# Database
 if 'DATABASE_URL' in os.environ:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
@@ -156,7 +122,6 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -173,13 +138,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 # Static and media file settings
 STATIC_URL = '/static/'
@@ -188,27 +151,39 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Define these variables early so custom_storages.py can import them
+# Define locations for custom_storages.py
 STATICFILES_LOCATION = 'static'
 MEDIAFILES_LOCATION = 'media'
 
-if os.getenv('USE_AWS'):
+# Default storage settings - will be overridden if using AWS
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
+
+# AWS S3 configuration
+if USE_AWS:
+    # Bucket Config
+    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'guerrier')
+    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'eu-north-1')
+    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+    
+    # S3 URL and domain configuration
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+    
+    # S3 specific settings
+    AWS_S3_ADDRESSING_STYLE = 'virtual'
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    
     # Cache control
     AWS_S3_OBJECT_PARAMETERS = {
         'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
         'CacheControl': 'max-age=94608000',
     }
-    # Bucket Config
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'guerrier')  # Updated to match your bucket name
-    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'eu-north-1')  # Updated to match your region
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-
-    # Static and media files
+    
+    # Storage configuration - requires custom_storages.py
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
     DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
-
+    
     # Override static and media URLs in production
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
@@ -249,7 +224,6 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'DEBUG',
         },
-      
         '': {
             'handlers': ['console'],
             'level': 'DEBUG',
