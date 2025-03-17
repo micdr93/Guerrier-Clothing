@@ -163,33 +163,29 @@ DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 
 
 # AWS S3 configuration
-if USE_AWS:
-    # Bucket Config
-    AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME', 'guerrier')
-    AWS_S3_REGION_NAME = os.environ.get('AWS_S3_REGION_NAME', 'eu-north-1')
-    AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-    
-    # S3 URL and domain configuration
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-    
-    # S3 specific settings
-    AWS_S3_ADDRESSING_STYLE = 'virtual'
-    AWS_S3_SIGNATURE_VERSION = 's3v4'
-    
-    # Cache control
-    AWS_S3_OBJECT_PARAMETERS = {
-        'Expires': 'Thu, 31 Dec 2099 20:00:00 GMT',
-        'CacheControl': 'max-age=94608000',
-    }
-    
-    # Storage configuration - requires custom_storages.py
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
-    DEFAULT_FILE_STORAGE = 'custom_storages.MediaStorage'
-    
-    # Override static and media URLs in production
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
+if os.getenv("USE_AWS") == "True":
+    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "").strip()
+    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "eu-north-1")
+    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
+    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
+
+    if not AWS_STORAGE_BUCKET_NAME:
+        raise ValueError("AWS_STORAGE_BUCKET_NAME is missing!")
+
+    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
+
+    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+else:
+    # If not using AWS, serve media locally
+    STATIC_URL = "/static/"
+    MEDIA_URL = "/media/"
+    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
+    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
 
 # Stripe
 FREE_DELIVERY_THRESHOLD = Decimal(os.environ.get('FREE_DELIVERY_THRESHOLD', '50'))

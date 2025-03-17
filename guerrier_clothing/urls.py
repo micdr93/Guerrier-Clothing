@@ -23,14 +23,18 @@ urlpatterns = [
     path("profiles/", include(("profiles.urls", "profiles"), namespace="profiles")),
     path("wishlist/", include(("wishlist.urls", "wishlist"), namespace="wishlist")),
     path("reviews/", include(("reviews.urls", "reviews"), namespace="reviews")),
-    re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
     path("homeware/mugs/", product_views.mugs_view, name="homeware_mugs"),
     path("homeware/coasters/", product_views.coasters_view, name="homeware_coasters"),
     path("homeware/skateboard-decks/", product_views.skateboard_decks_view, name="homeware_skateboard_decks"),
 ]
-urlpatterns += [
-    re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
-]
+
+# Serve media and static files in development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    # In production, use the serve view for media files
+    urlpatterns += [
+        re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
+    ]
