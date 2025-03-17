@@ -435,19 +435,19 @@ I have tested the deployed project using Lighthouse in Chrome developer tools to
 <details>
 <summary>Wishlist</summary>
 
-![Wishlist Lighthouse Audit](documentation/lighthouse/wishlist.png)
+![Wishlist Lighthouse Audit](documentation/lighthouse/wishlist1.png)
 </details>
 
 <details>
 <summary>Sign Up</summary>
 
-![Sign Up Lighthouse Audit](documentation/lighthouse/signup.png)
+![Sign Up Lighthouse Audit](documentation/lighthouse/signup1.png)
 </details>
 
 <details>
 <summary>Sign In</summary>
 
-![Sign In Lighthouse Audit](documentation/lighthouse/signin.png)
+![Sign In Lighthouse Audit](documentation/lighthouse/signin1.png)
 </details>
 
 <details>
@@ -471,7 +471,7 @@ I have tested the deployed project using Lighthouse in Chrome developer tools to
 <details>
 <summary>Checkout</summary>
 
-![Checkout Lighthouse Audit](documentation/lighthouse/checkout.png)
+![Checkout Lighthouse Audit](documentation/lighthouse/checkout1.png)
 </details>
 
 <details>
@@ -480,11 +480,6 @@ I have tested the deployed project using Lighthouse in Chrome developer tools to
 ![Checkout Success Lighthouse Audit](documentation/lighthouse/checkout-success.png)
 </details>
 
-<details>
-<summary>Profile</summary>
-
-![Profile Lighthouse Audit](documentation/lighthouse/profile.png)
-</details>
 
 [Back to Top](#table-of-contents)
 
@@ -525,27 +520,6 @@ The deployed project has been tested on different screen sizes to ensure it is r
 - A forced Dark Mode footer on Google Pixel
 </details>
 
-<details>
-<summary>Tablet (DevTools)</summary>
-
-![Tablet Responsiveness 1](documentation/responsive/tablet-1.png)
-![Tablet Responsiveness 2](documentation/responsive/tablet-2.png)
-![Tablet Responsiveness 3](documentation/responsive/tablet-3.png)
-</details>
-
-<details>
-<summary>Laptop</summary>
-
-![Laptop Responsiveness 1](documentation/responsive/laptop-1.png)
-![Laptop Responsiveness 2](documentation/responsive/laptop-2.png)
-</details>
-
-<details>
-<summary>Desktop</summary>
-
-![Desktop Responsiveness 1](documentation/responsive/desktop-1.png)
-![Desktop Responsiveness 2](documentation/responsive/desktop-2.png)
-</details>
 
 [Back to Top](#table-of-contents)
 
