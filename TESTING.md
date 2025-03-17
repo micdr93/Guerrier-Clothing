@@ -378,6 +378,29 @@ It is important to test on different browsers to ensure that the site is functio
 ![Profiles Views Python Validation](documentation/validation/python-profiles-views.png)
 </details>
 
+<details>
+<summary>Wishlist admin.py</summary>
+
+![Wishlist Admin Python Validation](documentation/validation/python-wishlist-admin.png)
+</details>
+
+<details>
+<summary>Wishlist models.py</summary>
+
+![Wishlist Models Python Validation](documentation/validation/python-wishlist-model.png)
+</details>
+
+<details>
+<summary>Wishlist urls.py</summary>
+
+![Wishlist URLs Python Validation](documentation/validation/python-wishlist-urls.png)
+</details>
+
+<details>
+<summary>Wishlist views.py</summary>
+
+![Wishlist Views Python Validation](documentation/validation/python-wishlist-views.png)
+</details>
 
 [Back to Top](#table-of-contents)
 
