@@ -26,7 +26,7 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Chrome</summary>
 
-![Chrome Browser Testing](documentation/chrome.png)
+![Chrome Browser Testing](documentation/readme_images/chrome.png)
 </details>
 
 <details>
