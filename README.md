@@ -477,6 +477,13 @@ Administrators can manage the entire catalog efficiently:
 ![Sign In](documentation/readme_images/sign_in.png)
 
 
+#### Dropdown 
+Dropdown features:
+- users can navigate easily with the dropwdown feature//
+
+
+![Dropdown2](documentation/readme_images/dropdown1.png)
+![Dropdown2](documentation/readme_images/dropdown2.png)
 
 ### Future Features
 
