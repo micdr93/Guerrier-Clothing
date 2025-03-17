@@ -361,7 +361,7 @@ Each product detail page provides comprehensive information:
 - Customer reviews and ratings
 - Add to cart with quantity selector
 
-![Product Detail](documentation/readme_images/product_details.png)
+![Product Detail](documentation/readme_images/prodcut_detail.png)
 
 #### Related Products
 On product detail pages, customers can discover similar items:
