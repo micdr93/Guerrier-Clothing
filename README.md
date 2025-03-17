@@ -389,7 +389,7 @@ The shopping cart offers a streamlined experience:
 - "Continue shopping" and "Proceed to checkout" options
 - Estimated shipping and tax calculations
 
-![Shopping Cart](documentation/readme_images/shopping_cart.png)
+![Shopping Cart](documentation/readme_images/shopping_bag.png)
 
 #### Checkout
 Our secure checkout process includes:
