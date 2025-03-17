@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
-    var stripePublicKey = document.getElementById("id_stripe_public_key").textContent.trim();
-    var clientSecret = document.getElementById("id_client_secret").textContent.trim();
+    // Retrieve and parse the JSON data for the public key and client secret.
+    var stripePublicKey = JSON.parse(document.getElementById("id_stripe_public_key").textContent);
+    var clientSecret = JSON.parse(document.getElementById("id_client_secret").textContent);
 
     var stripe = Stripe(stripePublicKey);
     var elements = stripe.elements();
