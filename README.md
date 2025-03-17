@@ -361,13 +361,12 @@ Each product detail page provides comprehensive information:
 - Customer reviews and ratings
 - Add to cart with quantity selector
 
-![Product Detail](documentation/readme_images/prodcut_detail.png)
+![Product Detail](documentation/readme_images/product_details.png)
 
 #### Related Products
 On product detail pages, customers can discover similar items:
 - Algorithmically generated product suggestions based on category, style, and purchase history
-- Horizontal scrollable carousel for easy browsing
-- Direct add-to-cart and wishlist functionality
+- Horizontal view for easy browisng
 - Clear visual distinction from the main product
 
 ![Related Products](documentation/readme_images/related_products.png)
@@ -416,11 +415,9 @@ The footer provides essential information and navigation:
 Registered users benefit from personalized features:
 - Dashboard with account overview
 - Profile management with saved delivery information
-- Order history with status tracking
-- Wishlist management with sharing options
-- Review management for previously purchased items
+- Order history 
 
-![User Profile](documentation/readme_images/user_profile.png)
+![User Profile](documentation/readme_images/customer_profile.png)
 
 #### Suggested Items
 Our recommendation engine enhances discovery:
