@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Determine if we're using AWS
 USE_AWS = os.environ.get('USE_AWS', 'False').lower() in ['true', '1']
@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     "products",
     "bag",
     "checkout",
+    "cloudinary",
+    "cloudinary_storage",
     "profiles",
     "wishlist",
     "recommendations",
