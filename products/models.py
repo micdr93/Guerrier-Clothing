@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 from decimal import Decimal
-
+from cloudinary.models import CloudinaryField
 
 class Category(models.Model):
     class Meta:
@@ -69,7 +69,8 @@ class Product(models.Model):
         ],
     )
 
-    image = models.ImageField(null=True, blank=True, upload_to="images/product_images/")
+
+    image = CloudinaryField('image', null=True, blank=True)
 
     color = models.CharField(max_length=20, blank=True, null=True)
     gender = models.CharField(max_length=1, default="U")
