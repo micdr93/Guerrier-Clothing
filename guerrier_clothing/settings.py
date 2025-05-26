@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 import dj_database_url
-from decimal import Decimal 
+from decimal import Decimal
 from django.core.exceptions import ImproperlyConfigured
 
 # Try to import env.py if it exists
@@ -16,9 +16,6 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-
-# Determine if we're using AWS
-USE_AWS = os.environ.get('USE_AWS', 'False').lower() in ['true', '1']
 
 ALLOWED_HOSTS = ["guerrier-184e74af35e6.herokuapp.com", "127.0.0.1", "localhost"]
 CSRF_TRUSTED_ORIGINS = [
@@ -50,7 +47,6 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     "django_countries",
-    "storages",
 ]
 
 MIDDLEWARE = [
@@ -147,47 +143,27 @@ USE_L10N = True
 USE_TZ = True
 
 # Static and media file settings
+
+# Static files (CSS, JavaScript, images)
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
+# Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# Cloudinary configuration for media file storage
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
+}
 
-# Define locations for custom_storages.py
-STATICFILES_LOCATION = 'static'
-MEDIAFILES_LOCATION = 'media'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Default storage settings - will be overridden if using AWS
+# Static file storage using Django's default (Whitenoise will serve from staticfiles on Heroku)
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
-DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
-
-
-# AWS S3 configuration
-if os.getenv("USE_AWS") == "True":
-    AWS_STORAGE_BUCKET_NAME = os.getenv("AWS_STORAGE_BUCKET_NAME", "").strip()
-    AWS_S3_REGION_NAME = os.getenv("AWS_S3_REGION_NAME", "eu-north-1")
-    AWS_ACCESS_KEY_ID = os.getenv("AWS_ACCESS_KEY_ID")
-    AWS_SECRET_ACCESS_KEY = os.getenv("AWS_SECRET_ACCESS_KEY")
-
-    if not AWS_STORAGE_BUCKET_NAME:
-        raise ValueError("AWS_STORAGE_BUCKET_NAME is missing!")
-
-    AWS_S3_CUSTOM_DOMAIN = f"{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com"
-
-    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
-
-    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/static/"
-    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
-else:
-    # If not using AWS, serve media locally
-    STATIC_URL = "/static/"
-    MEDIA_URL = "/media/"
-    STATICFILES_STORAGE = "django.contrib.staticfiles.storage.StaticFilesStorage"
-    DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
-
 
 # Stripe
 FREE_DELIVERY_THRESHOLD = Decimal(os.environ.get('FREE_DELIVERY_THRESHOLD', '50'))
