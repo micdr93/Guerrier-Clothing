@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load bag_tools %}
+{% load crispy_forms_tags %}
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
@@ -76,6 +77,17 @@
         </div>
         <div class="col-12 col-lg-6">
             <p class="text-muted">Please fill out the form below to complete your order</p>
+
+            {% if order_form.errors %}
+    <div class="alert alert-danger">
+        <strong>There was an error with your submission. Please check your details and try again.</strong>
+        <ul>
+            {% for field, errors in order_form.errors.items %}
+                <li>{{ field|capfirst }}: {{ errors|striptags }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}
             
             <form action="{% url 'checkout:checkout' %}" method="POST" id="payment-form">
                 {% csrf_token %}
@@ -109,7 +121,7 @@
                     <legend class="fieldset-label small text-black px-2 w-auto" id="payment-legend">Payment</legend>
                     <div class="mb-3" id="card-element"></div>
                     <div class="mb-3 text-danger" id="card-errors" role="alert"></div>
-                    <input type="hidden" value="{{ client_secret }}" name="client_secret" id="id_client_secret">
+                  
                 </fieldset>
                 <div class="submit-button text-right mt-5 mb-2">
                     <a href="{% url 'bag:view_bag' %}" class="btn btn-outline-black rounded-0">
@@ -146,7 +158,9 @@
 
 {% block postloadjs %}
     {{ block.super }}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     {{ stripe_public_key|json_script:"id_stripe_public_key" }}
     {{ client_secret|json_script:"id_client_secret" }}
+    <script src="https://js.stripe.com/v3/"></script>
     <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
 {% endblock %}

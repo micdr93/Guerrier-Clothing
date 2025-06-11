@@ -24,24 +24,34 @@ def bag_contents(request):
                     "line_total": line_total,
                 })
             else:
-                # When item_data is a dict (i.e., items with sizes)
-                for size, quantity in item_data.items():
+                if "items_by_size" in item_data:
+                    for size, quantity in item_data["items_by_size"].items():
+                        line_total = product.price * quantity
+                        total += line_total
+                        product_count += quantity
+                        bag_items.append({
+                            "product": product,
+                            "quantity": quantity,
+                            "size": size,
+                            "line_total": line_total,
+                        })
+                elif "quantity" in item_data:
+                    quantity = item_data["quantity"]
                     line_total = product.price * quantity
                     total += line_total
                     product_count += quantity
                     bag_items.append({
                         "product": product,
                         "quantity": quantity,
-                        "size": size,
                         "line_total": line_total,
                     })
         except Exception as e:
             print(f"Error processing item {item_id}: {e}")
             continue
 
-    # Calculate delivery cost
+    # Calculate delivery cost (fixed for Decimal math)
     if total < settings.FREE_DELIVERY_THRESHOLD:
-        delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
+        delivery = total * (Decimal(settings.STANDARD_DELIVERY_PERCENTAGE) / Decimal('100'))
         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
     else:
         delivery = Decimal(0)
