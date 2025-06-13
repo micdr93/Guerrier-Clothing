@@ -103,7 +103,6 @@ SITE_ID = 1
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_ALLOWED_TEMPLATE_PACKS = ["bootstrap5"]
 
-# --- Allauth configuration for easy demo/submission ---
 
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = "email"
