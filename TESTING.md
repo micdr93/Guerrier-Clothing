@@ -32,13 +32,13 @@ It is important to test on different browsers to ensure that the site is functio
 <details>
 <summary>Safari</summary>
 
-![Safari Browser Testing](documentation/safari.png)
+![Safari Browser Testing](documentation/readme_images/safari_screenshot.png)
 </details>
 
 <details>
 <summary>Firefox</summary>
 
-![Firefox Browser Testing](documentation/firefox.png)
+![Firefox Browser Testing](documentation/readme_images/firefox.png)
 </details>
 
 [Back to Top](#table-of-contents)
