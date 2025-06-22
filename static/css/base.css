@@ -290,3 +290,27 @@ button:hover,
     border: none !important;
     box-shadow: none !important;
 }
+
+.message-container .alert {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    gap: 1rem;
+    margin: 0.5rem auto !important;
+    min-width: 300px !important;
+    max-width: 500px !important;
+    width: 100% !important;
+}
+
+.message-container .btn-close {
+    position: static !important;
+    margin: 0 !important;
+    align-self: center !important;
+}
+.alert-lightblue-bg, .alert.lightblue-bg {
+    background-color: #4eaef3 !important;
+    color: #0d47a1 !important;
+    border: 1px solid #90caf9 !important;
+}

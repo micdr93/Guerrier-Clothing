@@ -1,7 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category
-from .models import NewsletterSubscription
-
+from .models import Product, Category, NewsletterSubscription, Contact
 
 @admin.register(NewsletterSubscription)
 class NewsletterSubscriptionAdmin(admin.ModelAdmin):
@@ -19,6 +17,12 @@ class NewsletterSubscriptionAdmin(admin.ModelAdmin):
 
     export_emails.short_description = "Export selected email addresses"
 
+@admin.register(Contact)
+class ContactAdmin(admin.ModelAdmin):
+    list_display = ('name', 'email', 'subject', 'date_submitted')
+    search_fields = ('name', 'email', 'subject')
+    readonly_fields = ('name', 'email', 'subject', 'message', 'date_submitted')
+    ordering = ('-date_submitted',)
 
 admin.site.register(Product)
 admin.site.register(Category)

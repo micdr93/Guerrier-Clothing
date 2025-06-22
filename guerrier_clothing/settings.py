@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 import dj_database_url
 from decimal import Decimal
+from django.contrib.messages import constants as messages
 
 if os.path.exists('env.py'):
     import env
@@ -99,6 +100,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     }
+}
+
+
+MESSAGE_TAGS = {
+    messages.ERROR: 'danger',
+    messages.SUCCESS: 'success',
+    messages.INFO: 'info',
+    messages.WARNING: 'warning',
 }
 
 AUTH_PASSWORD_VALIDATORS = [

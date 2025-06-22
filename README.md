@@ -326,7 +326,7 @@ Our intuitive navigation bar provides quick access to all main sections of the s
 ### Home Page
 The home page serves as a powerful introduction to our brand with:
 - Bold hero section with compelling call-to-action
-- Featured product carousel highlighting new arrivals and bestsellers
+- Featured product carousel highlighting new arrivals and 
 - Newsletter signup form with instant validation
 - Category shortcuts for easy browsing
 - Promotional banners for current sales and events
@@ -344,7 +344,7 @@ The home page serves as a powerful introduction to our brand with:
 
 ### Products Pages
 The product pages offer robust browsing functionality:
-- Filterable product listings by category, size, color, and price
+- Filterable product listings by price
 - Pagination for manageable browsing
 - Detailed product cards with key information
 - Quick-add to wishlist functionality
