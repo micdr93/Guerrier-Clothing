@@ -511,6 +511,67 @@ The color palette was chosen to reflect the brand's bold and urban aesthetic whi
 - Secondary: #FFFFFF - Used for text on dark backgrounds and for background for a clean look
 - Accent: #555555 (Dark Gray/Black) - Used on buttons and certain areas of text to 
 
+### 📖 Typography
+
+The site uses a combination of bold display fonts for headings and clean, modern sans-serif fonts for body text, creating a clear hierarchy and consistent readability across devices.
+
+### **Fonts Used**
+
+| Font Name | Purpose                        | Source |
+|:------------|:--------------------------------|:-------------|
+| **Anton**      | Logo branding, headings, and footer titles | [Google Fonts - Anton](https://fonts.google.com/specimen/Anton) |
+| **Lato**       | Body text and general site content            | [Google Fonts - Lato](https://fonts.google.com/specimen/Lato) |
+| **Roboto**     | Available for additional headings or future content areas | [Google Fonts - Roboto](https://fonts.google.com/specimen/Roboto) |
+
+---
+
+### **Font Sizes & Weight**
+
+- **Navbar Brand / Logo**:  
+  - Font: `Anton`  
+  - Size: `2.5rem`  
+  - Weight: `normal`  
+  - Text Transform: `uppercase`  
+  - Letter Spacing: `1px`
+
+- **Hero Banner Text**:  
+  - Font Size: `2rem` (`1.5rem` on screens < 576px)  
+  - Color: `#fff`  
+
+- **Button Text**:  
+  - Font Size: `1rem`  
+  - Font Weight: `600`  
+  - `.btn-sm-custom`: `0.8rem`  
+
+- **Bold Text Utility Class**:  
+  - Class: `.bold-text`  
+  - Weight: `900`
+
+---
+
+### **Text Colors**
+
+- **Primary Text Color**: `#555`
+- **Navbar & Dropdown Items**: `#000`  
+- **Footer Link Hover**: `#333`
+- **Button Hover Text**: `#fff`
+
+---
+
+### **Letter Spacing & Text Transform**
+
+- **Navbar Brand & Footer Headings**:  
+  - Letter Spacing: `1px`  
+  - Text Transform: `uppercase`  
+
+---
+
+### **Utilities**
+
+- **Wishlist Icon Button**:  
+  - Font Size: `1.5rem`  
+  - Color: `#ccc` (default), `black` (active)
+
 ### Images
 
 - All images and products on the site were created by myself, using Adobe Photoshop.
