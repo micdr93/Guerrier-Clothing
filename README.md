@@ -511,7 +511,7 @@ The color palette was chosen to reflect the brand's bold and urban aesthetic whi
 - Secondary: #FFFFFF - Used for text on dark backgrounds and for background for a clean look
 - Accent: #555555 (Dark Gray/Black) - Used on buttons and certain areas of text to 
 
-### 📖 Typography
+### Typography
 
 The site uses a combination of bold display fonts for headings and clean, modern sans-serif fonts for body text, creating a clear hierarchy and consistent readability across devices.
 
