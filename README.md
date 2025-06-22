@@ -609,7 +609,7 @@ Our newsletter is a cornerstone of our direct customer communication strategy, a
 * [stripe==7.8.1](https://pypi.org/project/stripe/) - A Python library for Stripe's API
 * [django-summernote](https://github.com/summernote/django-summernote) - WYSIWYG editor for Django admin
 * [Pillow](https://pypi.org/project/Pillow/) - Python Imaging Library for image processing
-* [boto3](https://pypi.org/project/boto3/) - AWS SDK for Python used for S3 bucket storage
+* [django-AXES](https://django-axes.readthedocs.io/en/latest/index.html) - Used for monitoring and logging logins attempts
 
 
 ## Tools And Resources
