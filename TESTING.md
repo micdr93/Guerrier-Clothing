@@ -135,12 +135,6 @@ It is important to test on different browsers to ensure that the site is functio
 </details>
 
 <details>
-<summary>Add Product</summary>
-
-![Add Product HTML Validation](documentation/validation/html_add_product.png)
-</details>
-
-<details>
 <summary>Edit Product</summary>
 
 ![Edit Product HTML Validation](documentation/validation/html_edit_product.png)
