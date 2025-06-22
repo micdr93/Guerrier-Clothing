@@ -609,7 +609,9 @@ Our newsletter is a cornerstone of our direct customer communication strategy, a
 * [stripe==7.8.1](https://pypi.org/project/stripe/) - A Python library for Stripe's API
 * [django-summernote](https://github.com/summernote/django-summernote) - WYSIWYG editor for Django admin
 * [Pillow](https://pypi.org/project/Pillow/) - Python Imaging Library for image processing
-* [django-AXES](https://django-axes.readthedocs.io/en/latest/index.html) - Used for monitoring and logging logins attempts
+* [django-axes](https://django-axes.readthedocs.io/en/latest/) — For login attempt monitoring and brute-force attack prevention.
+* [Cloudinary](https://cloudinary.com/documentation/django_integration) — For media and image management in the cloud.
+
 
 
 ## Tools And Resources

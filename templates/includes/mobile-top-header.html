@@ -1,11 +1,10 @@
-<!-- mobile_top_header.html -->
 <div class="d-lg-none">
   <nav class="navbar navbar-light bg-white">
     <div class="container-fluid">
-      <!-- Brand -->
+
       <a class="navbar-brand" href="{% url 'home:index' %}">GUERRIER</a>
 
-      <!-- Navbar Toggler -->
+
       <button
         class="navbar-toggler"
         type="button"
@@ -19,17 +18,17 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       
-      <!-- Search Toggle Button (toggles search form below) -->
+
       <button id="search-toggler" class="btn" aria-label="Toggle search bar">
         <i class="fa fa-search"></i>
       </button>
       
-      <!-- Cart Icon for Mobile -->
+
       <a href="{% url 'bag:view_bag' %}" class="btn" aria-label="Bag">
         <i class="fas fa-shopping-cart"></i>
       </a>
       
-      <!-- Collapsible Mobile Menu -->
+
       <div class="collapse navbar-collapse" id="mobile-nav">
         <ul class="navbar-nav">
           <li class="nav-item dropdown">
@@ -68,7 +67,7 @@
         </ul>
       </div>
 
-      <!-- Hidden Search Form (directly toggled by #search-toggler) -->
+
       <div class="container-fluid mt-2" id="mobile-search" style="display: none;">
         <form method="GET" action="{% url 'products:search_results' %}" class="d-flex">
           <input class="form-control me-2" type="search" placeholder="Search products..." aria-label="Search" name="q">
@@ -79,7 +78,7 @@
   </nav>
 </div>
 
-<!-- Small script to directly toggle the mobile search form -->
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const searchToggler = document.getElementById('search-toggler');

@@ -1,12 +1,8 @@
-<!-- main_nav.html -->
-<!-- Desktop navbar content (no outer d-none d-lg-block wrapper) -->
-
-<!-- Brand -->
 <a class="navbar-brand" href="{% url 'home:index' %}">
   GUERRIER
 </a>
 
-<!-- Optional: Toggler if you want a collapsible desktop menu -->
+
 <button
   class="navbar-toggler"
   type="button"
@@ -19,9 +15,9 @@
   <span class="navbar-toggler-icon"></span>
 </button>
 
-<!-- Collapsible Desktop Menu -->
+
 <div class="collapse navbar-collapse" id="main-nav">
-  <!-- Left side menu -->
+
   <ul class="navbar-nav me-auto text-center gap-4">
     <li class="nav-item dropdown">
       <a class="nav-link dropdown-toggle" href="#" id="clothing-link" data-bs-toggle="dropdown" aria-expanded="false">
@@ -44,9 +40,9 @@
     </li>
   </ul>
 
-  <!-- Right side menu -->
+
   <ul class="navbar-nav text-center gap-4">
-    <!-- Search Form -->
+
     <li class="nav-item">
       <form method="GET" action="{% url 'products:search_results' %}" class="d-flex">
         <div class="input-group">
@@ -66,21 +62,21 @@
       </form>
     </li>
 
-    <!-- Wishlist -->
+
     <li class="nav-item">
       <a class="nav-link" href="{% url 'wishlist:wishlist_home' %}" aria-label="Wishlist">
         <i class="fa-regular fa-heart"></i>
       </a>
     </li>
 
-    <!-- Bag/Cart -->
+
     <li class="nav-item">
       <a class="nav-link" href="{% url 'bag:view_bag' %}" aria-label="Bag">
         <i class="fas fa-shopping-cart"></i>
       </a>
     </li>
 
-    <!-- Account/Login/Logout -->
+    
     <li class="nav-item dropdown">
       {% if user.is_authenticated %}
         <a

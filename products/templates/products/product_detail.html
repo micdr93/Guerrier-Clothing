@@ -6,7 +6,7 @@
 {% block content %}
 <div class="container-fluid">
     <div class="row">
-        <!-- Product Image and Wishlist -->
+
         <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
             <div class="image-container my-5 position-relative">
                 <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <!-- Product Details -->
+       
         <div class="col-12 col-md-6 col-lg-4">
             <div class="product-details-container mb-5 mt-md-5">
                 <h1 class="mb-0">{{ product.name }}</h1>
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <!-- Reviews Section -->
+
     <div class="row">
         <div class="col-12 col-lg-8 offset-lg-2">
             <div class="reviews-section">
@@ -108,7 +108,7 @@
                                     Rating: {{ review.rating }}/5
                                 </div>
                             </div>
-                            <!-- Add the title here -->
+
                             <h5 class="review-title">{{ review.title }}</h5>
                             <p class="review-text">{{ review.review }}</p>
 
@@ -125,7 +125,7 @@
                 {% endif %}
             </div>
 
-            <!-- Related Products Section -->
+
             {% if related_products %}
             <div class="related-products mt-5">
                 <h2>Related Products</h2>
