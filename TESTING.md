@@ -451,12 +451,6 @@ I have tested the deployed project using Lighthouse in Chrome developer tools to
 </details>
 
 <details>
-<summary>Log Out</summary>
-
-![Log Out Lighthouse Audit](documentation/lighthouse/logout.png)
-</details>
-
-<details>
 <summary>Shopping Bag</summary>
 
 ![Shopping Bag Lighthouse Audit](documentation/lighthouse/bag.png)
@@ -473,6 +467,21 @@ I have tested the deployed project using Lighthouse in Chrome developer tools to
 
 ![Checkout Success Lighthouse Audit](documentation/lighthouse/checkout-success.png)
 </details>
+
+
+## Lighthouse Performance Notes
+
+During performance testing with Google Lighthouse, a small number of amber signals were recorded. These mostly relate to third-party services integrated into the project:
+
+- **Stripe Payment Elements**  
+  The use of Stripe's secure card field and supporting scripts can slightly impact initial page load and performance scores. This is expected, as external resources are loaded asynchronously to maintain security and compliance standards.
+
+- **Cloudinary Hosted Media**  
+  High-resolution images delivered via Cloudinary may affect performance scores depending on network conditions and how the images are optimised. Despite this, they offer essential functionality for responsive, scalable image delivery.
+
+### Summary
+
+These amber signals are reasonable trade-offs for incorporating services that focus on security, payment handling, and media optimisation. The site remains performant, accessible, and user-friendly, with no critical issues identified during testing.
 
 
 [Back to Top](#table-of-contents)
