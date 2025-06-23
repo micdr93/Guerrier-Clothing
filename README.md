@@ -751,7 +751,7 @@ For all testing, please refer to the [TESTING.md](TESTING.md) file.
 
 - **Remove Item from Bag Bug**  
   Initially, users were unable to remove items from the shopping bag correctly. This was identified and resolved to ensure smooth removal and instant bag updates.  
-  ![Remove Item Fix Screenshot](path/to/remove-item-fix-screenshot.png)  
+  ![Remove Item Fix Screenshot](documentation/readme_images/removefrombagbug.png)  
 
 ---
 
