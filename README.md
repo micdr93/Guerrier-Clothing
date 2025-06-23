@@ -622,7 +622,7 @@ The site uses a combination of bold display fonts for headings and clean, modern
 
 ### Images
 
-- All images and products on the site were created by myself, using Adobe Photoshop.
+- All images and products on the site were created and designed by myself, using Adobe Photoshop.
 
 # Business Model
 
