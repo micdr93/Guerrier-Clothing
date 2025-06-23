@@ -498,7 +498,7 @@ The Django Admin interface provides a centralised location for managing all data
 - **Groups**: Manage user groups and permissions.
 - **Users**: View, add, and manage individual user accounts.
 
-###️ Axes (Security)
+### Axes (Security)
 Integrated via the **Django Axes** package for login attempt monitoring:
 - **Access attempts**
 - **Access failures**
