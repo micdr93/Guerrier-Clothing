@@ -696,6 +696,33 @@ Our newsletter is a cornerstone of our direct customer communication strategy, a
 
 For all testing, please refer to the [TESTING.md](TESTING.md) file.
 
+
+# Bugs
+
+### Fixed Issues
+
+- **Remove Item from Bag Bug**  
+  Initially, users were unable to remove items from the shopping bag correctly. This was identified and resolved to ensure smooth removal and instant bag updates.  
+  ![Remove Item Fix Screenshot](path/to/remove-item-fix-screenshot.png)  
+
+---
+
+### Integration and Development Challenges
+
+- **Stripe Payment Integration**  
+  The Stripe integration took longer than expected due to configuration issues with the webhook URL and difficulties getting the card field to display properly. These were resolved after careful troubleshooting and testing, resulting in a stable payment flow.
+
+- **Project Environment Reset and Codebase Management**  
+  The project experienced an environment failure that required rebuilding the virtual environment and reverting to earlier commits to recover functionality. While this affected the development timeline, it allowed for a clean and stable setup moving forward.
+
+---
+
+### Notes
+
+- Sensitive Stripe communications and API details are excluded to maintain security.  
+- All fixes and updates have been tested across browsers and devices to ensure consistent user experience.
+
+
 # Credits
 ## Listed below are sources of information which helped me in the making of this project
 - [Boutique Ado Walkthrough Project](https://learn.codeinstitute.net/courses/course-v1:CodeInstitute+EA101+2021_T1/courseware/eb05f06e62c64ac89823cc956fcd8191/3adff2bf4a78469db72c5330b1afa836/)
