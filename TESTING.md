@@ -491,7 +491,7 @@ These amber signals are reasonable trade-offs for incorporating services that fo
 The deployed project has been tested on different screen sizes to ensure it is responsive.
 
 <details>
-<summary>Mobile (DevTools - iPohn 14 Pro Max)</summary>
+<summary>Mobile (DevTools - iPhone 14 Pro Max)</summary>
 
 ![Mobile Responsiveness 1](documentation/responsive/mobile_home.png)
 - DevTools responsive home view
