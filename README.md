@@ -485,6 +485,54 @@ Dropdown features:
 ![Dropdown2](documentation/readme_images/dropdown1.png)
 ![Dropdown2](documentation/readme_images/dropdown2.png)
 
+## Django Admin Dashboard Overview
+
+The Django Admin interface provides a centralised location for managing all database records associated with this project. Below is a breakdown of the models and sections currently available in the admin dashboard:
+
+![Django Admin Sidebar Screenshot](documentation/readme_images/adminsidebar.png)
+
+### Accounts
+- **Email addresses**: Manage user email addresses associated with accounts.
+
+### Authentication and Authorization
+- **Groups**: Manage user groups and permissions.
+- **Users**: View, add, and manage individual user accounts.
+
+###️ Axes (Security)
+Integrated via the **Django Axes** package for login attempt monitoring:
+- **Access attempts**
+- **Access failures**
+- **Access logs**
+
+These models log and track authentication attempts and failures, supporting brute-force protection.
+
+### Checkout
+- **Orders**: Manage customer orders placed via the e-commerce store.
+
+### Home
+- **Categorys**: *(Note: Should be "Categories")*  
+  Manage content categories.
+- **Contacts**: Manage customer or user contact submissions.
+- **Newsletter subscriptions**: Track email subscribers.
+- **Products**: Manage homepage-related product entries.
+
+### Products
+- **Categories**: Manage product categories for the store.
+- **Products**: Add, edit, and delete product listings.
+
+### Recommendations
+- **Suggested Items**: Manage product recommendations shown to customers.
+
+### Reviews
+- **Reviews**: Approve, edit, or delete customer-submitted reviews.
+
+### Sites
+- **Sites**: Django’s built-in framework for managing multiple websites.
+
+### Wishlist
+- **Wishlist Items**: Manage individual wishlist entries.
+- **Wishlists**: Track wishlists associated with user accounts.
+
 ### Future Features
 
 #### User Experience Enhancements
